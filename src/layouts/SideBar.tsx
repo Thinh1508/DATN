@@ -62,11 +62,11 @@ const SideBar = (props: Props) => {
     <div className="sticky mt-2 hidden lg:col-span-3 lg:block space-y-2 h-fit pb-20">
       <div>
         <div className="flex mb-2">
-          <a href="#">
+          <Link href="#">
             {/* <h1 className="font-bold text-slate-900 hover:text-green-600 border-b-[3px] border-green-600 uppercase">
               Danh mục
             </h1> */}
-          </a>
+          </Link>
           <div className="flex-1 border-b-[3px] border-slate-900/40"></div>
         </div>
 
@@ -176,7 +176,7 @@ const SideBar = (props: Props) => {
         </div>
         <div className="flex justify-between">
           <h1 className="text-slate-900 font-normal border-slate-900 px-2">
-            Tổng lượng truy cập
+            Tổng lượt truy cập
           </h1>
           <p className="text-slate-900 font-normal border-slate-900 px-2">1</p>
         </div>

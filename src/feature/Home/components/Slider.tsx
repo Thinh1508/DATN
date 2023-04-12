@@ -19,6 +19,7 @@ import Link from "next/link"
 type Props = {}
 
 export function SliderTop(props: Props) {
+  
   const listSlider = [
     {
       title: "CHI BỘ BAN QUẢN LÝ AN TOÀN THỰC PHẨM “VỀ QUÊ MẸ” 2023",
@@ -60,7 +61,8 @@ export function SliderTop(props: Props) {
         </Link>
       </div>
     </SwiperSlide>
-  ))
+  )
+  )
   return (
     <Swiper
       spaceBetween={30}
