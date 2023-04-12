@@ -62,11 +62,11 @@ const SideBar = (props: Props) => {
     <div className="sticky mt-2 hidden lg:col-span-3 lg:block space-y-2 h-fit pb-20">
       <div>
         <div className="flex mb-2">
-          <Link href="#">
-            <h1 className="font-bold text-slate-900 hover:text-green-600 border-b-[3px] border-green-600 uppercase">
+          <a href="#">
+            {/* <h1 className="font-bold text-slate-900 hover:text-green-600 border-b-[3px] border-green-600 uppercase">
               Danh mục
-            </h1>
-          </Link>
+            </h1> */}
+          </a>
           <div className="flex-1 border-b-[3px] border-slate-900/40"></div>
         </div>
 
