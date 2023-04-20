@@ -19,9 +19,17 @@ const SideBar = (props: Props) => {
       <div className="inline-flex">
         <img
           src="/assets/images/logo3.png"
-          className="h-10 w-10 text-4xl rounded cursor-pointer block float-left"
+          className={`h-9 w-9 text-4xl rounded-full cursor-pointer block float-left mr-2 duration-500 ${
+            !open && "rotate-[360deg]"
+          }`}
         />
-        <h1 className="text-white origin-left mr-2">DaNangFA</h1>
+        <h1
+          className={`text-white origin-left font-medium text-2xl duration-300 ${
+            !open && "scale-0"
+          }`}
+        >
+          DaNangFA
+        </h1>
       </div>
     </div>
   )
