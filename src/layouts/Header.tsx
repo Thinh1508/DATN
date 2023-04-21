@@ -11,9 +11,9 @@ const Header = (props: Props) => {
             <img
               src="https://cdn.haitrieu.com/wp-content/uploads/2022/06/Logo-Thanh-Pho-Da-Nang.png"
               alt="logo"
-              className="object-cover w-16 h-16"
+              className="object-cover w-10 h-10 xl:w-16 xl:h-16"
             />
-            <h1 className="text-white font-bold mx-1 drop-shadow-sm	text-base">
+            <h1 className="text-white font-bold mx-1 drop-shadow-sm	lg:text-base hidden md:block md:text-xs/[8px]">
               AN TOÀN VỆ SINH THỰC PHẨM <br />
               THÀNH PHỐ ĐÀ NẴNG
             </h1>

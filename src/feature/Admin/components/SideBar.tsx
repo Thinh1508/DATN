@@ -1,21 +1,23 @@
 import { useState } from "react"
 
+import { RiAlertFill } from "react-icons/ri"
 import {
   BsArrowLeftShort,
   BsSearch,
   BsChevronDown,
   BsPerson,
-  BsReverseLayoutTextSidebarReverse,
+  BsPersonLinesFill,
   BsCardImage,
+  BsPostcardFill,
 } from "react-icons/bs"
-import { RiDashboardFill } from "react-icons/ri"
 import {
-  AiOutlineFileText,
   AiOutlineBarChart,
-  AiOutlineMail,
   AiOutlineSetting,
   AiOutlineLogout,
+  AiFillFileText,
+  AiFillReconciliation,
 } from "react-icons/ai"
+import Link from "next/link"
 
 type Props = {}
 
@@ -24,24 +26,25 @@ const SideBar = (props: Props) => {
   const [submenuOpen, setSubmenuOpen] = useState(true)
 
   const Menus = [
-    { title: "Dashboard" },
-    { title: "Page", icon: <AiOutlineFileText /> },
-    { title: "Media", icon: <BsCardImage />, spacing: true },
+    { title: "statistical" },
+    { title: "account", icon: <BsPersonLinesFill />, spacing: true },
     {
-      title: "Project",
-      icon: <BsReverseLayoutTextSidebarReverse />,
-      submenu: true,
-      submenuItems: [
-        { title: "Submenu 1" },
-        { title: "Submenu 2" },
-        { title: "Submenu 3" },
-      ],
+      title: "inspection",
+      icon: <AiFillReconciliation />,
+      // submenu: true,
+      // submenuItems: [
+      //   { title: "submenu 1" },
+      //   { title: "submenu 2" },
+      //   { title: "submenu 3" },
+      // ],
     },
-    { title: "Analytics", icon: <AiOutlineBarChart /> },
-    { title: "Inbox", icon: <AiOutlineMail /> },
-    { title: "Profile", icon: <BsPerson />, spacing: true },
-    { title: "Setting", icon: <AiOutlineSetting /> },
-    { title: "Logout", icon: <AiOutlineLogout /> },
+    { title: "post", icon: <BsPostcardFill /> },
+    { title: "media", icon: <BsCardImage /> },
+    { title: "document", icon: <AiFillFileText /> },
+    { title: "reports", icon: <RiAlertFill /> },
+    { title: "profile", icon: <BsPerson />, spacing: true },
+    { title: "setting", icon: <AiOutlineSetting /> },
+    { title: "logout", icon: <AiOutlineLogout /> },
   ]
 
   return (
@@ -93,32 +96,36 @@ const SideBar = (props: Props) => {
       <ul className="pt-2">
         {Menus.map((menu, index) => (
           <>
-            <li
-              key={index}
-              className={`text-gray-200 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-light-while rounded-md ${
-                menu.spacing ? "mt-9" : "mt-2"
-              }`}
-              onClick={() => {
-                if (menu.submenuItems) {
-                  setSubmenuOpen(!submenuOpen)
-                }
-              }}
+            <Link
+              href={`/admin/${menu.title === "statistical" ? "" : menu.title}`}
             >
-              <span className="text-2xl block float-left">
-                {menu.icon ? menu.icon : <RiDashboardFill />}
-              </span>
-              <span
-                className={`text-base font-medium flex-1 ${
-                  !open && "hidden"
-                } duration-200`}
+              <li
+                key={index}
+                className={`text-gray-200 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-light-while rounded-md ${
+                  menu.spacing ? "mt-9" : "mt-2"
+                }`}
+                // onClick={() => {
+                //   if (menu.submenuItems) {
+                //     setSubmenuOpen(!submenuOpen)
+                //   }
+                // }}
               >
-                {menu.title}
-              </span>
-              {menu.submenu && open && (
-                <BsChevronDown className={`${submenuOpen && "rotate-180"}`} />
-              )}
-            </li>
-            {menu.submenu && submenuOpen && open && (
+                <span className="text-2xl block float-left">
+                  {menu.icon ? menu.icon : <AiOutlineBarChart />}
+                </span>
+                <span
+                  className={`text-base capitalize font-medium flex-1 ${
+                    !open && "hidden"
+                  } duration-300`}
+                >
+                  {menu.title}
+                </span>
+                {/* {menu.submenu && open && (
+                  <BsChevronDown className={`${submenuOpen && "rotate-180"}`} />
+                )} */}
+              </li>
+            </Link>
+            {/* {menu.submenu && submenuOpen && open && (
               <ul>
                 {menu.submenuItems.map((submenuItem, index) => (
                   <li
@@ -129,7 +136,7 @@ const SideBar = (props: Props) => {
                   </li>
                 ))}
               </ul>
-            )}
+            )} */}
           </>
         ))}
       </ul>
