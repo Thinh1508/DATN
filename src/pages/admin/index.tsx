@@ -2,7 +2,7 @@ import type { NextPageWithLayout } from "../_app"
 
 import AdminLayout from "@/layouts/AdminLayout"
 import TopCards from "@/feature/Admin/components/TopCards"
-import BarChart from "@/feature/Admin/components/BarChart"
+import BarChart from "@/feature/Admin/components/BarChart.jsx"
 import RecentOrders from "@/feature/Admin/components/RecentOrders"
 
 type Props = {}

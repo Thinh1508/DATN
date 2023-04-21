@@ -22,7 +22,7 @@ import Link from "next/link"
 type Props = {}
 
 const SideBar = (props: Props) => {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(true)
   const [submenuOpen, setSubmenuOpen] = useState(true)
 
   const Menus = [
