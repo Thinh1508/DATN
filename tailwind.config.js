@@ -15,7 +15,7 @@ module.exports = {
       },
       colors: {
         "dark-green": "#023020",
-        "light-while": "rgba(255,255,255,0,18)",
+        "light-while": "rgba(255,255,255,0.18)",
       },
     },
   },
