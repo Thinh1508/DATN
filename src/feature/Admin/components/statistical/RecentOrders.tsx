@@ -8,7 +8,7 @@ type Props = {}
 
 const RecentOrders = (props: Props) => {
   return (
-    <div className="w-full col-span-1 relative lg:h-[70vh] h-[50vh] m-auto p-4 border rounded-lg overflow-scroll bg-white">
+    <div className="w-full col-span-1 relative lg:h-[75vh] h-[50vh] m-auto p-4 border rounded-lg overflow-scroll bg-white">
       <h1 className="text-gray-900">RecentOrders</h1>
       <ul>
         {data.map((order, id) => (
@@ -23,7 +23,7 @@ const RecentOrders = (props: Props) => {
               <p className="text-gray-800 font-bold">${order.total}</p>
               <p className="text-gray-400 text-sm">{order.name.first}</p>
             </div>
-            <p className="lg:flex md:hidden absolute right-6 text-sm text-gray-900">
+            <p className="lg:flex hidden absolute right-6 text-sm text-gray-900">
               {order.date}
             </p>
           </li>

@@ -1,15 +1,22 @@
+import { useState } from "react"
 import { NextPageWithLayout } from "../_app"
 
+import { RiAddCircleLine } from "react-icons/ri"
+
 import AdminLayout from "@/layouts/AdminLayout"
+import Header from "@/feature/Admin/components/account/Header"
+import Table from "@/feature/Admin/components/account/Table"
 
 type Props = {}
 
 const Account: NextPageWithLayout = (props: Props) => {
   return (
-    <div className="p-8 bg-white h-full w-full">
-      <h1 className="text-2xl font-semibold uppercase text-gray-700">
+    <div className="sm:p-8 p-4 bg-gray-300 h-screen w-full overflow-y-auto">
+      <h1 className="p-4 sm:p-0 text-2xl font-semibold uppercase text-gray-700">
         account
       </h1>
+      <Header />
+      <Table />
     </div>
   )
 }

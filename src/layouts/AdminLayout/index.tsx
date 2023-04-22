@@ -1,4 +1,4 @@
-import SideBar from "@/feature/Admin/components/SideBar"
+import SideBar from "@/feature/Admin/SideBar"
 
 type Props = {
   children: React.ReactNode
@@ -6,7 +6,7 @@ type Props = {
 
 const AdminLayout = ({ children }: Props) => {
   return (
-    <div className="flex">
+    <div className="flex h-screen">
       <SideBar />
       {children}
     </div>

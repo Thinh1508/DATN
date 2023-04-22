@@ -1,10 +1,11 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/router"
+import Link from "next/link"
 
 import { RiAlertFill } from "react-icons/ri"
 import {
   BsArrowLeftShort,
   BsSearch,
-  BsChevronDown,
   BsPerson,
   BsPersonLinesFill,
   BsCardImage,
@@ -17,7 +18,39 @@ import {
   AiFillFileText,
   AiFillReconciliation,
 } from "react-icons/ai"
-import Link from "next/link"
+
+const Menus = [
+  { title: "statistical", link: "/admin" },
+  {
+    title: "account",
+    icon: <BsPersonLinesFill />,
+    spacing: true,
+    link: "/admin/account",
+  },
+  {
+    title: "inspection",
+    icon: <AiFillReconciliation />,
+    // submenu: true,
+    // submenuItems: [
+    //   { title: "submenu 1" },
+    //   { title: "submenu 2" },
+    //   { title: "submenu 3" },
+    // ],
+    link: "/admin/inspection",
+  },
+  { title: "post", icon: <BsPostcardFill />, link: "/admin/post" },
+  { title: "media", icon: <BsCardImage />, link: "/admin/media" },
+  { title: "document", icon: <AiFillFileText />, link: "/admin/document" },
+  { title: "report", icon: <RiAlertFill />, link: "/admin/report" },
+  {
+    title: "profile",
+    icon: <BsPerson />,
+    spacing: true,
+    link: "/admin/profile",
+  },
+  { title: "setting", icon: <AiOutlineSetting />, link: "/admin/setting" },
+  { title: "logout", icon: <AiOutlineLogout />, link: "/admin/logout" },
+]
 
 type Props = {}
 
@@ -25,33 +58,25 @@ const SideBar = (props: Props) => {
   const [open, setOpen] = useState(true)
   const [submenuOpen, setSubmenuOpen] = useState(true)
 
-  const Menus = [
-    { title: "statistical" },
-    { title: "account", icon: <BsPersonLinesFill />, spacing: true },
-    {
-      title: "inspection",
-      icon: <AiFillReconciliation />,
-      // submenu: true,
-      // submenuItems: [
-      //   { title: "submenu 1" },
-      //   { title: "submenu 2" },
-      //   { title: "submenu 3" },
-      // ],
-    },
-    { title: "post", icon: <BsPostcardFill /> },
-    { title: "media", icon: <BsCardImage /> },
-    { title: "document", icon: <AiFillFileText /> },
-    { title: "reports", icon: <RiAlertFill /> },
-    { title: "profile", icon: <BsPerson />, spacing: true },
-    { title: "setting", icon: <AiOutlineSetting /> },
-    { title: "logout", icon: <AiOutlineLogout /> },
-  ]
+  const { pathname } = useRouter()
+
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth < 640) {
+        setOpen(false)
+      } else {
+        setOpen(true)
+      }
+    }
+
+    window.addEventListener("resize", handleResize)
+  }, [])
 
   return (
     <div
       className={`bg-dark-green h-screen p-5 pt-8 ${
-        open ? "w-72 " : "w-20"
-      } duration-300 relative `}
+        open ? "w-72 absolute z-10" : "w-20 relative"
+      } duration-300 sm:relative`}
     >
       <BsArrowLeftShort
         className={`bg-white text-dark-green text-3xl rounded-full absolute -right-3 top-9 
@@ -59,7 +84,7 @@ const SideBar = (props: Props) => {
         onClick={() => setOpen(!open)}
       />
 
-      <div className="inline-flex">
+      <div className="inline-flex items-center">
         <img
           src="/assets/images/logo3.png"
           className={`h-9 w-9 text-4xl rounded-full cursor-pointer block float-left mr-2 duration-500 ${
@@ -67,7 +92,7 @@ const SideBar = (props: Props) => {
           }`}
         />
         <h1
-          className={`text-white origin-left font-medium text-2xl duration-300 ${
+          className={`text-white origin-left font-medium sm:text-2xl text-base duration-300 ${
             !open && "scale-0"
           }`}
         >
@@ -96,14 +121,16 @@ const SideBar = (props: Props) => {
       <ul className="pt-2">
         {Menus.map((menu, index) => (
           <>
-            <Link
-              href={`/admin/${menu.title === "statistical" ? "" : menu.title}`}
-            >
+            <Link href={menu.link} className="relative">
               <li
                 key={index}
-                className={`text-gray-200 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-light-while rounded-md ${
-                  menu.spacing ? "mt-9" : "mt-2"
-                }`}
+                className={`text-gray-200 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-green-700 rounded-md ${
+                  menu.spacing ? "mt-9 after:h-[53%]" : "mt-2 after:h-[83%]"
+                }
+                 ${
+                   pathname === menu.link &&
+                   "bg-green-700 after:absolute after:-left-5 after:bg-green-700 after:w-1.5 after:rounded-lg after:transition-all"
+                 } `}
                 // onClick={() => {
                 //   if (menu.submenuItems) {
                 //     setSubmenuOpen(!submenuOpen)
