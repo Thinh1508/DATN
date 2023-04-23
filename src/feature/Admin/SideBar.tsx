@@ -62,7 +62,7 @@ const SideBar = (props: Props) => {
 
   useEffect(() => {
     function handleResize() {
-      if (window.innerWidth < 640) {
+      if (window.innerWidth < 1280) {
         setOpen(false)
       } else {
         setOpen(true)
@@ -119,52 +119,49 @@ const SideBar = (props: Props) => {
       </div>
 
       <ul className="pt-2">
-        {Menus.map((menu, index) => (
-          <>
-            <Link href={menu.link} className="relative">
-              <li
-                key={index}
-                className={`text-gray-200 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-green-700 rounded-md ${
-                  menu.spacing ? "mt-9 after:h-[53%]" : "mt-2 after:h-[83%]"
-                }
+        {Menus.map((menu) => (
+          <Link href={menu.link} className="relative" key={menu.title}>
+            <li
+              className={`text-gray-200 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-green-700 rounded-md ${
+                menu.spacing ? "mt-9 after:h-[53%]" : "mt-2 after:h-[83%]"
+              }
                  ${
                    pathname === menu.link &&
                    "bg-green-700 after:absolute after:-left-5 after:bg-green-700 after:w-1.5 after:rounded-lg after:transition-all"
                  } `}
-                // onClick={() => {
-                //   if (menu.submenuItems) {
-                //     setSubmenuOpen(!submenuOpen)
-                //   }
-                // }}
+              // onClick={() => {
+              //   if (menu.submenuItems) {
+              //     setSubmenuOpen(!submenuOpen)
+              //   }
+              // }}
+            >
+              <span className="text-2xl block float-left">
+                {menu.icon ? menu.icon : <AiOutlineBarChart />}
+              </span>
+              <span
+                className={`text-base capitalize font-medium flex-1 ${
+                  !open && "hidden"
+                } duration-300`}
               >
-                <span className="text-2xl block float-left">
-                  {menu.icon ? menu.icon : <AiOutlineBarChart />}
-                </span>
-                <span
-                  className={`text-base capitalize font-medium flex-1 ${
-                    !open && "hidden"
-                  } duration-300`}
-                >
-                  {menu.title}
-                </span>
-                {/* {menu.submenu && open && (
+                {menu.title}
+              </span>
+              {/* {menu.submenu && open && (
                   <BsChevronDown className={`${submenuOpen && "rotate-180"}`} />
                 )} */}
-              </li>
-            </Link>
+            </li>
             {/* {menu.submenu && submenuOpen && open && (
-              <ul>
-                {menu.submenuItems.map((submenuItem, index) => (
-                  <li
-                    key={index}
-                    className="text-gray-200 text-sm flex item-center gap-x-4 cursor-pointer p-2 px-5 hover:bg-light-while rounded-md"
-                  >
-                    {submenuItem.title}
-                  </li>
-                ))}
-              </ul>
-            )} */}
-          </>
+                <ul>
+                  {menu.submenuItems.map((submenuItem, index) => (
+                    <li
+                      key={index}
+                      className="text-gray-200 text-sm flex item-center gap-x-4 cursor-pointer p-2 px-5 hover:bg-light-while rounded-md"
+                    >
+                      {submenuItem.title}
+                    </li>
+                  ))}
+                </ul>
+              )} */}
+          </Link>
         ))}
       </ul>
     </div>

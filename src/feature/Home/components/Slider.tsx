@@ -19,7 +19,6 @@ import Link from "next/link"
 type Props = {}
 
 export function SliderTop(props: Props) {
-  
   const listSlider = [
     {
       title: "CHI BỘ BAN QUẢN LÝ AN TOÀN THỰC PHẨM “VỀ QUÊ MẸ” 2023",
@@ -41,7 +40,7 @@ export function SliderTop(props: Props) {
     },
   ]
   const listItems = listSlider.map((slide) => (
-    <SwiperSlide>
+    <SwiperSlide key={slide.img}>
       <div className="space-y-2">
         <Link
           className="relative text-slate-900 font-bold gap-4 hover:text-green-600 group block"
@@ -61,8 +60,7 @@ export function SliderTop(props: Props) {
         </Link>
       </div>
     </SwiperSlide>
-  )
-  )
+  ))
   return (
     <Swiper
       spaceBetween={30}
@@ -100,7 +98,7 @@ export function SliderUser(props: Props) {
     },
   ]
   const listItems = listSlider.map((slide) => (
-    <SwiperSlide>
+    <SwiperSlide key={slide.img}>
       <div className="min-h-[240px] col-span-3 bg-[#ebebeb] h-full rounded-lg">
         <img src={slide.img} alt="" className="w-full h-40 p-2" />
         <p className="text-gray-700 text-base p-2 hover:text-green-600 cursor-pointer uppercase">
@@ -136,7 +134,7 @@ export function SliderBanner(props: Props) {
     "https://danahomeland.vn/uploads/media_gal/43-0banner-tc.jpg",
   ]
   const listItems = listSlider.map((slide) => (
-    <SwiperSlide>
+    <SwiperSlide key={slide}>
       <img
         src={slide}
         alt="thông điệp"

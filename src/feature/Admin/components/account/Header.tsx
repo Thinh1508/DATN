@@ -25,19 +25,17 @@ const Header = (props: Props) => {
         </Link>
       </div>
       <div className="flex flex-row items-center gap-2">
-        <div
+        <button
           onClick={() => setShowModal(true)}
-          className="min-w-fit text-gray-300 bg-green-700 hover:bg-green-800 hover:text-gray-100 rounded-lg text-sm p-1.5 sm:p-2.5 cursor-pointer"
+          className="min-w-fit text-white bg-[rgb(34,197,94)] hover:bg-green-600 hover:text-gray-100 rounded-lg text-sm p-1.5 sm:p-2.5 cursor-pointer"
         >
           <span className="text-xs uppercase font-normal ">new account</span>
-        </div>
+        </button>
         <select
           defaultValue={"DEFAULT"}
           className="bg-gray-300 outline-none flex items-center  text-gray-900 text-sm rounded-lg focus:ring-blue-500  w-full p-1.5 sm:p-2.5 "
         >
-          <option selected value="DEFAULT">
-            Choose a status
-          </option>
+          <option value="DEFAULT">Choose a status</option>
           <option value="1">Normal</option>
           <option value="2">Block</option>
         </select>
