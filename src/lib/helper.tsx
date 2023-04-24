@@ -39,11 +39,14 @@ export async function addUser(formData: any) {
 export async function updateUser(userId: string, formData: any) {
   const Options = {
     method: "PUT",
-    headers: { "Con-Type": "application/json" },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(formData),
   }
 
-  const response = await fetch(`${BASE_URL}/api/users/${userId}`, Options)
+  const response = await fetch(
+    `${BASE_URL}/api/users/?userId=${userId}`,
+    Options
+  )
   const json = await response.json()
 
   return json
@@ -53,10 +56,13 @@ export async function updateUser(userId: string, formData: any) {
 export async function deleteUser(userId: string) {
   const Options = {
     method: "DELETE",
-    header: { "Connect-Type": "application/json" },
+    headers: { "Content-Type": "application/json" },
   }
 
-  const response = await fetch(`${BASE_URL}/api/users/${userId}`, Options)
+  const response = await fetch(
+    `${BASE_URL}/api/users/?userId=${userId}`,
+    Options
+  )
   const json = await response.json()
 
   return json

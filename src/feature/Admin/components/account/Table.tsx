@@ -1,11 +1,14 @@
-import React from "react"
+import React, { useState } from "react"
 import Link from "next/link"
+import { useQueryClient, useMutation } from "react-query"
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 import { BiEdit, BiTrashAlt } from "react-icons/bi"
 
-import { getUsers } from "@/lib/helper"
+import { deleteUser, getUsers } from "@/lib/helper"
 import { useQuery } from "react-query"
-import { useSelector } from "react-redux"
+import EditModel from "./EditModal"
 
 type Props = {}
 type User = {
@@ -21,9 +24,73 @@ type User = {
 
 const Table = (props: Props) => {
   const { isLoading, isError, data, error } = useQuery("users", getUsers)
+
+  const queryClient = useQueryClient()
+  const [modalDelete, setModalDelete] = useState(false)
+  const [userIdDelete, setUserIdDelete] = useState(String)
+  const [showModalEdit, setShowModalEdit] = useState(false)
+  const [userInfo, setUserInfo] = useState(Object)
+
+  const handleOnClose = (mess: String) => {
+    setShowModalEdit(false)
+    if (mess !== "close") {
+      switch (mess) {
+        case "success":
+          toast.success("Add New Account Success!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          })
+          break
+        case "error":
+          toast.error("Add New Account False!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          })
+          break
+        default:
+          toast("Is Loading!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          })
+          toast.success("Add New Account Success!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          })
+      }
+    }
+  }
+
+  const onDelete = async (userId: string) => {
+    await deleteUser(userId)
+    await queryClient.prefetchQuery("users", getUsers)
+  }
+
   if (isLoading) return <div>Employee is Loading...</div>
   if (isError) return <div>Got Error {`${error}`}</div>
-
   return (
     <div className="bg-white w-full border p-4 mt-4  rounded-lg h-[84vh] xl:h-[82vh] overflow-y-auto">
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -80,11 +147,23 @@ const Table = (props: Props) => {
                     {user.status === "Active" ? "Active" : "Block"}
                   </span>
                 </td>
-                <td className="flex items-center px-4 py-4 space-x-3 ">
-                  <button className="cursor">
+                <td className="flex items-center px-4 py-4 space-x-3 relative">
+                  <button
+                    className="cursor"
+                    onClick={() => {
+                      setUserInfo(user)
+                      setShowModalEdit(true)
+                    }}
+                  >
                     <BiEdit size={25} color="rgb(34,197,94)" />
                   </button>
-                  <button className="cursor">
+                  <button
+                    className="cursor"
+                    onClick={() => {
+                      setUserIdDelete(user._id)
+                      setModalDelete(true)
+                    }}
+                  >
                     <BiTrashAlt size={25} color="rgb(244,63,94)" />
                   </button>
                 </td>
@@ -139,6 +218,42 @@ const Table = (props: Props) => {
           </ul>
         </nav>
       </div>
+      <div
+        className={`${
+          !modalDelete ? "hidden" : "block "
+        } fixed inset-0 bg-black/40 backdrop-blur-sm flex justify-center items-center z-20`}
+      >
+        <div
+          className={`bg-white p-8 bottom-0 border-4 border-green-600  rounded-lg flex flex-col items-center transition ease-in-out delay-150 duration-1000`}
+        >
+          <span className="font-medium text-xl text-gray-950">
+            Do you want delete?
+          </span>
+          <div className="mt-6 grid grid-cols-2 gap-4">
+            <button
+              onClick={() => {
+                if (userIdDelete.length > 0) onDelete(userIdDelete)
+                setModalDelete(false)
+                setUserIdDelete("")
+              }}
+              className="bg-white border-2 border-red-600 text-red-600 px-6 py-0 rounded-lg hover:bg-red-600 hover:text-white"
+            >
+              <span className="text-base font-medium uppercase  ">yes</span>
+            </button>
+            <button
+              onClick={() => setModalDelete(false)}
+              className="bg-white border-2 border-gray-600 text-gray-600 px-6 py-0 rounded-lg hover:bg-gray-600 hover:text-white"
+            >
+              <span className="text-base font-medium uppercase">no</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <EditModel
+        onClose={handleOnClose}
+        visible={showModalEdit}
+        userInfo={userInfo}
+      />
     </div>
   )
 }

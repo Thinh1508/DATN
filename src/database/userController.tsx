@@ -65,7 +65,7 @@ export async function putUsers(req: NextApiRequest, res: NextApiResponse) {
 export async function deleteUsers(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { userId } = req.query
-
+    console.log(userId)
     if (userId) {
       await Users.findByIdAndDelete(userId)
       res.status(200).json({ delete: userId })

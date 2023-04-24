@@ -1,14 +1,38 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { useQueryClient, useMutation } from "react-query"
 
 import { BsChevronDown } from "react-icons/bs"
-import { addUser, getUsers } from "@/lib/helper"
+import { updateUser, getUsers } from "@/lib/helper"
+type User = {
+  id: string
+  name: string
+  email: string
+  address: string
+  dob: string
+  gender: string
+  permissions: string
+  status: string
+}
+type Props = {
+  visible: boolean
+  onClose: (mess: String) => void
+  userInfo: User
+}
 
-type Props = { visible: boolean; onClose: (mess: String) => void }
+const EditModel = (props: Props) => {
+  const data = props.userInfo
+  const dateFormat = (inputDate: string) => {
+    const date = new Date(inputDate)
 
-const AddModal = (props: Props) => {
+    const day = date.getDate()
+    const month = date.getMonth() + 1
+    const year = date.getFullYear()
+
+    return year + "-" + month + "-" + day
+  }
   const queryClient = useQueryClient()
   const [formData, setFormData] = useState({
+    id: "",
     name: "",
     email: "",
     address: "",
@@ -21,6 +45,7 @@ const AddModal = (props: Props) => {
   const [isValName, setValName] = useState(true)
   const [isEmail, setEmail] = useState("")
   const [isName, setName] = useState("")
+  const [userId, setUserId] = useState("")
 
   const verifyEmail = (email: string) => {
     let regex = new RegExp(/[\w]+@[\w]+\.[\w]/)
@@ -32,14 +57,15 @@ const AddModal = (props: Props) => {
   }
 
   const [mess, setMess] = useState("")
+
   const handleChange = (e: any) => {
     const { name, value } = e.target
     setFormData({ ...formData, [name]: value })
   }
-
-  const addMutation = useMutation(addUser, {
+  const updateMutation = useMutation((formData) => updateUser("", formData), {
     onSuccess: () => {
       queryClient.prefetchQuery("users", getUsers)
+      console.log(formData)
       props.onClose(mess)
     },
   })
@@ -48,32 +74,21 @@ const AddModal = (props: Props) => {
     e.preventDefault()
     if (isEmail.length > 0 && isName.length > 0) {
       const model = formData
-      await addMutation.mutate(model)
-      setFormData({
-        name: "",
-        email: "",
-        address: "",
-        dob: "",
-        gender: "",
-        permission: "",
-        status: "Active",
-      })
-      if (addMutation.isError) setMess("error")
-      if (addMutation.isSuccess) setMess("success")
+      await updateMutation.mutate(model)
+      if (updateMutation.isError) setMess("error")
+      if (updateMutation.isSuccess) setMess("success")
       setEmail("")
       setName("")
     }
   }
-
   if (!props.visible) return null
-
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex justify-center items-center z-20">
       <div className="relative w-full max-w-3xl max-h-full">
         <div className="relative bg-white rounded-lg shadow ">
           <div className="flex items-start justify-between p-4 border-b rounded-t ">
             <h3 className="text-2xl font-semibold text-gray-900 ">
-              Add New Account
+              Edit Account
             </h3>
             <button
               type="button"
@@ -113,6 +128,7 @@ const AddModal = (props: Props) => {
                       ? setValName(true)
                       : setValName(false)
                   }}
+                  defaultValue={data.name}
                   className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-950 bg-transparent peer  appearance-none  focus:outline-none focus:ring-0 "
                   placeholder=" "
                 />
@@ -137,6 +153,7 @@ const AddModal = (props: Props) => {
                     const isVal = verifyEmail(e.target.value)
                     isVal ? setValEmail(true) : setValEmail(false)
                   }}
+                  defaultValue={data.email}
                   className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-900 bg-transparent   appearance-none  focus:outline-none focus:ring-0 focus:border-3 peer"
                   placeholder=" "
                 />
@@ -157,6 +174,7 @@ const AddModal = (props: Props) => {
                   type="text"
                   name="address"
                   onChange={handleChange}
+                  defaultValue={data.address}
                   className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-900 bg-transparent   appearance-none  focus:outline-none focus:ring-0 focus:border-3 peer"
                   placeholder=" "
                 />
@@ -170,6 +188,7 @@ const AddModal = (props: Props) => {
                   <input
                     type="date"
                     name="dob"
+                    defaultValue={dateFormat(data.dob)}
                     onChange={handleChange}
                     className="bg-gray-50 border-2 border-gray-400 text-gray-900 text-xl rounded-lg outline-none  block w-full p-2.5 "
                     placeholder="Select date"
@@ -179,7 +198,7 @@ const AddModal = (props: Props) => {
                   <select
                     name="gender"
                     onChange={handleChange}
-                    defaultValue={"DEFAULT"}
+                    defaultValue={data.gender}
                     className="block px-2.5 py-2.5 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                   >
                     <option className="relative" value="DEFAULT">
@@ -194,7 +213,7 @@ const AddModal = (props: Props) => {
                   <select
                     name="permission"
                     onChange={handleChange}
-                    defaultValue={"DEFAULT"}
+                    defaultValue={data.permissions}
                     className="block px-2.5 py-2.5 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                   >
                     <option className="relative" value="DEFAULT">
@@ -215,6 +234,7 @@ const AddModal = (props: Props) => {
                     id="radioDefault1"
                     onChange={handleChange}
                     name="status"
+                    defaultChecked={data.status == "Active"}
                     className="form-check-input appearance-none rounded-full h-5 w-5 border border-gray-300 checked:bg-green-500 checked:border-green-500 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                   />
                   <label
@@ -231,6 +251,7 @@ const AddModal = (props: Props) => {
                     id="radioDefault2"
                     name="status"
                     onChange={handleChange}
+                    defaultChecked={data.status !== "Active"}
                     className="form-check-input appearance-none rounded-full h-5 w-5 border border-gray-300 checked:bg-red-500 checked:border-red-500 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                   />
                   <label
@@ -246,9 +267,9 @@ const AddModal = (props: Props) => {
             <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b ">
               <button
                 type="submit"
-                className="sm:w-1/2 text-green-900 bg-white border border-green-900 hover:bg-green-800  hover:transition-all hover:duration-500 ease-in-out hover:text-white  font-medium rounded-lg text-lg px-5 py-2.5 text-center "
+                className="sm:w-1/2 text-yellow-700 bg-white border border-yellow-700 hover:bg-yellow-700 hover:transition-all hover:duration-500 ease-in-out hover:text-white  font-medium rounded-lg text-lg px-5 py-2.5 text-center "
               >
-                Add
+                Edit
               </button>
             </div>
           </form>
@@ -258,4 +279,4 @@ const AddModal = (props: Props) => {
   )
 }
 
-export default AddModal
+export default EditModel

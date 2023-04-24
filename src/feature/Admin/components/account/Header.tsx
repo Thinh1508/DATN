@@ -1,6 +1,9 @@
 import React, { useState } from "react"
 import Link from "next/link"
 
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+
 import AddModal from "./AddModal"
 
 type Props = {}
@@ -8,7 +11,58 @@ type Props = {}
 const Header = (props: Props) => {
   const [showModal, setShowModal] = useState(false)
 
-  const handleOnClose = () => setShowModal(false)
+  const handleOnClose = (mess: String) => {
+    setShowModal(false)
+    if (mess !== "close") {
+      switch (mess) {
+        case "success":
+          toast.success("Add New Account Success!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          })
+          break
+        case "error":
+          toast.error("Add New Account False!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          })
+          break
+        default:
+          toast("Is Loading!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          })
+          toast.success("Add New Account Success!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          })
+      }
+    }
+  }
 
   return (
     <div className="bg-white flex flex-col gap-2 w-full border p-4 mt-4 md:flex-row sm:justify-between rounded-lg">
@@ -29,16 +83,17 @@ const Header = (props: Props) => {
           onClick={() => setShowModal(true)}
           className="min-w-fit text-white bg-[rgb(34,197,94)] hover:bg-green-600 hover:text-gray-100 rounded-lg text-sm p-1.5 sm:p-2.5 cursor-pointer"
         >
-          <span className="text-xs uppercase font-normal ">new account</span>
+          <span className="text-xs uppercase font-normal ">new account </span>
         </button>
         <select
           defaultValue={"DEFAULT"}
           className="bg-gray-300 outline-none flex items-center  text-gray-900 text-sm rounded-lg focus:ring-blue-500  w-full p-1.5 sm:p-2.5 "
         >
           <option value="DEFAULT">Choose a status</option>
-          <option value="1">Normal</option>
+          <option value="1">Active</option>
           <option value="2">Block</option>
         </select>
+        <ToastContainer />
       </div>
       <AddModal onClose={handleOnClose} visible={showModal} />
     </div>
