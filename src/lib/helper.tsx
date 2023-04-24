@@ -36,7 +36,7 @@ export async function addUser(formData: any) {
 }
 
 //update user
-export async function updateUser(userId: string, formData: any) {
+export async function updateUser({ userId, formData }: any) {
   const Options = {
     method: "PUT",
     headers: { "Content-Type": "application/json" },

@@ -6,12 +6,13 @@ import "react-toastify/dist/ReactToastify.css"
 
 import AddModal from "./AddModal"
 
-type Props = {}
+type Props = { onChange: (status: string) => void }
 
 const Header = (props: Props) => {
   const [showModal, setShowModal] = useState(false)
 
   const handleOnClose = (mess: String) => {
+    console.log(mess)
     setShowModal(false)
     if (mess !== "close") {
       switch (mess) {
@@ -87,11 +88,14 @@ const Header = (props: Props) => {
         </button>
         <select
           defaultValue={"DEFAULT"}
+          onChange={(e) => {
+            props.onChange(e.target.value)
+          }}
           className="bg-gray-300 outline-none flex items-center  text-gray-900 text-sm rounded-lg focus:ring-blue-500  w-full p-1.5 sm:p-2.5 "
         >
-          <option value="DEFAULT">Choose a status</option>
-          <option value="1">Active</option>
-          <option value="2">Block</option>
+          <option value="">Choose a status</option>
+          <option value="Active">Active</option>
+          <option value="Block">Block</option>
         </select>
         <ToastContainer />
       </div>

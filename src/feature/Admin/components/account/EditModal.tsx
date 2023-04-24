@@ -4,7 +4,7 @@ import { useQueryClient, useMutation } from "react-query"
 import { BsChevronDown } from "react-icons/bs"
 import { updateUser, getUsers } from "@/lib/helper"
 type User = {
-  id: string
+  _id: string
   name: string
   email: string
   address: string
@@ -15,37 +15,18 @@ type User = {
 }
 type Props = {
   visible: boolean
-  onClose: (mess: String) => void
+  onClose: (mess: String, modal: String) => void
   userInfo: User
 }
 
 const EditModel = (props: Props) => {
-  const data = props.userInfo
-  const dateFormat = (inputDate: string) => {
-    const date = new Date(inputDate)
-
-    const day = date.getDate()
-    const month = date.getMonth() + 1
-    const year = date.getFullYear()
-
-    return year + "-" + month + "-" + day
-  }
+  const { userInfo: data } = props
   const queryClient = useQueryClient()
-  const [formData, setFormData] = useState({
-    id: "",
-    name: "",
-    email: "",
-    address: "",
-    dob: "",
-    gender: "",
-    permission: "",
-    status: "Active",
-  })
+  const [formData, setFormData] = useState(data)
   const [isValEmail, setValEmail] = useState(true)
   const [isValName, setValName] = useState(true)
-  const [isEmail, setEmail] = useState("")
-  const [isName, setName] = useState("")
-  const [userId, setUserId] = useState("")
+  const [isEmail, setEmail] = useState(data.email)
+  const [isName, setName] = useState(data.name)
 
   const verifyEmail = (email: string) => {
     let regex = new RegExp(/[\w]+@[\w]+\.[\w]/)
@@ -62,25 +43,26 @@ const EditModel = (props: Props) => {
     const { name, value } = e.target
     setFormData({ ...formData, [name]: value })
   }
-  const updateMutation = useMutation((formData) => updateUser("", formData), {
+  const updateMutation = useMutation(updateUser, {
     onSuccess: () => {
       queryClient.prefetchQuery("users", getUsers)
-      console.log(formData)
-      props.onClose(mess)
+      props.onClose(mess, "Edit Account")
+      setMess("success")
+    },
+    onError: () => {
+      setMess("error")
     },
   })
 
   const handleSubmit = async (e: any) => {
     e.preventDefault()
-    if (isEmail.length > 0 && isName.length > 0) {
-      const model = formData
-      await updateMutation.mutate(model)
-      if (updateMutation.isError) setMess("error")
-      if (updateMutation.isSuccess) setMess("success")
-      setEmail("")
-      setName("")
+    console.log(isValEmail, isValName)
+    if (isValEmail && isValName) {
+      updateMutation.mutate({ userId: data._id, formData })
+      // setFormData(err)
     }
   }
+
   if (!props.visible) return null
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex justify-center items-center z-20">
@@ -96,7 +78,7 @@ const EditModel = (props: Props) => {
               onClick={() => {
                 setEmail("")
                 setName("")
-                props.onClose("close")
+                props.onClose("close", "")
               }}
             >
               <svg
@@ -188,7 +170,7 @@ const EditModel = (props: Props) => {
                   <input
                     type="date"
                     name="dob"
-                    defaultValue={dateFormat(data.dob)}
+                    defaultValue={data.dob}
                     onChange={handleChange}
                     className="bg-gray-50 border-2 border-gray-400 text-gray-900 text-xl rounded-lg outline-none  block w-full p-2.5 "
                     placeholder="Select date"
@@ -211,7 +193,7 @@ const EditModel = (props: Props) => {
                 </div>
                 <div className="relative border-2 border-gray-400 rounded-lg">
                   <select
-                    name="permission"
+                    name="permissions"
                     onChange={handleChange}
                     defaultValue={data.permissions}
                     className="block px-2.5 py-2.5 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"

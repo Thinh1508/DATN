@@ -52,9 +52,8 @@ export async function putUsers(req: NextApiRequest, res: NextApiResponse) {
 
     if (userId && formData) {
       await Users.findByIdAndUpdate(userId, formData)
-      res.status(200).json(formData)
+      return res.status(200).json(formData)
     }
-
     res.status(400).json({ error: "User Not Selected...!" })
   } catch (error) {
     res.status(400).json(error)
@@ -68,7 +67,7 @@ export async function deleteUsers(req: NextApiRequest, res: NextApiResponse) {
     console.log(userId)
     if (userId) {
       await Users.findByIdAndDelete(userId)
-      res.status(200).json({ delete: userId })
+      return res.status(200).json({ delete: userId })
     }
 
     res.status(400).json({ error: "User Not Selected...!" })

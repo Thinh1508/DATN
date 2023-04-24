@@ -14,7 +14,7 @@ const AddModal = (props: Props) => {
     address: "",
     dob: "",
     gender: "",
-    permission: "",
+    permissions: "",
     status: "Active",
   })
   const [isValEmail, setValEmail] = useState(true)
@@ -40,26 +40,28 @@ const AddModal = (props: Props) => {
   const addMutation = useMutation(addUser, {
     onSuccess: () => {
       queryClient.prefetchQuery("users", getUsers)
+      setMess("success")
       props.onClose(mess)
+    },
+    onError: () => {
+      setMess("error")
     },
   })
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault()
     if (isEmail.length > 0 && isName.length > 0) {
       const model = formData
-      await addMutation.mutate(model)
+      addMutation.mutate(model)
       setFormData({
         name: "",
         email: "",
         address: "",
         dob: "",
         gender: "",
-        permission: "",
+        permissions: "",
         status: "Active",
       })
-      if (addMutation.isError) setMess("error")
-      if (addMutation.isSuccess) setMess("success")
       setEmail("")
       setName("")
     }
@@ -192,13 +194,13 @@ const AddModal = (props: Props) => {
                 </div>
                 <div className="relative border-2 border-gray-400 rounded-lg">
                   <select
-                    name="permission"
+                    name="permissions"
                     onChange={handleChange}
                     defaultValue={"DEFAULT"}
                     className="block px-2.5 py-2.5 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                   >
                     <option className="relative" value="DEFAULT">
-                      Choose a permission
+                      Choose a permissions
                     </option>
                     <option value="1">User</option>
                     <option value="2">Inspection</option>

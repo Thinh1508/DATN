@@ -33,7 +33,7 @@ export default async function handler(
       deleteUsers(req, res)
       break
     default:
-      res.setHeader("Allowd", ["GET", "POST", "PUT", "DELETE"])
+      // res.setHeader("Allowd", ["GET", "POST", "PUT", "DELETE"])
       res.status(405).end(`Method ${method} Not Allowd`)
   }
 }

@@ -10,7 +10,7 @@ import { deleteUser, getUsers } from "@/lib/helper"
 import { useQuery } from "react-query"
 import EditModel from "./EditModal"
 
-type Props = {}
+type Props = { status: string }
 type User = {
   _id: string
   name: string
@@ -31,12 +31,12 @@ const Table = (props: Props) => {
   const [showModalEdit, setShowModalEdit] = useState(false)
   const [userInfo, setUserInfo] = useState(Object)
 
-  const handleOnClose = (mess: String) => {
+  const handleOnClose = (mess: String, modal: String) => {
     setShowModalEdit(false)
     if (mess !== "close") {
       switch (mess) {
         case "success":
-          toast.success("Add New Account Success!", {
+          toast.success(`${modal} Success!`, {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -48,7 +48,7 @@ const Table = (props: Props) => {
           })
           break
         case "error":
-          toast.error("Add New Account False!", {
+          toast.error(`${modal} False!`, {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -89,39 +89,47 @@ const Table = (props: Props) => {
     await queryClient.prefetchQuery("users", getUsers)
   }
 
+  const tableBody = () => {
+    const statusData = data
+    if (props.status.length > 0) {
+      return statusData.filter((user: User) => user.status === props.status)
+    }
+    return statusData
+  }
+
   if (isLoading) return <div>Employee is Loading...</div>
   if (isError) return <div>Got Error {`${error}`}</div>
   return (
-    <div className="bg-white w-full border p-4 mt-4  rounded-lg h-[84vh] xl:h-[82vh] overflow-y-auto">
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <div className="bg-white w-full border p-4 mt-4  rounded-lg h-[84vh] xl:h-[82vh] overflow-y-auto scrollbar-style">
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg scrollbar-style">
         <table className="w-full text-sm text-left text-gray-500 ">
           <thead className="text-xs text-gray-300 uppercase bg-gray-900">
             <tr>
-              <th scope="col" className="px-6 py-3 xl:text-lg">
+              <th scope="col" className="px-4 py-3 xl:text-lg">
                 Name
               </th>
-              <th scope="col" className="px-6 py-3 xl:text-lg">
+              <th scope="col" className="px-4 py-3 xl:text-lg">
                 Day of Birth
               </th>
-              <th scope="col" className="px-6 py-3 xl:text-lg">
+              <th scope="col" className="px-4 py-3 xl:text-lg">
                 Gender
               </th>
-              <th scope="col" className="px-6 py-3 xl:text-lg">
+              <th scope="col" className="px-4 py-3 xl:text-lg">
                 Email
               </th>
-              <th scope="col" className="px-6 py-3 col-span-2 xl:text-lg">
-                Address
+              <th scope="col" className="px-4 py-3  xl:text-lg">
+                Permissions
               </th>
-              <th scope="col" className="px-6 py-3 xl:text-lg">
+              <th scope="col" className="px-4 py-3 xl:text-lg">
                 Status
               </th>
-              <th scope="col" className="px-6 py-3 xl:text-lg">
+              <th scope="col" className="px-4 py-3 xl:text-lg">
                 Action
               </th>
             </tr>
           </thead>
           <tbody>
-            {data.map((user: User) => (
+            {tableBody().map((user: User) => (
               <tr
                 key={user._id}
                 className="bg-gray-200 border-b text-gray-900 hover:bg-gray-300"
@@ -137,7 +145,13 @@ const Table = (props: Props) => {
                   {user.gender === 1 ? "Male" : "Female"}
                 </td>
                 <td className="px-4 py-4 text-lg">{user.email}</td>
-                <td className="px-4 py-4 col-span-2 text-lg">{user.address}</td>
+                <td className="px-4 py-4 text-lg">
+                  {user.permissions === 1
+                    ? "User"
+                    : user.permissions === 2
+                    ? "Inspection"
+                    : "Admin"}
+                </td>
                 <td className="px-4 py-4 text-lg">
                   <span
                     className={`${
@@ -221,12 +235,12 @@ const Table = (props: Props) => {
       <div
         className={`${
           !modalDelete ? "hidden" : "block "
-        } fixed inset-0 bg-black/40 backdrop-blur-sm flex justify-center items-center z-20`}
+        } fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center z-20`}
       >
         <div
           className={`bg-white p-8 bottom-0 border-4 border-green-600  rounded-lg flex flex-col items-center transition ease-in-out delay-150 duration-1000`}
         >
-          <span className="font-medium text-xl text-gray-950">
+          <span className="font-medium text-3xl text-gray-950">
             Do you want delete?
           </span>
           <div className="mt-6 grid grid-cols-2 gap-4">
@@ -238,13 +252,13 @@ const Table = (props: Props) => {
               }}
               className="bg-white border-2 border-red-600 text-red-600 px-6 py-0 rounded-lg hover:bg-red-600 hover:text-white"
             >
-              <span className="text-base font-medium uppercase  ">yes</span>
+              <span className="text-xl font-medium uppercase  ">yes</span>
             </button>
             <button
               onClick={() => setModalDelete(false)}
               className="bg-white border-2 border-gray-600 text-gray-600 px-6 py-0 rounded-lg hover:bg-gray-600 hover:text-white"
             >
-              <span className="text-base font-medium uppercase">no</span>
+              <span className="text-xl font-medium uppercase">no</span>
             </button>
           </div>
         </div>

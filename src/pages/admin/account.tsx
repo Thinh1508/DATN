@@ -10,13 +10,18 @@ import Table from "@/feature/Admin/components/account/Table"
 type Props = {}
 
 const Account: NextPageWithLayout = (props: Props) => {
+  const [isStatus, SetIsStatus] = useState("")
+  const onChangeStatus = (status: string) => {
+    SetIsStatus(status)
+    console.log(status)
+  }
   return (
-    <div className="sm:p-8 p-4 bg-gray-300 h-screen w-full overflow-y-auto">
+    <div className="sm:p-8 p-4 bg-gray-300 h-screen w-full overflow-y-auto scrollbar-style">
       <h1 className="p-4 sm:p-0 text-2xl font-semibold uppercase text-gray-700">
         account
       </h1>
-      <Header />
-      <Table />
+      <Header onChange={onChangeStatus} />
+      <Table status={isStatus} />
     </div>
   )
 }
