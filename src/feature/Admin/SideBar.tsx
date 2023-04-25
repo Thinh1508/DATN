@@ -3,12 +3,12 @@ import { useRouter } from "next/router"
 import Link from "next/link"
 
 import { RiAlertFill } from "react-icons/ri"
+import { FaThList } from "react-icons/fa"
 import {
   BsArrowLeftShort,
   BsSearch,
   BsPerson,
   BsPersonLinesFill,
-  BsCardImage,
   BsPostcardFill,
 } from "react-icons/bs"
 import {
@@ -39,7 +39,7 @@ const Menus = [
     link: "/admin/inspection",
   },
   { title: "post", icon: <BsPostcardFill />, link: "/admin/post" },
-  { title: "media", icon: <BsCardImage />, link: "/admin/media" },
+  { title: "category", icon: <FaThList />, link: "/admin/category" },
   { title: "document", icon: <AiFillFileText />, link: "/admin/document" },
   { title: "report", icon: <RiAlertFill />, link: "/admin/report" },
   {

@@ -25,19 +25,19 @@ const Table = (props: Props) => {
         <thead className="text-xs text-gray-300 uppercase bg-gray-900">
           <tr>
             <th scope="col" className="px-4 py-3 xl:text-lg">
-              Số/Kí hiệu
+              Symbol
             </th>
             <th scope="col" className="px-4 py-3 xl:text-lg">
-              Loại văn bản
+              Issuing Agency
             </th>
             <th scope="col" className="px-4 py-3 xl:text-lg">
-              Cơ quan ban hành
+              Category Document
             </th>
             <th scope="col" className="px-4 py-3 xl:text-lg">
-              Ngày ban hàng
+              Date Issued
             </th>
             <th scope="col" className="px-4 py-3  xl:text-lg">
-              Ngày có hiệu lực
+              Date Effective
             </th>
             <th scope="col" className="px-4 py-3 xl:text-lg">
               Status
