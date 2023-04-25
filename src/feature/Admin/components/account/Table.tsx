@@ -9,6 +9,7 @@ import { BiEdit, BiTrashAlt } from "react-icons/bi"
 import { deleteUser, getUsers } from "@/lib/helper"
 import { useQuery } from "react-query"
 import EditModel from "./EditModal"
+import ViewModal from "./ViewModal"
 
 type Props = { status: string }
 type User = {
@@ -18,7 +19,7 @@ type User = {
   address: string
   dob: string
   gender: number
-  permissions: number
+  permissions: string
   status: string
 }
 
@@ -30,6 +31,7 @@ const Table = (props: Props) => {
   const [userIdDelete, setUserIdDelete] = useState(String)
   const [showModalEdit, setShowModalEdit] = useState(false)
   const [userInfo, setUserInfo] = useState(Object)
+  const [viewModal, setViewModal] = useState(false)
 
   const handleOnClose = (mess: String, modal: String) => {
     setShowModalEdit(false)
@@ -83,6 +85,7 @@ const Table = (props: Props) => {
       }
     }
   }
+  const handleOnViewClose = () => setViewModal(false)
 
   const onDelete = async (userId: string) => {
     await deleteUser(userId)
@@ -137,28 +140,66 @@ const Table = (props: Props) => {
                 <th
                   scope="row"
                   className="px-4 py-4 font-medium  whitespace-nowrap text-lg"
+                  onClick={() => {
+                    setUserInfo(user)
+                    setViewModal(true)
+                  }}
                 >
                   {user.name}
                 </th>
-                <td className="px-4 py-4 text-lg">{user.dob}</td>
-                <td className="px-4 py-4 text-lg">
+                <td
+                  className="px-4 py-4 text-lg"
+                  onClick={() => {
+                    setUserInfo(user)
+                    setViewModal(true)
+                  }}
+                >
+                  {user.dob}
+                </td>
+                <td
+                  className="px-4 py-4 text-lg"
+                  onClick={() => {
+                    setUserInfo(user)
+                    setViewModal(true)
+                  }}
+                >
                   {user.gender === 1 ? "Male" : "Female"}
                 </td>
-                <td className="px-4 py-4 text-lg">{user.email}</td>
-                <td className="px-4 py-4 text-lg">
-                  {user.permissions === 1
+                <td
+                  className="px-4 py-4 text-lg"
+                  onClick={() => {
+                    setUserInfo(user)
+                    setViewModal(true)
+                  }}
+                >
+                  {user.email}
+                </td>
+                <td
+                  className="px-4 py-4 text-lg"
+                  onClick={() => {
+                    setUserInfo(user)
+                    setViewModal(true)
+                  }}
+                >
+                  {user.permissions === "user"
                     ? "User"
-                    : user.permissions === 2
+                    : user.permissions === "inspection"
                     ? "Inspection"
                     : "Admin"}
                 </td>
-                <td className="px-4 py-4 text-lg">
+                <td
+                  className="px-4 py-4 text-lg"
+                  onClick={() => {
+                    setUserInfo(user)
+                    setViewModal(true)
+                  }}
+                >
                   <span
                     className={`${
-                      user.status === "Active" ? "bg-green-500" : "bg-red-500"
+                      user.status === "active" ? "bg-green-500" : "bg-red-500"
                     } text-white px-6 py-2.5 rounded-xl text-lg`}
                   >
-                    {user.status === "Active" ? "Active" : "Block"}
+                    {user.status === "active" ? "Active" : "Block"}
                   </span>
                 </td>
                 <td className="flex items-center px-4 py-4 space-x-3 relative">
@@ -266,6 +307,11 @@ const Table = (props: Props) => {
       <EditModel
         onClose={handleOnClose}
         visible={showModalEdit}
+        userInfo={userInfo}
+      />
+      <ViewModal
+        onClose={handleOnViewClose}
+        visible={viewModal}
         userInfo={userInfo}
       />
     </div>

@@ -94,8 +94,8 @@ const Header = (props: Props) => {
           className="bg-gray-300 outline-none flex items-center  text-gray-900 text-sm rounded-lg focus:ring-blue-500  w-full p-1.5 sm:p-2.5 "
         >
           <option value="">Choose a status</option>
-          <option value="Active">Active</option>
-          <option value="Block">Block</option>
+          <option value="active">Active</option>
+          <option value="block">Block</option>
         </select>
         <ToastContainer />
       </div>

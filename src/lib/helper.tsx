@@ -67,3 +67,11 @@ export async function deleteUser(userId: string) {
 
   return json
 }
+
+// all category
+export const getCategory = async () => {
+  const response = await fetch(`${BASE_URL}/api/categorys`)
+  const json = await response.json()
+
+  return json
+}

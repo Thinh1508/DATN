@@ -9,7 +9,7 @@ type User = {
   email: string
   address: string
   dob: string
-  gender: string
+  gender: number
   permissions: string
   status: string
 }
@@ -175,6 +175,9 @@ const EditModel = (props: Props) => {
                     className="bg-gray-50 border-2 border-gray-400 text-gray-900 text-xl rounded-lg outline-none  block w-full p-2.5 "
                     placeholder="Select date"
                   />
+                  <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
+                    Day of birth
+                  </label>
                 </div>
                 <div className="relative border-2 border-gray-400 rounded-lg">
                   <select
@@ -201,9 +204,9 @@ const EditModel = (props: Props) => {
                     <option className="relative" value="DEFAULT">
                       Choose a permission
                     </option>
-                    <option value="1">User</option>
-                    <option value="2">Inspection</option>
-                    <option value="3">Admin</option>
+                    <option value="user">User</option>
+                    <option value="inspection">Inspection</option>
+                    <option value="admin">Admin</option>
                   </select>
                   <BsChevronDown className="absolute right-3 top-[30%] text-gray-600" />
                 </div>
@@ -212,11 +215,11 @@ const EditModel = (props: Props) => {
                 <div className="flex items-center">
                   <input
                     type="radio"
-                    value={"Active"}
+                    value={"active"}
                     id="radioDefault1"
                     onChange={handleChange}
                     name="status"
-                    defaultChecked={data.status == "Active"}
+                    defaultChecked={data.status == "active"}
                     className="form-check-input appearance-none rounded-full h-5 w-5 border border-gray-300 checked:bg-green-500 checked:border-green-500 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                   />
                   <label
@@ -229,11 +232,11 @@ const EditModel = (props: Props) => {
                 <div className="flex items-center">
                   <input
                     type="radio"
-                    value={"Block"}
+                    value={"block"}
                     id="radioDefault2"
                     name="status"
                     onChange={handleChange}
-                    defaultChecked={data.status !== "Active"}
+                    defaultChecked={data.status !== "active"}
                     className="form-check-input appearance-none rounded-full h-5 w-5 border border-gray-300 checked:bg-red-500 checked:border-red-500 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                   />
                   <label
@@ -252,6 +255,12 @@ const EditModel = (props: Props) => {
                 className="sm:w-1/2 text-yellow-700 bg-white border border-yellow-700 hover:bg-yellow-700 hover:transition-all hover:duration-500 ease-in-out hover:text-white  font-medium rounded-lg text-lg px-5 py-2.5 text-center "
               >
                 Edit
+              </button>
+              <button
+                onClick={() => props.onClose("close", "")}
+                className="sm:w-1/2 text-gray-950 bg-white border border-gray-900 hover:bg-gray-900 hover:transition-all hover:duration-500 ease-in-out hover:text-white  font-medium rounded-lg text-lg px-5 py-2.5 text-center "
+              >
+                Close
               </button>
             </div>
           </form>

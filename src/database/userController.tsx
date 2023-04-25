@@ -1,6 +1,6 @@
 // user controller
 
-import Users from "@/model/user"
+import Users from "@/model/Users"
 import { NextApiRequest, NextApiResponse } from "next"
 
 //get:http://localhost:3000/api/users
