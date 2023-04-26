@@ -256,7 +256,7 @@ const Table = (props: Props) => {
           ))}
         </tbody>
       </table>
-      <div className="mt-7 w-full h-fit flex flex-row sm:justify-end justify-center">
+      {/* <div className="mt-7 w-full h-fit flex flex-row sm:justify-end justify-center">
         <nav className="">
           <ul className="inline-flex -space-x-px">
             <li>
@@ -301,7 +301,7 @@ const Table = (props: Props) => {
             </li>
           </ul>
         </nav>
-      </div>
+      </div> */}
       <div
         className={`${
           !modalDelete ? "hidden" : "block "

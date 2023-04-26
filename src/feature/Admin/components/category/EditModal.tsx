@@ -126,7 +126,7 @@ const EditModel = (props: Props) => {
                   onChange={handleChange}
                   name="title"
                   defaultValue={data.title}
-                  className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-950 bg-transparent peer  appearance-none  focus:outline-none focus:ring-0 "
+                  className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-950 bg-transparent peer  appearance-none  focus:outline-none focus:ring-0 capitalize"
                   placeholder=" "
                 />
                 <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
@@ -135,17 +135,16 @@ const EditModel = (props: Props) => {
               </div>
 
               <div className="relative border-2 border-gray-400 rounded-lg">
-                <input
-                  type="text"
-                  onChange={handleChange}
+                <select
                   name="description"
+                  onChange={handleChange}
                   defaultValue={data.description}
-                  className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-950 bg-transparent peer  appearance-none  focus:outline-none focus:ring-0 "
-                  placeholder=" "
-                />
-                <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
-                  Description
-                </label>
+                  className="block px-2.5 py-2.5 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                >
+                  <option value="agency">Agency</option>
+                  <option value="document">Document</option>
+                  <option value="post">Post</option>
+                </select>
               </div>
             </div>
 

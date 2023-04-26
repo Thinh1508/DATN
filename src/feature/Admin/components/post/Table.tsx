@@ -9,6 +9,7 @@ import AddModal from "../post/AddModal"
 import { useQuery, useQueryClient } from "react-query"
 import { getPost, deletePost } from "@/lib/helper"
 import ViewModal from "./ViewModal"
+import EditModal from "./EditModal"
 // import ViewModal from "./ViewModal"
 // import EditModel from "./EditModal"
 
@@ -226,7 +227,13 @@ const Table = (props: Props) => {
               >
                 {post.userCreate}
               </td>
-              <td className="px-4 py-4 text-lg">
+              <td
+                className="px-4 py-4 text-lg"
+                onClick={() => {
+                  setPostInfo(post)
+                  setViewModal(true)
+                }}
+              >
                 <span
                   className={`${
                     post.status === "active" ? "bg-green-500" : "bg-red-500"
@@ -236,7 +243,13 @@ const Table = (props: Props) => {
                 </span>
               </td>
               <td className="flex items-center px-4 py-4 space-x-3 relative">
-                <button className="cursor">
+                <button
+                  className="cursor"
+                  onClick={() => {
+                    setPostInfo(post)
+                    setShowModalEdit(true)
+                  }}
+                >
                   <BiEdit size={25} color="rgb(34,197,94)" />
                 </button>
                 <button
@@ -332,11 +345,11 @@ const Table = (props: Props) => {
       </div>
       <ToastContainer />
       <AddModal onClose={handleOnClose} visible={addModal} />
-      {/* <EditModel
+      <EditModal
         onClose={handleOnClose1}
         visible={showModalEdit}
-        categoryInfo={categoryInfo}
-      /> */}
+        postInfo={postInfo}
+      />
       <ViewModal
         onViewClose={handleOnViewClose}
         visible={viewModal}

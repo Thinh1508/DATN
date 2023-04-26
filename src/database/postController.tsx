@@ -54,7 +54,7 @@ export async function putPost(req: NextApiRequest, res: NextApiResponse) {
       await Post.findByIdAndUpdate(postId, formData)
       return res.status(200).json(formData)
     }
-    res.status(400).json({ error: "User Not Selected...!" })
+    res.status(401).json({ error: "User Not Selected...!" })
   } catch (error) {
     res.status(400).json(error)
   }

@@ -164,6 +164,22 @@ export async function addPost(formData: any) {
   }
 }
 
+export async function updatePost({ postId, formData }: any) {
+  const Options = {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(formData),
+  }
+  console.log(postId, formData)
+  const response = await fetch(
+    `${BASE_URL}/api/post/?postId=${postId}`,
+    Options
+  )
+  const json = await response.json()
+
+  return json
+}
+
 //delete post
 export async function deletePost(postId: string) {
   const Options = {

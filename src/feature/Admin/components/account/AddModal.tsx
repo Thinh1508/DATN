@@ -212,7 +212,7 @@ const AddModal = (props: Props) => {
                   <BsChevronDown className="absolute right-3 top-[30%] text-gray-600" />
                 </div>
               </div>
-              <div className="relative flex flex-row items-center gap-4">
+              {/* <div className="relative flex flex-row items-center gap-4">
                 <div className="flex items-center">
                   <input
                     type="radio"
@@ -245,7 +245,7 @@ const AddModal = (props: Props) => {
                     Block
                   </label>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b ">

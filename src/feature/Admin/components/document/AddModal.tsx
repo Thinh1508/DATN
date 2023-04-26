@@ -1,5 +1,5 @@
-import React, { useState } from "react"
-import { BsChevronDown } from "react-icons/bs"
+import React, { useRef, useState } from "react"
+import { AiOutlineClose } from "react-icons/ai"
 
 import { useQuery } from "react-query"
 import { getCategory } from "@/lib/helper"
@@ -25,18 +25,23 @@ const AddModal = (props: Props) => {
   const agencyCategory = () => {
     const agency = data
     return agency.filter(
-      (category: Category) => category.description === "Agency"
+      (category: Category) => category.description === "agency"
     )
   }
   const documentCategory = () => {
     const document = data
     return document.filter(
-      (category: Category) => category.description === "Document"
+      (category: Category) => category.description === "document"
     )
   }
 
   const [pdfFile, setPdfFile] = useState(null)
   const [viewFdf, setViewFdf] = useState(null)
+  const [fileName, setFileName] = useState("")
+  function handleFileChange(event: any) {
+    const file = event.target.files[0]
+    setFileName(file.name)
+  }
 
   const handelFileChange = (e: any) => {
     setViewFdf(null)
@@ -177,8 +182,8 @@ const AddModal = (props: Props) => {
                 </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="flex flex-row items-center gap-6">
-                  <div className="flex items-center">
+                <div className="flex flex-row items-center gap-6 relative">
+                  {/* <div className="flex items-center">
                     <input
                       type="radio"
                       value={"active"}
@@ -209,21 +214,31 @@ const AddModal = (props: Props) => {
                     >
                       Block
                     </label>
-                  </div>
-                </div>
-                <div className="flex flex-row gap-2">
+                  </div> */}
                   <input
-                    className="block w-2/3 p-2 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
+                    className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 pr-6"
                     id="file_input"
                     type="file"
                     onChange={handelFileChange}
                     accept=".pdf"
                   />
                   <span
-                    className="text-red-700 cursor-pointer border-2 border-red-700 rounded-lg text-lg px-2 py-1 hover:text-white hover:bg-red-700"
+                    className="absolute text-gray-700 top-3 right-1 hover:bg-gray-300 hover:text-gray-900 p-1 hover:rounded-md cursor-pointer"
+                    onClick={() => {
+                      console.log(pdfFile)
+                      setPdfFile(null)
+                      setViewFdf(null)
+                    }}
+                  >
+                    <AiOutlineClose size={15} />
+                  </span>
+                </div>
+                <div className="flex flex-row">
+                  <span
+                    className="text-red-700 cursor-pointer border-2 border-red-700 rounded-lg text-lg p-1 hover:text-white hover:bg-red-700 "
                     onClick={handleShowFile}
                   >
-                    show file
+                    Show file
                   </span>
                 </div>
               </div>
