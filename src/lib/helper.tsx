@@ -129,3 +129,53 @@ export async function deleteCategory(Id: string) {
 
   return json
 }
+
+//all post
+export const getPost = async () => {
+  const response = await fetch(`${BASE_URL}/api/post`)
+  const json = await response.json()
+
+  return json
+}
+
+//single Post
+export const getPostId = async (postId: string) => {
+  const response = await fetch(`${BASE_URL}/api/post/${postId}`)
+  const json = await response.json()
+
+  if (json) return json
+  return {}
+}
+
+//posting new user
+export async function addPost(formData: any) {
+  try {
+    const Options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    }
+    const response = await fetch(`${BASE_URL}/api/post`, Options)
+    const json = await response.json()
+
+    return json
+  } catch (error) {
+    return error
+  }
+}
+
+//delete post
+export async function deletePost(postId: string) {
+  const Options = {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+  }
+
+  const response = await fetch(
+    `${BASE_URL}/api/post/?postId=${postId}`,
+    Options
+  )
+  const json = await response.json()
+
+  return json
+}

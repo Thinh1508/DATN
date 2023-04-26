@@ -61,6 +61,9 @@ const AddModal = (props: Props) => {
 
   const handleChange = () => {}
   const newPlugin = defaultLayoutPlugin()
+
+  if (isLoading) return <div>Employee is Loading...</div>
+  if (isError) return <div>Got Error {`${error}`}</div>
   if (!props.visible) return null
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex justify-center items-center z-20">

@@ -2,11 +2,11 @@ import type { NextApiRequest, NextApiResponse } from "next"
 
 import connectMongo from "@/database/conn"
 import {
-  getCategory,
-  postCategory,
-  putCategory,
-  deleteCategory,
-} from "@/database/categoryController"
+  getPost,
+  postPost,
+  putPost,
+  deletePost,
+} from "@/database/postController"
 
 export default async function handler(
   req: NextApiRequest,
@@ -21,16 +21,16 @@ export default async function handler(
 
   switch (method) {
     case "GET":
-      getCategory(req, res)
+      getPost(req, res)
       break
     case "POST":
-      postCategory(req, res)
+      postPost(req, res)
       break
     case "PUT":
-      putCategory(req, res)
+      putPost(req, res)
       break
     case "DELETE":
-      deleteCategory(req, res)
+      deletePost(req, res)
       break
     default:
       // res.setHeader("Allowd", ["GET", "POST", "PUT", "DELETE"])
