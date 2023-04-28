@@ -4,7 +4,7 @@ import Users from "@/model/Users"
 import { NextApiRequest, NextApiResponse } from "next"
 
 //get:http://localhost:3000/api/users
-export async function getUsers(req: NextApiRequest, res: NextApiResponse) {
+export async function getUser(req: NextApiRequest, res: NextApiResponse) {
   try {
     const users = await Users.find()
     if (!users) return res.status(404).json({ error: "Data Not Found" })
@@ -16,7 +16,7 @@ export async function getUsers(req: NextApiRequest, res: NextApiResponse) {
 }
 
 //get:http://localhost:3000/api/users/1
-export async function getUser(req: NextApiRequest, res: NextApiResponse) {
+export async function getUserId(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { userId } = req.query
     if (userId) {
@@ -30,7 +30,7 @@ export async function getUser(req: NextApiRequest, res: NextApiResponse) {
 }
 
 //post:http://localhost:3000/api/users
-export async function postUsers(req: NextApiRequest, res: NextApiResponse) {
+export async function postUser(req: NextApiRequest, res: NextApiResponse) {
   try {
     const formData = req.body
     if (!formData)
@@ -45,7 +45,7 @@ export async function postUsers(req: NextApiRequest, res: NextApiResponse) {
 }
 
 //put:http://localhost:3000/api/users/1
-export async function putUsers(req: NextApiRequest, res: NextApiResponse) {
+export async function putUser(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { userId } = req.query
     const formData = req.body
@@ -61,7 +61,7 @@ export async function putUsers(req: NextApiRequest, res: NextApiResponse) {
 }
 
 //delete:http://localhost:3000/api/users/1
-export async function deleteUsers(req: NextApiRequest, res: NextApiResponse) {
+export async function deleteUser(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { userId } = req.query
     console.log(userId)

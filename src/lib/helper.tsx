@@ -1,8 +1,9 @@
 const BASE_URL = "http://localhost:3000"
 
+// User
 //all user
 export const getUsers = async () => {
-  const response = await fetch(`${BASE_URL}/api/users`)
+  const response = await fetch(`${BASE_URL}/api/user`)
   const json = await response.json()
 
   return json
@@ -10,7 +11,7 @@ export const getUsers = async () => {
 
 //single user
 export const getUser = async (userId: string) => {
-  const response = await fetch(`${BASE_URL}/api/users/${userId}`)
+  const response = await fetch(`${BASE_URL}/api/user/${userId}`)
   const json = await response.json()
 
   if (json) return json
@@ -26,7 +27,7 @@ export async function addUser(formData: any) {
       body: JSON.stringify(formData),
     }
 
-    const response = await fetch(`${BASE_URL}/api/users`, Options)
+    const response = await fetch(`${BASE_URL}/api/user`, Options)
     const json = await response.json()
 
     return json
@@ -44,7 +45,7 @@ export async function updateUser({ userId, formData }: any) {
   }
 
   const response = await fetch(
-    `${BASE_URL}/api/users/?userId=${userId}`,
+    `${BASE_URL}/api/user/?userId=${userId}`,
     Options
   )
   const json = await response.json()
@@ -60,7 +61,7 @@ export async function deleteUser(userId: string) {
   }
 
   const response = await fetch(
-    `${BASE_URL}/api/users/?userId=${userId}`,
+    `${BASE_URL}/api/user/?userId=${userId}`,
     Options
   )
   const json = await response.json()
@@ -68,24 +69,25 @@ export async function deleteUser(userId: string) {
   return json
 }
 
+// category
 // all category
 export const getCategory = async () => {
-  const response = await fetch(`${BASE_URL}/api/categorys`)
+  const response = await fetch(`${BASE_URL}/api/category`)
   const json = await response.json()
 
   return json
 }
 
 //single category
-export const getCategoryId = async (Id: string) => {
-  const response = await fetch(`${BASE_URL}/api/categorys/${Id}`)
+export const getCategoryId = async (categoryId: string) => {
+  const response = await fetch(`${BASE_URL}/api/category/${categoryId}`)
   const json = await response.json()
 
   if (json) return json
   return {}
 }
 
-//posting new user
+//posting new category
 export async function addCategory(formData: any) {
   try {
     const Options = {
@@ -94,7 +96,7 @@ export async function addCategory(formData: any) {
       body: JSON.stringify(formData),
     }
 
-    const response = await fetch(`${BASE_URL}/api/categorys`, Options)
+    const response = await fetch(`${BASE_URL}/api/category`, Options)
     const json = await response.json()
 
     return json
@@ -104,32 +106,37 @@ export async function addCategory(formData: any) {
 }
 
 //update category
-export async function updateCategory({ Id, formData }: any) {
+export async function updateCategory({ categoryId, formData }: any) {
   const Options = {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(formData),
   }
-  console.log(Id, formData)
-  const response = await fetch(`${BASE_URL}/api/categorys/?Id=${Id}`, Options)
+  const response = await fetch(
+    `${BASE_URL}/api/category/?categoryId=${categoryId}`,
+    Options
+  )
   const json = await response.json()
 
   return json
 }
 
 //delete category
-export async function deleteCategory(Id: string) {
+export async function deleteCategory(categoryId: string) {
   const Options = {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
   }
-
-  const response = await fetch(`${BASE_URL}/api/categorys/?Id=${Id}`, Options)
+  const response = await fetch(
+    `${BASE_URL}/api/category/?categoryId=${categoryId}`,
+    Options
+  )
   const json = await response.json()
 
   return json
 }
 
+// post
 //all post
 export const getPost = async () => {
   const response = await fetch(`${BASE_URL}/api/post`)

@@ -20,15 +20,18 @@ import {
 } from "react-icons/ai"
 
 const Menus = [
-  { title: "statistical", link: "/admin" },
+  { title: "Thống kê", link: "/admin" },
   {
-    title: "account",
+    title: "Tài khoản",
     icon: <BsPersonLinesFill />,
     spacing: true,
     link: "/admin/account",
   },
+  { title: "Danh mục", icon: <FaThList />, link: "/admin/category" },
+  { title: "Bài viết", icon: <BsPostcardFill />, link: "/admin/post" },
+  { title: "Văn bản", icon: <AiFillFileText />, link: "/admin/document" },
   {
-    title: "inspection",
+    title: "Thanh tra",
     icon: <AiFillReconciliation />,
     // submenu: true,
     // submenuItems: [
@@ -38,18 +41,15 @@ const Menus = [
     // ],
     link: "/admin/inspection",
   },
-  { title: "post", icon: <BsPostcardFill />, link: "/admin/post" },
-  { title: "category", icon: <FaThList />, link: "/admin/category" },
-  { title: "document", icon: <AiFillFileText />, link: "/admin/document" },
-  { title: "report", icon: <RiAlertFill />, link: "/admin/report" },
+  { title: "Báo cáo", icon: <RiAlertFill />, link: "/admin/report" },
   {
-    title: "profile",
+    title: "Trang cá nhân",
     icon: <BsPerson />,
     spacing: true,
     link: "/admin/profile",
   },
-  { title: "setting", icon: <AiOutlineSetting />, link: "/admin/setting" },
-  { title: "logout", icon: <AiOutlineLogout />, link: "/admin/logout" },
+  { title: "Cài đặt", icon: <AiOutlineSetting />, link: "/admin/setting" },
+  { title: "Đăng xuất", icon: <AiOutlineLogout />, link: "/admin/logout" },
 ]
 
 type Props = {}

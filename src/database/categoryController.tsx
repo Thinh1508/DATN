@@ -1,7 +1,7 @@
 import Category from "@/model/Category"
 import { NextApiRequest, NextApiResponse } from "next"
 
-//get:http://localhost:3000/api/categorys
+//get:http://localhost:3000/api/category
 export async function getCategory(req: NextApiRequest, res: NextApiResponse) {
   try {
     const category = await Category.find()
@@ -16,10 +16,10 @@ export async function getCategory(req: NextApiRequest, res: NextApiResponse) {
 //get:http://localhost:3000/api/category/1
 export async function getCategoryId(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { Id } = req.query
-    if (Id) {
-      const user = await Category.findById(Id)
-      res.status(200).json(user)
+    const { categoryId } = req.query
+    if (categoryId) {
+      const category = await Category.findById(categoryId)
+      res.status(200).json(category)
     }
     res.status(400).json({ error: "Category Not Selected...!" })
   } catch (error) {
@@ -27,7 +27,7 @@ export async function getCategoryId(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-//post:http://localhost:3000/api/categorys
+//post:http://localhost:3000/api/category
 export async function postCategory(req: NextApiRequest, res: NextApiResponse) {
   try {
     const formData = req.body
@@ -42,14 +42,14 @@ export async function postCategory(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-//put:http://localhost:3000/api/categorys/1
+//put:http://localhost:3000/api/category/1
 export async function putCategory(req: NextApiRequest, res: NextApiResponse) {
+  console.log(req.query, req.body)
   try {
-    const { Id } = req.query
+    const { categoryId } = req.query
     const formData = req.body
-    console.log(Id, formData)
-    if (Id && formData) {
-      await Category.findByIdAndUpdate(Id, formData)
+    if (categoryId && formData) {
+      await Category.findByIdAndUpdate(categoryId, formData)
       return res.status(200).json(formData)
     }
     res.status(400).json({ error: "Category Not Selected...!" })
@@ -58,16 +58,17 @@ export async function putCategory(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-//delete:http://localhost:3000/api/category/1
+//delete:http://localhost:3000/api/category/1yyy
 export async function deleteCategory(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   try {
-    const { Id } = req.query
-    if (Id) {
-      await Category.findByIdAndDelete(Id)
-      return res.status(200).json({ delete: Id })
+    const { categoryId } = req.query
+    console.log(categoryId)
+    if (categoryId) {
+      await Category.findByIdAndDelete(categoryId)
+      return res.status(200).json({ delete: categoryId })
     }
 
     res.status(400).json({ error: "Category Not Selected...!" })

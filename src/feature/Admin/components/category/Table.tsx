@@ -5,11 +5,9 @@ import { BiEdit, BiTrashAlt } from "react-icons/bi"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 
-import AddModal from "../category/AddModal"
 import { useQuery, useQueryClient } from "react-query"
 import { deleteCategory, getCategory } from "@/lib/helper"
-import ViewModal from "./ViewModal"
-import EditModel from "./EditModal"
+import Modal from "./Modal"
 
 type Props = {}
 type Category = {
@@ -24,25 +22,24 @@ type Category = {
 const Table = (props: Props) => {
   const queryClient = useQueryClient()
   const { isLoading, isError, data, error } = useQuery("category", getCategory)
-  const [addModal, setAddModal] = useState(false)
+
+  const [modal, setModal] = useState(false)
+  const [action, setAction] = useState("")
+  const [categoryInfo, setCategoryInfo] = useState(Object)
   const [modalDelete, setModalDelete] = useState(false)
-  const [userIdDelete, setUserIdDelete] = useState(String)
-  const [showModalEdit, setShowModalEdit] = useState(false)
-  const onDelete = async (userId: string) => {
-    await deleteCategory(userId)
+  const [categoryIdDelete, setCategoryIdDelete] = useState(String)
+
+  const onDelete = async (categoryId: string) => {
+    await deleteCategory(categoryId)
     await queryClient.prefetchQuery("category", getCategory)
   }
 
-  const [categoryInfo, setCategoryInfo] = useState(Object)
-  const [viewModal, setViewModal] = useState(false)
-
   const handleOnClose = (mess: String) => {
-    console.log(mess)
-    setAddModal(false)
+    setModal(false)
     if (mess !== "close") {
       switch (mess) {
         case "success":
-          toast.success("Add New Account Success!", {
+          toast.success(`${action === "add" ? "Thêm" : "Sửa"} Thành công!`, {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -54,7 +51,7 @@ const Table = (props: Props) => {
           })
           break
         case "error":
-          toast.error("Add New Account False!", {
+          toast.error(`${action === "add" ? "Thêm" : "Sửa"} Thành công!`, {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -66,7 +63,7 @@ const Table = (props: Props) => {
           })
           break
         default:
-          toast("Is Loading!", {
+          toast("Đang thực hiện!", {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -76,59 +73,7 @@ const Table = (props: Props) => {
             progress: undefined,
             theme: "light",
           })
-          toast.success("Add New Account Success!", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          })
-      }
-    }
-  }
-  const handleOnClose1 = (mess: String, modal: String) => {
-    setShowModalEdit(false)
-    if (mess !== "close") {
-      switch (mess) {
-        case "success":
-          toast.success(`${modal} Success!`, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          })
-          break
-        case "error":
-          toast.error(`${modal} False!`, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          })
-          break
-        default:
-          toast("Is Loading!", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          })
-          toast.success("Add New Account Success!", {
+          toast.success(`${action === "add" ? "Thêm" : "Sửa"} Thành công!`, {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -140,122 +85,130 @@ const Table = (props: Props) => {
           })
       }
     }
-  }
-  const handleOnViewClose = () => {
-    setViewModal(false)
   }
 
   if (isLoading) return <div>Employee is Loading...</div>
   if (isError) return <div>Got Error {`${error}`}</div>
   return (
-    <div className="bg-white w-full border p-4 mt-4  rounded-lg h-[84vh] xl:h-[82vh] overflow-y-auto scrollbar-style">
+    <div className="bg-white w-full border p-4 mt-4  rounded-lg h-[84vh] xl:h-[82vh] ">
       <div className="mb-4">
         <button
           className="bg-white py-2 px-6 border-green-600 text-green-600 border-2 rounded-lg hover:bg-green-600 hover:text-white"
-          onClick={() => setAddModal(true)}
+          onClick={() => {
+            setAction("add")
+            setModal(true)
+          }}
         >
-          <span className="font-medium">Add New Category</span>
+          <span className="font-medium">Thêm mới danh mục</span>
         </button>
       </div>
-      <table className="w-full text-sm text-left text-gray-500 ">
-        <thead className="text-xs text-gray-300 uppercase bg-gray-900">
-          <tr>
-            <th scope="col" className="px-4 py-3 xl:text-lg">
-              Title
-            </th>
-            <th scope="col" className="px-4 py-3 xl:text-lg">
-              Slug
-            </th>
-            <th scope="col" className="px-4 py-3 xl:text-lg">
-              Description
-            </th>
-            <th scope="col" className="px-4 py-3 xl:text-lg">
-              CreatedAt
-            </th>
-            <th scope="col" className="px-4 py-3 xl:text-lg">
-              UpdatedAt
-            </th>
-            <th scope="col" className="px-4 py-3 xl:text-lg">
-              Action
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((category: Category) => (
-            <tr
-              className="bg-gray-200 border-b text-gray-900 hover:bg-gray-300"
-              key={category._id}
-            >
-              <th
-                scope="row"
-                className="px-4 py-4 font-medium  whitespace-nowrap text-lg"
-                onClick={() => {
-                  setCategoryInfo(category)
-                  setViewModal(true)
-                }}
-              >
-                {category.title}
+      <div className="max-h-[91%] overflow-y-auto scrollbar-style">
+        <table className="w-full text-sm text-left text-gray-500 ">
+          <thead className="text-xs text-gray-300 uppercase bg-gray-900 sticky top-0 z-10">
+            <tr>
+              <th scope="col" className="px-4 py-3 xl:text-lg">
+                Tiêu đề
               </th>
-              <td
-                className="px-4 py-4 text-lg"
-                onClick={() => {
-                  setCategoryInfo(category)
-                  setViewModal(true)
-                }}
+              <th scope="col" className="px-4 py-3 xl:text-lg">
+                Slug
+              </th>
+              <th scope="col" className="px-4 py-3 xl:text-lg">
+                Loại danh mục
+              </th>
+              <th scope="col" className="px-4 py-3 xl:text-lg">
+                Ngày tạo
+              </th>
+              <th scope="col" className="px-4 py-3 xl:text-lg">
+                Ngày cập nhập
+              </th>
+              <th scope="col" className="px-4 py-3 xl:text-lg">
+                Tuỳ chọn
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((category: Category) => (
+              <tr
+                className="bg-gray-200 border-b text-gray-900 hover:bg-gray-300"
+                key={category._id}
               >
-                {category.slug}
-              </td>
-              <td
-                className="px-4 py-4 text-lg"
-                onClick={() => {
-                  setCategoryInfo(category)
-                  setViewModal(true)
-                }}
-              >
-                {category.description}
-              </td>
-              <td
-                className="px-4 py-4 text-lg"
-                onClick={() => {
-                  setCategoryInfo(category)
-                  setViewModal(true)
-                }}
-              >
-                {category.createdAt}
-              </td>
-              <td
-                className="px-4 py-4 text-lg"
-                onClick={() => {
-                  setCategoryInfo(category)
-                  setViewModal(true)
-                }}
-              >
-                {category.updatedAt}
-              </td>
-              <td className="flex items-center px-4 py-4 space-x-3 relative">
-                <button
-                  className="cursor"
+                <th
+                  scope="row"
+                  className="px-4 py-4 font-medium  whitespace-nowrap text-lg"
                   onClick={() => {
                     setCategoryInfo(category)
-                    setShowModalEdit(true)
+                    setAction("view")
+                    setModal(true)
                   }}
                 >
-                  <BiEdit size={25} color="rgb(34,197,94)" />
-                </button>
-                <button
-                  className="cursor"
+                  {category.title}
+                </th>
+                <td
+                  className="px-4 py-4 text-lg"
                   onClick={() => {
-                    setUserIdDelete(category._id)
-                    setModalDelete(true)
+                    setCategoryInfo(category)
+                    setAction("view")
+                    setModal(true)
                   }}
                 >
-                  <BiTrashAlt size={25} color="rgb(244,63,94)" />
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                  {category.slug}
+                </td>
+                <td
+                  className="px-4 py-4 text-lg"
+                  onClick={() => {
+                    setCategoryInfo(category)
+                    setAction("view")
+                    setModal(true)
+                  }}
+                >
+                  {category.description}
+                </td>
+                <td
+                  className="px-4 py-4 text-lg"
+                  onClick={() => {
+                    setCategoryInfo(category)
+                    setAction("view")
+                    setModal(true)
+                  }}
+                >
+                  {category.createdAt}
+                </td>
+                <td
+                  className="px-4 py-4 text-lg"
+                  onClick={() => {
+                    setCategoryInfo(category)
+                    setAction("view")
+                    setModal(true)
+                  }}
+                >
+                  {category.updatedAt}
+                </td>
+                <td className="flex items-center px-4 py-4 space-x-3 relative">
+                  <button
+                    className="cursor"
+                    onClick={() => {
+                      setCategoryInfo(category)
+                      setAction("edit")
+                      setModal(true)
+                    }}
+                  >
+                    <BiEdit size={25} color="rgb(34,197,94)" />
+                  </button>
+                  <button
+                    className="cursor"
+                    onClick={() => {
+                      setCategoryIdDelete(category._id)
+                      setModalDelete(true)
+                    }}
+                  >
+                    <BiTrashAlt size={25} color="rgb(244,63,94)" />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       {/* <div className="mt-7 w-full h-fit flex flex-row sm:justify-end justify-center">
         <nav className="">
           <ul className="inline-flex -space-x-px">
@@ -311,40 +264,38 @@ const Table = (props: Props) => {
           className={`bg-white p-8 bottom-0 border-4 border-green-600  rounded-lg flex flex-col items-center transition ease-in-out delay-150 duration-1000`}
         >
           <span className="font-medium text-3xl text-gray-950">
-            Do you want delete?
+            Bạn có thực sự muốn xoá danh mục?
           </span>
-          <div className="mt-6 grid grid-cols-2 gap-4">
+          <div className="mt-6 grid grid-cols-2 gap-10  ">
             <button
               onClick={() => {
-                if (userIdDelete.length > 0) onDelete(userIdDelete)
+                if (categoryIdDelete.length > 0) onDelete(categoryIdDelete)
+                console.log(categoryIdDelete)
                 setModalDelete(false)
-                setUserIdDelete("")
+                setCategoryIdDelete("")
               }}
               className="bg-white border-2 border-red-600 text-red-600 px-6 py-0 rounded-lg hover:bg-red-600 hover:text-white"
             >
-              <span className="text-xl font-medium uppercase  ">yes</span>
+              <span className="text-xl font-medium capitalize">Có</span>
             </button>
             <button
               onClick={() => setModalDelete(false)}
               className="bg-white border-2 border-gray-600 text-gray-600 px-6 py-0 rounded-lg hover:bg-gray-600 hover:text-white"
             >
-              <span className="text-xl font-medium uppercase">no</span>
+              <span className="text-xl font-medium capitalize">Không</span>
             </button>
           </div>
         </div>
       </div>
       <ToastContainer />
-      <AddModal onClose={handleOnClose} visible={addModal} />
-      <EditModel
-        onClose={handleOnClose1}
-        visible={showModalEdit}
-        categoryInfo={categoryInfo}
-      />
-      <ViewModal
-        onViewClose={handleOnViewClose}
-        visible={viewModal}
-        categoryInfo={categoryInfo}
-      />
+      {modal && (
+        <Modal
+          action={action}
+          onClose={handleOnClose}
+          visible={modal}
+          categoryData={categoryInfo}
+        />
+      )}
     </div>
   )
 }

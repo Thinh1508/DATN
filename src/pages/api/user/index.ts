@@ -2,10 +2,10 @@ import type { NextApiRequest, NextApiResponse } from "next"
 
 import connectMongo from "@/database/conn"
 import {
-  getUsers,
-  postUsers,
-  putUsers,
-  deleteUsers,
+  getUser,
+  postUser,
+  putUser,
+  deleteUser,
 } from "@/database/userController"
 
 export default async function handler(
@@ -21,16 +21,16 @@ export default async function handler(
 
   switch (method) {
     case "GET":
-      getUsers(req, res)
+      getUser(req, res)
       break
     case "POST":
-      postUsers(req, res)
+      postUser(req, res)
       break
     case "PUT":
-      putUsers(req, res)
+      putUser(req, res)
       break
     case "DELETE":
-      deleteUsers(req, res)
+      deleteUser(req, res)
       break
     default:
       // res.setHeader("Allowd", ["GET", "POST", "PUT", "DELETE"])
