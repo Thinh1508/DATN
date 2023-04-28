@@ -2,7 +2,7 @@ const BASE_URL = "http://localhost:3000"
 
 // User
 //all user
-export const getUsers = async () => {
+export const getUser = async () => {
   const response = await fetch(`${BASE_URL}/api/user`)
   const json = await response.json()
 
@@ -10,7 +10,7 @@ export const getUsers = async () => {
 }
 
 //single user
-export const getUser = async (userId: string) => {
+export const getUserId = async (userId: string) => {
   const response = await fetch(`${BASE_URL}/api/user/${userId}`)
   const json = await response.json()
 

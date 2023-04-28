@@ -6,10 +6,9 @@ import "react-toastify/dist/ReactToastify.css"
 
 import { BiEdit, BiTrashAlt } from "react-icons/bi"
 
-import { deleteUser, getUsers } from "@/lib/helper"
+import { deleteUser, getUser } from "@/lib/helper"
 import { useQuery } from "react-query"
-import EditModel from "./EditModal"
-import ViewModal from "./ViewModal"
+import Modal from "./Modal"
 
 type Props = { status: string }
 type User = {
@@ -24,21 +23,27 @@ type User = {
 }
 
 const Table = (props: Props) => {
-  const { isLoading, isError, data, error } = useQuery("users", getUsers)
-
+  const { isLoading, isError, data, error } = useQuery("user", getUser)
   const queryClient = useQueryClient()
+
+  //delete user
   const [modalDelete, setModalDelete] = useState(false)
   const [userIdDelete, setUserIdDelete] = useState(String)
-  const [showModalEdit, setShowModalEdit] = useState(false)
+  const onDelete = async (userId: string) => {
+    await deleteUser(userId)
+    await queryClient.prefetchQuery("user", getUser)
+  }
+  // show and edit
+  const [modal, setModal] = useState(false)
+  const [action, setAction] = useState("")
   const [userInfo, setUserInfo] = useState(Object)
-  const [viewModal, setViewModal] = useState(false)
 
-  const handleOnClose = (mess: String, modal: String) => {
-    setShowModalEdit(false)
+  const handleOnClose = (mess: String) => {
+    setModal(false)
     if (mess !== "close") {
       switch (mess) {
         case "success":
-          toast.success(`${modal} Success!`, {
+          toast.success("Chỉnh sửa thông tin thành công!", {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -50,7 +55,7 @@ const Table = (props: Props) => {
           })
           break
         case "error":
-          toast.error(`${modal} False!`, {
+          toast.error("Chỉnh sửa thộng tin thất bại!", {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -62,7 +67,7 @@ const Table = (props: Props) => {
           })
           break
         default:
-          toast("Is Loading!", {
+          toast("Đang thực hiện...", {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -72,7 +77,7 @@ const Table = (props: Props) => {
             progress: undefined,
             theme: "light",
           })
-          toast.success("Add New Account Success!", {
+          toast.success("Chỉnh sửa thông tin thành công!", {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -84,12 +89,6 @@ const Table = (props: Props) => {
           })
       }
     }
-  }
-  const handleOnViewClose = () => setViewModal(false)
-
-  const onDelete = async (userId: string) => {
-    await deleteUser(userId)
-    await queryClient.prefetchQuery("users", getUsers)
   }
 
   const tableBody = () => {
@@ -109,25 +108,25 @@ const Table = (props: Props) => {
           <thead className="text-xs text-gray-300 uppercase bg-gray-900">
             <tr>
               <th scope="col" className="px-4 py-3 xl:text-lg">
-                Name
+                Họ tên
               </th>
               <th scope="col" className="px-4 py-3 xl:text-lg">
-                Day of Birth
+                Ngày sinh
               </th>
               <th scope="col" className="px-4 py-3 xl:text-lg">
-                Gender
+                Giới tính
               </th>
               <th scope="col" className="px-4 py-3 xl:text-lg">
                 Email
               </th>
               <th scope="col" className="px-4 py-3  xl:text-lg">
-                Permissions
+                Quyền
               </th>
               <th scope="col" className="px-4 py-3 xl:text-lg">
-                Status
+                Trạng thái
               </th>
               <th scope="col" className="px-4 py-3 xl:text-lg">
-                Action
+                Tùy chọn
               </th>
             </tr>
           </thead>
@@ -139,59 +138,65 @@ const Table = (props: Props) => {
               >
                 <th
                   scope="row"
-                  className="px-4 py-4 font-medium  whitespace-nowrap text-lg"
+                  className="px-4 py-4 font-medium  whitespace-nowrap text-lg cursor-pointer"
                   onClick={() => {
                     setUserInfo(user)
-                    setViewModal(true)
+                    setAction("view")
+                    setModal(true)
                   }}
                 >
                   {user.name}
                 </th>
                 <td
-                  className="px-4 py-4 text-lg"
+                  className="px-4 py-4 text-lg cursor-pointer"
                   onClick={() => {
                     setUserInfo(user)
-                    setViewModal(true)
+                    setAction("view")
+                    setModal(true)
                   }}
                 >
                   {user.dob}
                 </td>
                 <td
-                  className="px-4 py-4 text-lg"
+                  className="px-4 py-4 text-lg cursor-pointer"
                   onClick={() => {
                     setUserInfo(user)
-                    setViewModal(true)
+                    setAction("view")
+                    setModal(true)
                   }}
                 >
                   {user.gender === 1 ? "Male" : "Female"}
                 </td>
                 <td
-                  className="px-4 py-4 text-lg"
+                  className="px-4 py-4 text-lg cursor-pointer"
                   onClick={() => {
                     setUserInfo(user)
-                    setViewModal(true)
+                    setAction("view")
+                    setModal(true)
                   }}
                 >
                   {user.email}
                 </td>
                 <td
-                  className="px-4 py-4 text-lg"
+                  className="px-4 py-4 text-lg cursor-pointer"
                   onClick={() => {
                     setUserInfo(user)
-                    setViewModal(true)
+                    setAction("view")
+                    setModal(true)
                   }}
                 >
                   {user.permissions === "user"
-                    ? "User"
+                    ? "Người dùng"
                     : user.permissions === "inspection"
-                    ? "Inspection"
-                    : "Admin"}
+                    ? "Cán bộ"
+                    : "Người quản lý"}
                 </td>
                 <td
                   className="px-4 py-4 text-lg"
                   onClick={() => {
                     setUserInfo(user)
-                    setViewModal(true)
+                    setAction("view")
+                    setModal(true)
                   }}
                 >
                   <span
@@ -207,7 +212,8 @@ const Table = (props: Props) => {
                     className="cursor"
                     onClick={() => {
                       setUserInfo(user)
-                      setShowModalEdit(true)
+                      setAction("edit")
+                      setModal(true)
                     }}
                   >
                     <BiEdit size={25} color="rgb(34,197,94)" />
@@ -227,7 +233,7 @@ const Table = (props: Props) => {
           </tbody>
         </table>
       </div>
-      <div className="mt-7 w-full h-fit flex flex-row sm:justify-end justify-center">
+      {/* <div className="mt-7 w-full h-fit flex flex-row sm:justify-end justify-center">
         <nav className="">
           <ul className="inline-flex -space-x-px">
             <li>
@@ -272,7 +278,7 @@ const Table = (props: Props) => {
             </li>
           </ul>
         </nav>
-      </div>
+      </div> */}
       <div
         className={`${
           !modalDelete ? "hidden" : "block "
@@ -282,9 +288,9 @@ const Table = (props: Props) => {
           className={`bg-white p-8 bottom-0 border-4 border-green-600  rounded-lg flex flex-col items-center transition ease-in-out delay-150 duration-1000`}
         >
           <span className="font-medium text-3xl text-gray-950">
-            Do you want delete?
+            Bạn có muôn xóa tài khoản không?
           </span>
-          <div className="mt-6 grid grid-cols-2 gap-4">
+          <div className="mt-6 grid grid-cols-2 gap-10">
             <button
               onClick={() => {
                 if (userIdDelete.length > 0) onDelete(userIdDelete)
@@ -293,27 +299,25 @@ const Table = (props: Props) => {
               }}
               className="bg-white border-2 border-red-600 text-red-600 px-6 py-0 rounded-lg hover:bg-red-600 hover:text-white"
             >
-              <span className="text-xl font-medium uppercase  ">yes</span>
+              <span className="text-xl font-medium capitalize ">Có</span>
             </button>
             <button
               onClick={() => setModalDelete(false)}
               className="bg-white border-2 border-gray-600 text-gray-600 px-6 py-0 rounded-lg hover:bg-gray-600 hover:text-white"
             >
-              <span className="text-xl font-medium uppercase">no</span>
+              <span className="text-xl font-medium capitalize">Không</span>
             </button>
           </div>
         </div>
       </div>
-      <EditModel
-        onClose={handleOnClose}
-        visible={showModalEdit}
-        userInfo={userInfo}
-      />
-      <ViewModal
-        onClose={handleOnViewClose}
-        visible={viewModal}
-        userInfo={userInfo}
-      />
+      {modal && (
+        <Modal
+          action={action}
+          visible={modal}
+          onClose={handleOnClose}
+          userData={userInfo}
+        />
+      )}
     </div>
   )
 }
