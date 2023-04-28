@@ -177,7 +177,6 @@ export async function updatePost({ postId, formData }: any) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(formData),
   }
-  console.log(postId, formData)
   const response = await fetch(
     `${BASE_URL}/api/post/?postId=${postId}`,
     Options

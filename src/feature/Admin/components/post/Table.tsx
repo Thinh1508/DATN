@@ -5,13 +5,9 @@ import { BiEdit, BiTrashAlt } from "react-icons/bi"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 
-import AddModal from "../post/AddModal"
 import { useQuery, useQueryClient } from "react-query"
 import { getPost, deletePost } from "@/lib/helper"
-import ViewModal from "./ViewModal"
-import EditModal from "./EditModal"
-// import ViewModal from "./ViewModal"
-// import EditModel from "./EditModal"
+import Modal from "./Modal"
 
 type Props = {}
 type Post = {
@@ -27,50 +23,69 @@ type Post = {
 const Table = (props: Props) => {
   const { isLoading, isError, data, error } = useQuery("post", getPost)
   const queryClient = useQueryClient()
-  const [addModal, setAddModal] = useState(false)
+
+  // delete
   const [modalDelete, setModalDelete] = useState(false)
   const [postIdDelete, setPostIdDelete] = useState(String)
-  const [showModalEdit, setShowModalEdit] = useState(false)
-
   const onDelete = async (postId: string) => {
     await deletePost(postId)
     await queryClient.prefetchQuery("post", getPost)
+    toast.success("Xóa bìa viết thành công", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    })
   }
-
+  //view and edit
+  const [action, setAction] = useState("")
+  const [modal, setModal] = useState(false)
   const [postInfo, setPostInfo] = useState(Object)
-  const [viewModal, setViewModal] = useState(false)
 
   const handleOnClose = (mess: String) => {
-    console.log(mess)
-    setAddModal(false)
+    setModal(false)
     if (mess !== "close") {
       switch (mess) {
         case "success":
-          toast.success("Add New Account Success!", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          })
+          toast.success(
+            action === "add"
+              ? "Thêm bài viết thành công!"
+              : "Chỉnh sửa bài viết thành công!",
+            {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            }
+          )
           break
         case "error":
-          toast.error("Add New Account False!", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          })
+          toast.error(
+            action === "add"
+              ? "Thêm bài viết thất bại!"
+              : "Chỉnh sửa bài viết thành công!",
+            {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            }
+          )
           break
         default:
-          toast("Is Loading!", {
+          toast("Đang thực hiện!", {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -80,73 +95,23 @@ const Table = (props: Props) => {
             progress: undefined,
             theme: "light",
           })
-          toast.success("Add New Account Success!", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          })
+          toast.success(
+            action === "add"
+              ? "Thêm bài viết thành công"
+              : "Chỉnh sửa bài viết thành công",
+            {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            }
+          )
       }
     }
-  }
-  const handleOnClose1 = (mess: String, modal: String) => {
-    setShowModalEdit(false)
-    if (mess !== "close") {
-      switch (mess) {
-        case "success":
-          toast.success(`${modal} Success!`, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          })
-          break
-        case "error":
-          toast.error(`${modal} False!`, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          })
-          break
-        default:
-          toast("Is Loading!", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          })
-          toast.success("Add New Account Success!", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          })
-      }
-    }
-  }
-  const handleOnViewClose = () => {
-    setViewModal(false)
   }
 
   if (isLoading) return <div>Employee is Loading...</div>
@@ -156,31 +121,34 @@ const Table = (props: Props) => {
       <div className="mb-4">
         <button
           className="bg-white py-2 px-6 border-green-600 text-green-600 border-2 rounded-lg hover:bg-green-600 hover:text-white"
-          onClick={() => setAddModal(true)}
+          onClick={() => {
+            setAction("add")
+            setModal(true)
+          }}
         >
-          <span className="font-medium">Add New Post</span>
+          <span className="font-medium">Thêm mới bài viết</span>
         </button>
       </div>
       <table className="w-full text-sm text-left text-gray-500 ">
-        <thead className="text-xs text-gray-300 uppercase bg-gray-900">
+        <thead className="text-xs text-gray-300 uppercase bg-gray-900 sticky top-0 z-10">
           <tr>
-            <th scope="col" className="px-4 py-3 xl:text-lg">
-              Title
+            <th scope="col" className="px-4 py-3 xl:text-lg cursor-pointer">
+              Tiêu đề
             </th>
-            <th scope="col" className="px-4 py-3 xl:text-lg">
-              Category
+            <th scope="col" className="px-4 py-3 xl:text-lg cursor-pointer">
+              Danh mục
             </th>
-            <th scope="col" className="px-4 py-3 xl:text-lg">
-              Description
+            <th scope="col" className="px-4 py-3 xl:text-lg cursor-pointer">
+              Mô tả
             </th>
-            <th scope="col" className="px-4 py-3 xl:text-lg">
-              UserCreate
+            <th scope="col" className="px-4 py-3 xl:text-lg cursor-pointer">
+              Người tạo
             </th>
-            <th scope="col" className="px-4 py-3 xl:text-lg">
-              Status
+            <th scope="col" className="px-4 py-3 xl:text-lg cursor-pointer">
+              Trạng thái
             </th>
-            <th scope="col" className="px-4 py-3 xl:text-lg">
-              Action
+            <th scope="col" className="px-4 py-3 xl:text-lg cursor-pointer">
+              Tùy chọn
             </th>
           </tr>
         </thead>
@@ -192,46 +160,51 @@ const Table = (props: Props) => {
             >
               <th
                 scope="row"
-                className="px-4 py-4 font-medium  whitespace-nowrap text-lg"
+                className="px-4 py-4 font-medium  whitespace-nowrap text-lg cursor-pointer"
                 onClick={() => {
                   setPostInfo(post)
-                  setViewModal(true)
+                  setAction("view")
+                  setModal(true)
                 }}
               >
                 {post.title}
               </th>
               <td
-                className="px-4 py-4 text-lg"
+                className="px-4 py-4 text-lg cursor-pointer"
                 onClick={() => {
                   setPostInfo(post)
-                  setViewModal(true)
+                  setAction("view")
+                  setModal(true)
                 }}
               >
                 {post.category}
               </td>
               <td
-                className="px-4 py-4 text-lg"
+                className="px-4 py-4 text-lg cursor-pointer"
                 onClick={() => {
                   setPostInfo(post)
-                  setViewModal(true)
+                  setAction("view")
+                  setModal(true)
                 }}
               >
                 {post.description}
               </td>
               <td
-                className="px-4 py-4 text-lg"
+                className="px-4 py-4 text-lg cursor-pointer"
                 onClick={() => {
                   setPostInfo(post)
-                  setViewModal(true)
+                  setAction("view")
+                  setModal(true)
                 }}
               >
                 {post.userCreate}
               </td>
               <td
-                className="px-4 py-4 text-lg"
+                className="px-4 py-4 text-lg cursor-pointer"
                 onClick={() => {
                   setPostInfo(post)
-                  setViewModal(true)
+                  setAction("view")
+                  setModal(true)
                 }}
               >
                 <span
@@ -247,7 +220,8 @@ const Table = (props: Props) => {
                   className="cursor"
                   onClick={() => {
                     setPostInfo(post)
-                    setShowModalEdit(true)
+                    setAction("edit")
+                    setModal(true)
                   }}
                 >
                   <BiEdit size={25} color="rgb(34,197,94)" />
@@ -266,7 +240,7 @@ const Table = (props: Props) => {
           ))}
         </tbody>
       </table>
-      <div className="mt-7 w-full h-fit flex flex-row sm:justify-end justify-center">
+      {/* <div className="mt-7 w-full h-fit flex flex-row sm:justify-end justify-center">
         <nav className="">
           <ul className="inline-flex -space-x-px">
             <li>
@@ -311,7 +285,7 @@ const Table = (props: Props) => {
             </li>
           </ul>
         </nav>
-      </div>
+      </div> */}
       <div
         className={`${
           !modalDelete ? "hidden" : "block "
@@ -321,9 +295,9 @@ const Table = (props: Props) => {
           className={`bg-white p-8 bottom-0 border-4 border-green-600  rounded-lg flex flex-col items-center transition ease-in-out delay-150 duration-1000`}
         >
           <span className="font-medium text-3xl text-gray-950">
-            Do you want delete?
+            Bạn có muốn xóa bài viết không?
           </span>
-          <div className="mt-6 grid grid-cols-2 gap-4">
+          <div className="mt-6 grid grid-cols-2 gap-10">
             <button
               onClick={() => {
                 if (postIdDelete.length > 0) onDelete(postIdDelete)
@@ -332,29 +306,26 @@ const Table = (props: Props) => {
               }}
               className="bg-white border-2 border-red-600 text-red-600 px-6 py-0 rounded-lg hover:bg-red-600 hover:text-white"
             >
-              <span className="text-xl font-medium uppercase  ">yes</span>
+              <span className="text-xl font-medium uppercase  ">Có</span>
             </button>
             <button
               onClick={() => setModalDelete(false)}
               className="bg-white border-2 border-gray-600 text-gray-600 px-6 py-0 rounded-lg hover:bg-gray-600 hover:text-white"
             >
-              <span className="text-xl font-medium uppercase">no</span>
+              <span className="text-xl font-medium uppercase">Không</span>
             </button>
           </div>
         </div>
       </div>
       <ToastContainer />
-      <AddModal onClose={handleOnClose} visible={addModal} />
-      <EditModal
-        onClose={handleOnClose1}
-        visible={showModalEdit}
-        postInfo={postInfo}
-      />
-      <ViewModal
-        onViewClose={handleOnViewClose}
-        visible={viewModal}
-        postInfo={postInfo}
-      />
+      {modal && (
+        <Modal
+          action={action}
+          visible={modal}
+          onClose={handleOnClose}
+          postData={postInfo}
+        />
+      )}
     </div>
   )
 }

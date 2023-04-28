@@ -32,6 +32,16 @@ const Table = (props: Props) => {
   const onDelete = async (userId: string) => {
     await deleteUser(userId)
     await queryClient.prefetchQuery("user", getUser)
+    toast.success("Xóa tài khoản thành công", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    })
   }
   // show and edit
   const [modal, setModal] = useState(false)
@@ -105,7 +115,7 @@ const Table = (props: Props) => {
     <div className="bg-white w-full border p-4 mt-4  rounded-lg h-[84vh] xl:h-[82vh] overflow-y-auto scrollbar-style">
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg scrollbar-style">
         <table className="w-full text-sm text-left text-gray-500 ">
-          <thead className="text-xs text-gray-300 uppercase bg-gray-900">
+          <thead className="text-xs text-gray-300 uppercase bg-gray-900 sticky top-0 z-10">
             <tr>
               <th scope="col" className="px-4 py-3 xl:text-lg">
                 Họ tên

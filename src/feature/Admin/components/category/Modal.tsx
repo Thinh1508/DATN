@@ -86,12 +86,15 @@ const Modal = (props: Props) => {
   const handleSubmit = (e: any) => {
     e.preventDefault()
     if (formData.title) {
-      const model = formData
-      model._id = data._id
-      model.slug = slug(model.title)
+      const model = {
+        title: formData.title,
+        slug: slug(formData.title),
+        description: formData.description,
+      }
       if (props.action == "add") addMutation.mutate(model)
       if (props.action == "edit")
         updateMutation.mutate({ categoryId: data._id, formData: model })
+      setFormData(data)
     }
   }
 
@@ -152,13 +155,19 @@ const Modal = (props: Props) => {
                         disabled
                       />
                       <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
-                        Slug
+                        Đường dẫn
                       </label>
                     </div>
                     <div className="relative border-2 border-gray-400 rounded-lg">
                       <input
                         type="text"
-                        defaultValue={data.description}
+                        defaultValue={
+                          data.description === "agency"
+                            ? "Cơ quan ban hành"
+                            : data.description === "document"
+                            ? "Loại văn bản"
+                            : "Bài viết"
+                        }
                         className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-950 bg-transparent peer  appearance-none  focus:outline-none focus:ring-0 "
                         placeholder=" "
                         disabled
@@ -275,9 +284,9 @@ const Modal = (props: Props) => {
                       <option className="relative" value="DEFAULT">
                         Chọn loại danh mục
                       </option>
-                      <option value="agency">Agency</option>
-                      <option value="document">Document</option>
-                      <option value="post">Post</option>
+                      <option value="agency">Cơ quan ban hành</option>
+                      <option value="document">Loại Văn bản</option>
+                      <option value="post">Bài viết</option>
                     </select>
                   </div>
                 </div>
@@ -368,9 +377,9 @@ const Modal = (props: Props) => {
                       defaultValue={data.description}
                       className="block px-2.5 py-2.5 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                     >
-                      <option value="agency">Agency</option>
-                      <option value="document">Document</option>
-                      <option value="post">Post</option>
+                      <option value="agency">Cơ quan ban hành</option>
+                      <option value="document">Loại văn bản</option>
+                      <option value="post">Bài viết</option>
                     </select>
                   </div>
                 </div>

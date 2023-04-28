@@ -22,6 +22,11 @@ type Category = {
 const Table = (props: Props) => {
   const queryClient = useQueryClient()
   const { isLoading, isError, data, error } = useQuery("category", getCategory)
+  const checkDescription = (description: string) => {
+    if (description === "agency") return "Cơ quan ban hành"
+    else if (description === "document") return "Loại văn bản"
+    else return "Bài viết"
+  }
 
   const [modal, setModal] = useState(false)
   const [action, setAction] = useState("")
@@ -32,6 +37,16 @@ const Table = (props: Props) => {
   const onDelete = async (categoryId: string) => {
     await deleteCategory(categoryId)
     await queryClient.prefetchQuery("category", getCategory)
+    toast.success("Xóa danh mục thành công", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    })
   }
 
   const handleOnClose = (mess: String) => {
@@ -39,28 +54,34 @@ const Table = (props: Props) => {
     if (mess !== "close") {
       switch (mess) {
         case "success":
-          toast.success(`${action === "add" ? "Thêm" : "Sửa"} Thành công!`, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          })
+          toast.success(
+            `${action === "add" ? "Thêm" : "Sửa"} danh mục thành công!`,
+            {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            }
+          )
           break
         case "error":
-          toast.error(`${action === "add" ? "Thêm" : "Sửa"} Thành công!`, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          })
+          toast.error(
+            `${action === "add" ? "Thêm" : "Sửa"} danh mục thành công!`,
+            {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            }
+          )
           break
         default:
           toast("Đang thực hiện!", {
@@ -73,16 +94,19 @@ const Table = (props: Props) => {
             progress: undefined,
             theme: "light",
           })
-          toast.success(`${action === "add" ? "Thêm" : "Sửa"} Thành công!`, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          })
+          toast.success(
+            `${action === "add" ? "Thêm" : "Sửa"} danh mục thành công!`,
+            {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            }
+          )
       }
     }
   }
@@ -106,22 +130,22 @@ const Table = (props: Props) => {
         <table className="w-full text-sm text-left text-gray-500 ">
           <thead className="text-xs text-gray-300 uppercase bg-gray-900 sticky top-0 z-10">
             <tr>
-              <th scope="col" className="px-4 py-3 xl:text-lg">
+              <th scope="col" className="px-4 py-3 xl:text-lg cursor-pointer">
                 Tiêu đề
               </th>
-              <th scope="col" className="px-4 py-3 xl:text-lg">
-                Slug
+              <th scope="col" className="px-4 py-3 xl:text-lg cursor-pointer">
+                Đường dẫn
               </th>
-              <th scope="col" className="px-4 py-3 xl:text-lg">
+              <th scope="col" className="px-4 py-3 xl:text-lg cursor-pointer">
                 Loại danh mục
               </th>
-              <th scope="col" className="px-4 py-3 xl:text-lg">
+              <th scope="col" className="px-4 py-3 xl:text-lg cursor-pointer">
                 Ngày tạo
               </th>
-              <th scope="col" className="px-4 py-3 xl:text-lg">
+              <th scope="col" className="px-4 py-3 xl:text-lg cursor-pointer">
                 Ngày cập nhập
               </th>
-              <th scope="col" className="px-4 py-3 xl:text-lg">
+              <th scope="col" className="px-4 py-3 xl:text-lg cursor-pointer">
                 Tuỳ chọn
               </th>
             </tr>
@@ -134,7 +158,7 @@ const Table = (props: Props) => {
               >
                 <th
                   scope="row"
-                  className="px-4 py-4 font-medium  whitespace-nowrap text-lg"
+                  className="px-4 py-4 font-medium  whitespace-nowrap text-lg cursor-pointer"
                   onClick={() => {
                     setCategoryInfo(category)
                     setAction("view")
@@ -144,7 +168,7 @@ const Table = (props: Props) => {
                   {category.title}
                 </th>
                 <td
-                  className="px-4 py-4 text-lg"
+                  className="px-4 py-4 text-lg cursor-pointer"
                   onClick={() => {
                     setCategoryInfo(category)
                     setAction("view")
@@ -154,17 +178,17 @@ const Table = (props: Props) => {
                   {category.slug}
                 </td>
                 <td
-                  className="px-4 py-4 text-lg"
+                  className="px-4 py-4 text-lg cursor-pointer"
                   onClick={() => {
                     setCategoryInfo(category)
                     setAction("view")
                     setModal(true)
                   }}
                 >
-                  {category.description}
+                  {checkDescription(category.description)}
                 </td>
                 <td
-                  className="px-4 py-4 text-lg"
+                  className="px-4 py-4 text-lg cursor-pointer"
                   onClick={() => {
                     setCategoryInfo(category)
                     setAction("view")
@@ -174,7 +198,7 @@ const Table = (props: Props) => {
                   {category.createdAt}
                 </td>
                 <td
-                  className="px-4 py-4 text-lg"
+                  className="px-4 py-4 text-lg cursor-pointer"
                   onClick={() => {
                     setCategoryInfo(category)
                     setAction("view")
@@ -183,7 +207,7 @@ const Table = (props: Props) => {
                 >
                   {category.updatedAt}
                 </td>
-                <td className="flex items-center px-4 py-4 space-x-3 relative">
+                <td className="flex items-center px-4 py-4 space-x-3 relative ">
                   <button
                     className="cursor"
                     onClick={() => {
