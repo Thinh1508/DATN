@@ -12,11 +12,11 @@ const Footer = (props: Props) => {
             <div className="mb-6 md:mb-0">
               <a href="/" className="flex items-center">
                 <img
-                  src="https://cdn.haitrieu.com/wp-content/uploads/2022/06/Logo-Thanh-Pho-Da-Nang.png"
+                  src="/assets/images/logo3.png"
                   alt="logo"
-                  className="object-cover w-12 h-12 inline-block"
+                  className="object-cover w-12 h-12 inline-block rounded-full"
                 />
-                <h1 className="text-black font-bold mx-1 drop-shadow-sm	text-base">
+                <h1 className="text-[#049803] font-bold mx-1 drop-shadow-sm	text-base">
                   AN TOÀN VỆ SINH THỰC PHẨM <br />
                   THÀNH PHỐ ĐÀ NẴNG
                 </h1>

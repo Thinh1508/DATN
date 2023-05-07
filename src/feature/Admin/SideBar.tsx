@@ -18,6 +18,7 @@ import {
   AiFillFileText,
   AiFillReconciliation,
 } from "react-icons/ai"
+import { useSession, signOut } from "next-auth/react"
 
 const Menus = [
   { title: "Thống kê", link: "/admin" },
@@ -49,14 +50,14 @@ const Menus = [
     link: "/admin/profile",
   },
   { title: "Cài đặt", icon: <AiOutlineSetting />, link: "/admin/setting" },
-  { title: "Đăng xuất", icon: <AiOutlineLogout />, link: "/admin/logout" },
+  // { title: "Đăng xuất", icon: <AiOutlineLogout />, link: "/admin/logout" },
 ]
 
 type Props = {}
 
 const SideBar = (props: Props) => {
   const [open, setOpen] = useState(true)
-  const [submenuOpen, setSubmenuOpen] = useState(true)
+  const { data: session }: { data: any } = useSession()
 
   const { pathname } = useRouter()
 
@@ -86,18 +87,19 @@ const SideBar = (props: Props) => {
 
       <div className="inline-flex items-center">
         <img
-          src="/assets/images/logo3.png"
+          src="/assets/images/logo4.png"
           className={`h-9 w-9 text-4xl rounded-full cursor-pointer block float-left mr-2 duration-500 ${
             !open && "rotate-[360deg]"
           }`}
         />
-        <h1
-          className={`text-white origin-left font-medium sm:text-2xl text-base duration-300 ${
+        <Link
+          href={"/"}
+          className={`text-white origin-left font-medium sm:text-2xl text-base duration-300 cursor-pointer ${
             !open && "scale-0"
           }`}
         >
           DaNangFA
-        </h1>
+        </Link>
       </div>
 
       <div
@@ -163,6 +165,22 @@ const SideBar = (props: Props) => {
               )} */}
           </Link>
         ))}
+        <li
+          className={`text-gray-200 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-green-700 rounded-md 
+                  `}
+          onClick={() => signOut()}
+        >
+          <span className="text-2xl block float-left">
+            <AiOutlineLogout />
+          </span>
+          <span
+            className={`text-base capitalize font-medium flex-1 ${
+              !open && "hidden"
+            } duration-300`}
+          >
+            Đăng xuất
+          </span>
+        </li>
       </ul>
     </div>
   )

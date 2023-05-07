@@ -111,8 +111,8 @@ const Table = (props: Props) => {
     }
   }
 
-  if (isLoading) return <div>Employee is Loading...</div>
-  if (isError) return <div>Got Error {`${error}`}</div>
+  if (isLoading) return <div>Đang tải dữ liệu...</div>
+  if (isError) return <div>Lỗi khi tải dữ liệu {`${error}`}</div>
   return (
     <div className="bg-white w-full border p-4 mt-4  rounded-lg h-[84vh] xl:h-[82vh] ">
       <div className="mb-4">

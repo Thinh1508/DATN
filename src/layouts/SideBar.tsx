@@ -58,6 +58,7 @@ const SideBar = (props: Props) => {
     "https://antoanthucpham.danang.gov.vn/documents/10181/10940/d-min.jpg?t=1560500879407",
     "https://antoanthucpham.danang.gov.vn/documents/10181/10940/ddn-min.png?t=1560500879408",
   ]
+
   return (
     <div className="sticky mt-2 hidden lg:col-span-3 lg:block space-y-2 h-fit pb-20">
       <div>
@@ -130,7 +131,7 @@ const SideBar = (props: Props) => {
           </Link>
           <div className="flex-1 border-b-[3px] border-slate-900/40"></div>
         </div>
-        <div className="space-y-2 overflow-x-auto max-h-64">
+        <div className="space-y-2 overflow-x-auto max-h-64 scrollbar-style">
           {documents.map((document) => (
             <Link
               className="text-green-600 font-bold flex gap-1 mb-2 hover:text-red-600 text-sm"

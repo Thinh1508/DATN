@@ -97,8 +97,8 @@ const Modal = (props: Props) => {
     []
   )
 
-  if (isLoading) return <div>Employee is Loading...</div>
-  if (isError) return <div>Got Error {`${error}`}</div>
+  if (isLoading) return <div>Đang tải dữ liệu...</div>
+  if (isError) return <div>Lỗi khi tải dữ liệu {`${error}`}</div>
 
   switch (props.action) {
     case "view":

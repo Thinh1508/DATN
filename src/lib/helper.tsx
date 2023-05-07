@@ -1,5 +1,7 @@
 const BASE_URL = "http://localhost:3000"
 
+import { signIn } from "next-auth/react"
+
 // User
 //all user
 export const getUser = async () => {
@@ -200,4 +202,14 @@ export async function deletePost(postId: string) {
   const json = await response.json()
 
   return json
+}
+
+export const loginUser = async ({ email, password }: any) => {
+  const res = await signIn("credentials", {
+    redirect: false,
+    email,
+    password,
+  })
+
+  return res
 }

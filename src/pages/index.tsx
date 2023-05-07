@@ -15,7 +15,7 @@ type Props = {}
 const HomePage = (props: Props) => {
   return (
     <div className="bg-white">
-      <div className="grid grid-cols-10 space-x-8 pt-4 container mx-auto">
+      <div className="grid grid-cols-10 space-x-8 pt-4 container mx-auto scrollbar-style">
         <div className="col-span-10 lg:col-span-7 pt-2 pb-6 space-y-4 ">
           <div className="min-h-[450px] border-slate-900 gird grid-cols-8 space-x-4 drop-shadow-md">
             <SliderTop />
