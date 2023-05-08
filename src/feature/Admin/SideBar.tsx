@@ -72,6 +72,7 @@ const SideBar = (props: Props) => {
 
     window.addEventListener("resize", handleResize)
     if (pathname === "/admin/inspection/planning") setSubmenuOpen(true)
+    if (pathname === "/admin/inspection/license") setSubmenuOpen(true)
   }, [])
 
   return (

@@ -1,8 +1,8 @@
-import { Schema, models, model } from "mongoose"
+import mongoose, { Schema, models, model } from "mongoose"
 
 const certificateRegistrationSchema = new Schema(
   {
-    idStore: { type: String, required: true },
+    idStore: { type: Schema.Types.ObjectId, ref: "store" },
     proposal: { type: String, required: true },
     healthCertificate: { type: String, required: true },
     description: { type: String, required: true },

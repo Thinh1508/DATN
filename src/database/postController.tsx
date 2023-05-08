@@ -32,7 +32,6 @@ export async function getPostId(req: NextApiRequest, res: NextApiResponse) {
 //post:http://localhost:3000/api/post
 export async function postPost(req: NextApiRequest, res: NextApiResponse) {
   try {
-    console.log("cc")
     const formData = req.body
     if (!formData)
       return res.status(400).json({ error: "Form Data Not Provided...!" })

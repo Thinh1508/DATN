@@ -24,8 +24,8 @@ export async function getStoreUserId(
   try {
     const { userId } = req.query
     if (userId) {
-      const user = await Store.find({ idUser: userId })
-      res.status(200).json(user)
+      const store = await Store.find({ idUser: userId })
+      res.status(200).json(store)
     }
     res.status(400).json({ error: req.query })
   } catch (error) {
@@ -86,7 +86,9 @@ export async function getCertificateReg(
   res: NextApiResponse
 ) {
   try {
-    const certificateReg = await CertificateRegistration.find()
+    const certificateReg = await CertificateRegistration.find().populate(
+      "idStore"
+    )
     if (!certificateReg)
       return res.status(404).json({ error: "Data Not Found" })
 

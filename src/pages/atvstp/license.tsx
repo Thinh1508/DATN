@@ -8,7 +8,6 @@ import { addCertificateReg, getStoreUserId } from "@/lib/helper"
 
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import { type } from "os"
 
 type Props = {}
 type Store = {

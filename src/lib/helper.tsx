@@ -241,6 +241,14 @@ export const getStoreUserId = async (userId: string) => {
   return {}
 }
 
+//certificateReg
+//all certificateReg
+export const getCertificateReg = async () => {
+  const response = await fetch(`${BASE_URL}/api/certificateReg`)
+  const json = await response.json()
+
+  return json
+}
 //post certificateReg
 export async function addCertificateReg(formData: any) {
   try {
