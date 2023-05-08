@@ -5,16 +5,16 @@ import AdminLayout from "@/layouts/AdminLayout"
 
 type Props = {}
 
-const Inspection: NextPageWithLayout = (props: Props) => {
+const Setting: NextPageWithLayout = (props: Props) => {
   return (
     <div className="sm:p-8 p-4 bg-gray-300 h-screen w-full overflow-y-auto">
       <h1 className="p-4 sm:p-0 text-2xl font-semibold uppercase text-gray-700">
-        Thanh tra
+        Setting
       </h1>
     </div>
   )
 }
 
-Inspection.getLayout = (page) => <AdminLayout>{page}</AdminLayout>
+Setting.getLayout = (page) => <AdminLayout>{page}</AdminLayout>
 
-export default Inspection
+export default Setting

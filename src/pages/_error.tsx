@@ -2,12 +2,9 @@ import Link from "next/link"
 
 const ErrorPage = () => (
   <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-    <h1 className="text-4xl font-bold text-gray-800">
-      Lỗi không đủ thẩm quyền
-    </h1>
+    <h1 className="text-4xl font-bold text-gray-800">Lỗi 404</h1>
     <p className="text-lg text-gray-700 mt-4">
-      Bạn không đủ thẩm quyền để tru cập trang này. Vui long đăng nhập với tài
-      khoản quyền cao hơn và tiếp tục
+      Không thể tìm thấy trang được yêu cầu trên máy chủ của trang Web
     </p>
     <Link
       href="/"

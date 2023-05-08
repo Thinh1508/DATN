@@ -10,6 +10,7 @@ import {
   BsPerson,
   BsPersonLinesFill,
   BsPostcardFill,
+  BsChevronDown,
 } from "react-icons/bs"
 import {
   AiOutlineBarChart,
@@ -34,12 +35,11 @@ const Menus = [
   {
     title: "Thanh tra",
     icon: <AiFillReconciliation />,
-    // submenu: true,
-    // submenuItems: [
-    //   { title: "submenu 1" },
-    //   { title: "submenu 2" },
-    //   { title: "submenu 3" },
-    // ],
+    submenu: true,
+    submenuItems: [
+      { title: "Lên kế hoạch", link: "/admin/inspection/planning" },
+      { title: "Cấp giấy ATVSTP", link: "/admin/inspection/license" },
+    ],
     link: "/admin/inspection",
   },
   { title: "Báo cáo", icon: <RiAlertFill />, link: "/admin/report" },
@@ -50,13 +50,13 @@ const Menus = [
     link: "/admin/profile",
   },
   { title: "Cài đặt", icon: <AiOutlineSetting />, link: "/admin/setting" },
-  // { title: "Đăng xuất", icon: <AiOutlineLogout />, link: "/admin/logout" },
 ]
 
 type Props = {}
 
 const SideBar = (props: Props) => {
   const [open, setOpen] = useState(true)
+  const [submenuOpen, setSubmenuOpen] = useState(false)
   const { data: session }: { data: any } = useSession()
 
   const { pathname } = useRouter()
@@ -71,6 +71,7 @@ const SideBar = (props: Props) => {
     }
 
     window.addEventListener("resize", handleResize)
+    if (pathname === "/admin/inspection/planning") setSubmenuOpen(true)
   }, [])
 
   return (
@@ -125,17 +126,14 @@ const SideBar = (props: Props) => {
           <Link href={menu.link} className="relative" key={menu.title}>
             <li
               className={`text-gray-200 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-green-700 rounded-md ${
-                menu.spacing ? "mt-9 after:h-[53%]" : "mt-2 after:h-[83%]"
+                menu.spacing ? "mt-9 " : "mt-2 "
               }
-                 ${
-                   pathname === menu.link &&
-                   "bg-green-700 after:absolute after:-left-5 after:bg-green-700 after:w-1.5 after:rounded-lg after:transition-all"
-                 } `}
-              // onClick={() => {
-              //   if (menu.submenuItems) {
-              //     setSubmenuOpen(!submenuOpen)
-              //   }
-              // }}
+               ${pathname === menu.link && "bg-green-700"} `}
+              onClick={() => {
+                if (menu.submenuItems) {
+                  setSubmenuOpen(!submenuOpen)
+                }
+              }}
             >
               <span className="text-2xl block float-left">
                 {menu.icon ? menu.icon : <AiOutlineBarChart />}
@@ -147,22 +145,25 @@ const SideBar = (props: Props) => {
               >
                 {menu.title}
               </span>
-              {/* {menu.submenu && open && (
-                  <BsChevronDown className={`${submenuOpen && "rotate-180"}`} />
-                )} */}
+              {menu.submenu && open && (
+                <BsChevronDown className={`${submenuOpen && "rotate-180"}`} />
+              )}
             </li>
-            {/* {menu.submenu && submenuOpen && open && (
-                <ul>
-                  {menu.submenuItems.map((submenuItem, index) => (
+            {menu.submenu && submenuOpen && open && (
+              <ul>
+                {menu.submenuItems.map((submenuItem, index) => (
+                  <Link href={submenuItem.link} key={index}>
                     <li
-                      key={index}
-                      className="text-gray-200 text-sm flex item-center gap-x-4 cursor-pointer p-2 px-5 hover:bg-light-while rounded-md"
+                      className={`text-gray-200 text-sm flex item-center gap-x-4 cursor-pointer p-2 px-5 hover:bg-light-while rounded-md ${
+                        pathname === submenuItem.link && "bg-green-700"
+                      }`}
                     >
                       {submenuItem.title}
                     </li>
-                  ))}
-                </ul>
-              )} */}
+                  </Link>
+                ))}
+              </ul>
+            )}
           </Link>
         ))}
         <li

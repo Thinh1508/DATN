@@ -107,8 +107,16 @@ const Header = (props: Props) => {
             <li className="flex-none px-3 py-3 text-white font-bold uppercase cursor-pointer hover:bg-[#0cb306]  text-center">
               truyền thông
             </li>
-            <li className="flex-none px-3 py-3 text-white font-bold uppercase cursor-pointer hover:bg-[#0cb306]  text-center">
-              chứng nhận ATTP
+            <li className="flex-none px-3 py-3 text-white font-bold uppercase cursor-pointer hover:bg-[#0cb306]  text-center relative group">
+              <h1>chứng nhận ATTP</h1>
+              <ul className="absolute bg-[#0cb306] right-0 rounded-md p-2 z-20 text-white w-full hidden group-hover:block ">
+                <li className="hover:text-gray-900 hover:font-bold my-2">
+                  <Link href={"/atvstp/store"}>cơ sở kinh doanh</Link>
+                </li>
+                <li className="hover:text-gray-900 hover:font-bold my-2">
+                  <Link href={"/atvstp/license"}>đăng kí giấy phép</Link>
+                </li>
+              </ul>
             </li>
           </ul>
         </div>

@@ -4,8 +4,6 @@ import { useRouter } from "next/router"
 import { AxiosError } from "axios"
 
 import { loginUser } from "@/lib/helper"
-import { ToastContainer, toast } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
 
 type Props = {}
 
@@ -14,19 +12,6 @@ const Login = (props: Props) => {
   const [loading, setLoading] = useState(false)
   const [submitError, setSubmitError] = useState(false)
   const route = useRouter()
-
-  const showError = (mess: String) => {
-    toast.error(mess, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    })
-  }
 
   const handleSubmit = async (e: any) => {
     e.preventDefault()

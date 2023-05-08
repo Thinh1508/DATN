@@ -10,16 +10,19 @@ type Props = {
 const AdminLayout = ({ children }: Props) => {
   const router = useRouter()
   const { data: session }: { data: any } = useSession()
-  if (session && session.user.permissions === "admin") {
-    console.log(session.user.permissions !== "admin")
-    return (
-      <div className="flex h-screen">
-        <SideBar />
-        {children}
-      </div>
-    )
+  if (session) {
+    if (session.user.permissions === "admin") {
+      return (
+        <div className="flex h-screen">
+          <SideBar />
+          {children}
+        </div>
+      )
+    } else {
+      return <ErrorPage />
+    }
   }
-
-  return <ErrorPage />
+  // router.replace("/login")
+  return null
 }
 export default AdminLayout

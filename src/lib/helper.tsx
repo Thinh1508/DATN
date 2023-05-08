@@ -213,3 +213,47 @@ export const loginUser = async ({ email, password }: any) => {
 
   return res
 }
+
+//store
+//post
+export async function addStore(formData: any) {
+  try {
+    const Options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    }
+    const response = await fetch(`${BASE_URL}/api/store`, Options)
+    const json = await response.json()
+
+    return json
+  } catch (error) {
+    return error
+  }
+}
+
+//get by userId
+export const getStoreUserId = async (userId: string) => {
+  const response = await fetch(`${BASE_URL}/api/store/${userId}`)
+  const json = await response.json()
+
+  if (json) return json
+  return {}
+}
+
+//post certificateReg
+export async function addCertificateReg(formData: any) {
+  try {
+    const Options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    }
+    const response = await fetch(`${BASE_URL}/api/certificateReg`, Options)
+    const json = await response.json()
+
+    return json
+  } catch (error) {
+    return error
+  }
+}
