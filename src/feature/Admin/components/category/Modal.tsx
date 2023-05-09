@@ -56,6 +56,19 @@ const Modal = (props: Props) => {
   const [isValTitle, setValTitle] = useState(true)
   const [formData, setFormData] = useState<Category>(data)
 
+  const showDescription = (description: string) => {
+    switch (description) {
+      case "agency":
+        return "Cơ quan ban hành"
+      case "document":
+        return "Loại văn bản"
+      case "post":
+        return "Bài viết"
+      case "inspection":
+        return "Loại thanh tra"
+    }
+  }
+
   const handleChange = (e: any) => {
     const { name, value } = e.target
     setFormData({ ...formData, [name]: value })
@@ -161,13 +174,7 @@ const Modal = (props: Props) => {
                     <div className="relative border-2 border-gray-400 rounded-lg">
                       <input
                         type="text"
-                        defaultValue={
-                          data.description === "agency"
-                            ? "Cơ quan ban hành"
-                            : data.description === "document"
-                            ? "Loại văn bản"
-                            : "Bài viết"
-                        }
+                        defaultValue={showDescription(data.description)}
                         className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-950 bg-transparent peer  appearance-none  focus:outline-none focus:ring-0 "
                         placeholder=" "
                         disabled
@@ -181,7 +188,7 @@ const Modal = (props: Props) => {
                     <div className="relative border-2 border-gray-400 rounded-lg">
                       <input
                         type="text"
-                        defaultValue={data.updatedAt}
+                        defaultValue={data.updatedAt.slice(0, 10)}
                         className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-950 bg-transparent peer  appearance-none  focus:outline-none focus:ring-0 "
                         placeholder=" "
                         disabled
@@ -193,7 +200,7 @@ const Modal = (props: Props) => {
                     <div className="relative border-2 border-gray-400 rounded-lg">
                       <input
                         type="text"
-                        defaultValue={data.createdAt}
+                        defaultValue={data.createdAt.slice(0, 10)}
                         className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-950 bg-transparent peer  appearance-none  focus:outline-none focus:ring-0 "
                         placeholder=" "
                         disabled
@@ -287,6 +294,7 @@ const Modal = (props: Props) => {
                       <option value="agency">Cơ quan ban hành</option>
                       <option value="document">Loại Văn bản</option>
                       <option value="post">Bài viết</option>
+                      <option value="inspection">Thanh tra</option>
                     </select>
                   </div>
                 </div>
@@ -380,6 +388,7 @@ const Modal = (props: Props) => {
                       <option value="agency">Cơ quan ban hành</option>
                       <option value="document">Loại văn bản</option>
                       <option value="post">Bài viết</option>
+                      <option value="inspection">Thanh tra</option>
                     </select>
                   </div>
                 </div>

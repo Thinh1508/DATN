@@ -215,7 +215,15 @@ export const loginUser = async ({ email, password }: any) => {
 }
 
 //store
-//post
+//get all store
+export const getStore = async () => {
+  const response = await fetch(`${BASE_URL}/api/store`)
+  const json = await response.json()
+
+  return json
+}
+
+//post store
 export async function addStore(formData: any) {
   try {
     const Options = {
@@ -230,6 +238,22 @@ export async function addStore(formData: any) {
   } catch (error) {
     return error
   }
+}
+
+//put store
+export async function updateStore({ storeId, formData }: any) {
+  const Options = {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(formData),
+  }
+  const response = await fetch(
+    `${BASE_URL}/api/store/?storeId=${storeId}`,
+    Options
+  )
+  const json = await response.json()
+
+  return json
 }
 
 //get by userId
@@ -258,6 +282,24 @@ export async function addCertificateReg(formData: any) {
       body: JSON.stringify(formData),
     }
     const response = await fetch(`${BASE_URL}/api/certificateReg`, Options)
+    const json = await response.json()
+
+    return json
+  } catch (error) {
+    return error
+  }
+}
+
+//inspectionPlan
+//post inspectionPlan
+export async function addInspectionPlan(formData: any) {
+  try {
+    const Options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    }
+    const response = await fetch(`${BASE_URL}/api/inspectionPlan`, Options)
     const json = await response.json()
 
     return json

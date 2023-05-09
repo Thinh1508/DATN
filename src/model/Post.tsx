@@ -6,7 +6,7 @@ const postSchema = new Schema(
     category: { type: String, required: true },
     content: { type: String, required: true },
     description: { type: String },
-    userCreate: { type: String, required: true },
+    idUser: { type: Schema.Types.ObjectId, ref: "user" },
     status: { type: String, default: "active" },
   },
   {

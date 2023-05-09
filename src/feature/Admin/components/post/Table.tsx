@@ -16,7 +16,10 @@ type Post = {
   category: string
   content: string
   description: string
-  userCreate: string
+  idUser: {
+    _id: string
+    name: string
+  }
   status: string
 }
 
@@ -197,7 +200,7 @@ const Table = (props: Props) => {
                   setModal(true)
                 }}
               >
-                {post.userCreate}
+                {post.idUser.name}
               </td>
               <td
                 className="px-4 py-4 text-lg cursor-pointer"

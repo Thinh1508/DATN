@@ -3,6 +3,7 @@
 import CertificateRegistration from "@/model/CertificateRegistration"
 import Store from "@/model/Store"
 import { NextApiRequest, NextApiResponse } from "next"
+import mongoose from "mongoose"
 
 //get:http://localhost:3000/api/store
 export async function getStore(req: NextApiRequest, res: NextApiResponse) {
@@ -23,8 +24,11 @@ export async function getStoreUserId(
 ) {
   try {
     const { userId } = req.query
+    console.log(userId)
     if (userId) {
-      const store = await Store.find({ idUser: userId })
+      const store = await Store.find({
+        idUser: userId,
+      })
       res.status(200).json(store)
     }
     res.status(400).json({ error: req.query })
@@ -48,21 +52,21 @@ export async function postStore(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-// //put:http://localhost:3000/api/users/1
-// export async function putUser(req: NextApiRequest, res: NextApiResponse) {
-//   try {
-//     const { userId } = req.query
-//     const formData = req.body
+//put:http://localhost:3000/api/users/1
+export async function putStore(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    const { storeId } = req.query
+    const formData = req.body
 
-//     if (userId && formData) {
-//       await Users.findByIdAndUpdate(userId, formData)
-//       return res.status(200).json(formData)
-//     }
-//     res.status(400).json({ error: "User Not Selected...!" })
-//   } catch (error) {
-//     res.status(400).json(error)
-//   }
-// }
+    if (storeId && formData) {
+      await CertificateRegistration.findByIdAndUpdate(storeId, formData)
+      return res.status(200).json(formData)
+    }
+    res.status(400).json({ error: "User Not Selected...!" })
+  } catch (error) {
+    res.status(400).json(error)
+  }
+}
 
 // //delete:http://localhost:3000/api/users/1
 // export async function deleteUser(req: NextApiRequest, res: NextApiResponse) {

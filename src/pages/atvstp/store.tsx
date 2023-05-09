@@ -5,7 +5,7 @@ import { useMutation } from "react-query"
 import { addStore } from "@/lib/helper"
 import { useSession } from "next-auth/react"
 
-import { toast } from "react-toastify"
+import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 
 type Props = {}
@@ -44,10 +44,18 @@ const store = (props: Props) => {
         progress: undefined,
         theme: "light",
       })
-      alert("Thành công")
     },
     onError: (e) => {
-      console.log(e)
+      toast.error("Thất bại", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
     },
   })
 
@@ -141,6 +149,7 @@ const store = (props: Props) => {
           </div>
         </form>
       </div>
+      <ToastContainer />
     </div>
   )
 }

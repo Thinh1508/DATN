@@ -37,7 +37,6 @@ const Menus = [
     icon: <AiFillReconciliation />,
     submenu: true,
     submenuItems: [
-      { title: "Lên kế hoạch", link: "/admin/inspection/planning" },
       { title: "Cấp giấy ATVSTP", link: "/admin/inspection/license" },
     ],
     link: "/admin/inspection",
@@ -71,13 +70,12 @@ const SideBar = (props: Props) => {
     }
 
     window.addEventListener("resize", handleResize)
-    if (pathname === "/admin/inspection/planning") setSubmenuOpen(true)
     if (pathname === "/admin/inspection/license") setSubmenuOpen(true)
   }, [])
 
   return (
     <div
-      className={`bg-dark-green h-screen p-5 pt-8 ${
+      className={`bg-dark-green h-screen p-5 pt-8 z-20 ${
         open ? "w-72 absolute z-10" : "w-20 relative"
       } duration-300 sm:relative`}
     >

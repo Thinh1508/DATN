@@ -1,4 +1,4 @@
-import license from "@/pages/atvstp/license"
+import Link from "next/link"
 import React from "react"
 
 type License = {
@@ -57,7 +57,7 @@ const ModalShowLicense = (props: Props) => {
             </button>
           </div>
           <form>
-            <div className="p-6 space-y-10">
+            <div className="p-6 space-y-10 h-[70vh] overflow-y-auto scrollbar-style">
               <div className="relative border-2 border-gray-400 rounded-lg">
                 <input
                   type="text"
@@ -87,7 +87,7 @@ const ModalShowLicense = (props: Props) => {
                 <div className="relative border-2 border-gray-400 rounded-lg">
                   <input
                     type="text"
-                    defaultValue={data.createdAt}
+                    defaultValue={data.createdAt.slice(0, 10)}
                     className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-950 bg-transparent peer  appearance-none  focus:outline-none focus:ring-0 "
                     placeholder=" "
                     disabled
@@ -109,17 +109,58 @@ const ModalShowLicense = (props: Props) => {
                   Địa chỉ
                 </label>
               </div>
-              <div className="relative border-2 border-gray-400 rounded-lg">
-                <image
-                  href={data.idStore.imageBusiness}
-                  className="w-52 h-52"
-                />
+              <div className="relative border-2 border-gray-400 rounded-lg p-4">
+                <Link href={data.idStore.imageBusiness} target="_blank">
+                  <img
+                    src={data.idStore.imageBusiness}
+                    className="w-full h-fit"
+                  />
+                </Link>
                 <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
-                  Bản sao giấy chứng nhận kinh doanh
+                  Bản sao giấy phép kinh doanh
+                </label>
+              </div>
+              <div className="relative border-2 border-gray-400 rounded-lg p-4">
+                <img src={data.healthCertificate} className="w-full h-fit" />
+                <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
+                  Giấy xác nhận đủ sức khỏe của chủ cơ sở
+                </label>
+              </div>
+              <div className="relative border-2 border-gray-400 rounded-lg p-4">
+                <img src={data.proposal} className="w-full h-fit" />
+                <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
+                  Đơn đề nghị cấp giấy chứng nhận
+                </label>
+              </div>
+              <div className="relative border-2 border-gray-400 rounded-lg p-4">
+                <img src={data.description} className="w-full h-fit" />
+                <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
+                  Bản thuyết minh về cơ sở vật chất, trang thiết bị
+                </label>
+              </div>
+              <div className="relative border-2 border-gray-400 rounded-lg p-4">
+                <img src={data.trainCertificate} className="w-full h-fit" />
+                <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
+                  Giấy xác nhận đã được tập huấn kiến thức về an toàn về sinh
+                  thực phẩm
                 </label>
               </div>
             </div>
             <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b ">
+              {data.status === "pending" && (
+                <Link
+                  href={{
+                    pathname: "/admin/inspection/planning",
+                    query: {
+                      store: JSON.stringify(data.idStore),
+                      idCertificateReg: data._id,
+                    },
+                  }}
+                  className="sm:w-1/2 text-green-900 bg-white border border-green-900 hover:bg-green-800  hover:transition-all hover:duration-500 ease-in-out hover:text-white  font-medium rounded-lg text-lg px-5 py-2.5 text-center "
+                >
+                  Lên kế hoạch
+                </Link>
+              )}
               <button
                 type="button"
                 onClick={props.onClose}

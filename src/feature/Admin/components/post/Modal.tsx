@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query"
 import { addPost, getCategory, getPost, updatePost } from "@/lib/helper"
 import dynamic from "next/dynamic"
 import "react-quill/dist/quill.snow.css"
+import { useSession } from "next-auth/react"
 
 type Post = {
   _id: string
@@ -32,6 +33,7 @@ type Props = {
 const Modal = (props: Props) => {
   const { postData: postData } = props
   const queryClient = useQueryClient()
+  const { data: session }: { data: any } = useSession()
 
   const { isLoading, isError, data, error } = useQuery("category", getCategory)
   const postCategory = () => {
@@ -73,14 +75,13 @@ const Modal = (props: Props) => {
   const handleSubmit = (e: any) => {
     e.preventDefault()
     formData.content = value
-    formData.userCreate = "644542307bfe2a59e1620ccc"
     const model = {
       title: formData.title,
       description: formData.description,
       status: formData.status,
       category: formData.category,
       content: value,
-      userCreate: "644542307bfe2a59e1620ccc",
+      idUser: session?.user?._id,
     }
     if (props.action === "add") {
       addMutation.mutate(model)

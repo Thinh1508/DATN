@@ -70,35 +70,40 @@ const LicenseTable = (props: Props) => {
             </tr>
           </thead>
           <tbody>
-            {data.map((license: License) => (
-              <tr
-                className="bg-gray-200 border-b text-gray-900 hover:bg-gray-300"
-                key={license._id}
-                onClick={() => {
-                  setLicenseData(license)
-                  setShowModal(true)
-                }}
-              >
-                <th
-                  scope="row"
-                  className="px-4 py-4 font-medium  whitespace-nowrap text-lg cursor-pointer"
-                >
-                  {license.idStore.name}
-                </th>
-                <td className="px-4 py-4 text-lg cursor-pointer">
-                  {license.idStore.type}
-                </td>
-                <td className="px-4 py-4 text-lg cursor-pointer">
-                  {license.idStore.address}
-                </td>
-                <td className="px-4 py-4 text-lg cursor-pointer">
-                  {license.createdAt}
-                </td>
-                <td className="px-4 py-4 text-lg cursor-pointer ">
-                  {license.status === "pending" ? "Đợi sử lý" : "Đang kiểm tra"}
-                </td>
-              </tr>
-            ))}
+            {data.map(
+              (license: License) =>
+                license.status !== "processed" && (
+                  <tr
+                    className="bg-gray-200 border-b text-gray-900 hover:bg-gray-300"
+                    key={license._id}
+                    onClick={() => {
+                      setLicenseData(license)
+                      setShowModal(true)
+                    }}
+                  >
+                    <th
+                      scope="row"
+                      className="px-4 py-4 font-medium  whitespace-nowrap text-lg cursor-pointer capitalize"
+                    >
+                      {license.idStore.name}
+                    </th>
+                    <td className="px-4 py-4 text-lg cursor-pointer capitalize">
+                      {license.idStore.type}
+                    </td>
+                    <td className="px-4 py-4 text-lg cursor-pointer capitalize">
+                      {license.idStore.address}
+                    </td>
+                    <td className="px-4 py-4 text-lg cursor-pointer capitalize">
+                      {license.createdAt.slice(0, 10)}
+                    </td>
+                    <td className="px-4 py-4 text-lg cursor-pointer capitalize">
+                      {license.status === "pending"
+                        ? "Đợi sử lý"
+                        : "Đang kiểm tra"}
+                    </td>
+                  </tr>
+                )
+            )}
           </tbody>
         </table>
       </div>

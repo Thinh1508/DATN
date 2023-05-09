@@ -6,7 +6,7 @@ import Link from "next/link"
 import checkAuth from "../middleware/checkAuth"
 import { addCertificateReg, getStoreUserId } from "@/lib/helper"
 
-import { toast } from "react-toastify"
+import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 
 type Props = {}
@@ -79,8 +79,36 @@ const license = (props: Props) => {
     return data.secure_url
   }
 
-  const showMess = (mess: String) => {
-    toast.error(mess, {
+  const addMutation = useMutation(addCertificateReg, {
+    onSuccess: () => {
+      toast.success("Thành công", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
+    },
+    onError: () => {
+      toast.error("Thất bại", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
+    },
+  })
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault()
+    toast("Đang thực hiện...", {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -90,24 +118,10 @@ const license = (props: Props) => {
       progress: undefined,
       theme: "light",
     })
-  }
-
-  const addMutation = useMutation(addCertificateReg, {
-    onSuccess: () => {
-      showMess("Thành công")
-      alert("Thành công")
-    },
-    onError: (e) => {
-      console.log(e)
-    },
-  })
-
-  const handleSubmit = async (e: any) => {
-    e.preventDefault()
     const model = formData
     model.proposal = await uploadImage(fileImage1)
-    model.healthCertificate = await uploadImage(fileImage2)
-    model.description = await uploadImage(fileImage3)
+    model.description = await uploadImage(fileImage2)
+    model.healthCertificate = await uploadImage(fileImage3)
     model.trainCertificate = await uploadImage(fileImage4)
     addMutation.mutate(model)
   }
@@ -173,8 +187,8 @@ const license = (props: Props) => {
                   className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-900 bg-transparent   appearance-none  focus:outline-none focus:ring-0 focus:border-3 peer"
                 />
                 <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
-                  Giấy xác nhận đủ sức khỏe của chủ cơ sở và người trực tiếp sản
-                  xuất, kinh doanh thực phẩm
+                  Giấy xác nhận đã được tập huấn kiến thức về an toàn về sinh
+                  thực phẩm
                 </label>
               </div>
               <div className="relative border-2 border-gray-400 rounded-lg">
@@ -187,8 +201,8 @@ const license = (props: Props) => {
                   className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-900 bg-transparent   appearance-none  focus:outline-none focus:ring-0 focus:border-3 peer"
                 />
                 <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
-                  Giấy xác nhận đã được tập huấn kiến thức về an toàn về sinh
-                  thực phẩm
+                  Giấy xác nhận đủ sức khỏe của chủ cơ sở và người trực tiếp sản
+                  xuất, kinh doanh thực phẩm
                 </label>
               </div>
             </div>
@@ -215,6 +229,7 @@ const license = (props: Props) => {
           </div>
         )}
       </div>
+      <ToastContainer />
     </div>
   )
 }

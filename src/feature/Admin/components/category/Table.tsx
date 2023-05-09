@@ -22,17 +22,25 @@ type Category = {
 const Table = (props: Props) => {
   const queryClient = useQueryClient()
   const { isLoading, isError, data, error } = useQuery("category", getCategory)
-  const checkDescription = (description: string) => {
-    if (description === "agency") return "Cơ quan ban hành"
-    else if (description === "document") return "Loại văn bản"
-    else return "Bài viết"
-  }
 
   const [modal, setModal] = useState(false)
   const [action, setAction] = useState("")
   const [categoryInfo, setCategoryInfo] = useState(Object)
   const [modalDelete, setModalDelete] = useState(false)
   const [categoryIdDelete, setCategoryIdDelete] = useState(String)
+
+  const showDescription = (description: string) => {
+    switch (description) {
+      case "agency":
+        return "Cơ quan ban hành"
+      case "document":
+        return "Loại văn bản"
+      case "post":
+        return "Bài viết"
+      case "inspection":
+        return "Thanh tra"
+    }
+  }
 
   const onDelete = async (categoryId: string) => {
     await deleteCategory(categoryId)
@@ -153,7 +161,7 @@ const Table = (props: Props) => {
           <tbody>
             {data.map((category: Category) => (
               <tr
-                className="bg-gray-200 border-b text-gray-900 hover:bg-gray-300"
+                className="bg-gray-200 border-b text-gray-900 hover:bg-gray-300 capitalize"
                 key={category._id}
               >
                 <th
@@ -185,7 +193,7 @@ const Table = (props: Props) => {
                     setModal(true)
                   }}
                 >
-                  {checkDescription(category.description)}
+                  {showDescription(category.description)}
                 </td>
                 <td
                   className="px-4 py-4 text-lg cursor-pointer"
@@ -195,7 +203,7 @@ const Table = (props: Props) => {
                     setModal(true)
                   }}
                 >
-                  {category.createdAt}
+                  {category.createdAt.slice(0, 10)}
                 </td>
                 <td
                   className="px-4 py-4 text-lg cursor-pointer"
@@ -205,7 +213,7 @@ const Table = (props: Props) => {
                     setModal(true)
                   }}
                 >
-                  {category.updatedAt}
+                  {category.updatedAt.slice(0, 10)}
                 </td>
                 <td className="flex items-center px-4 py-4 space-x-3 relative ">
                   <button

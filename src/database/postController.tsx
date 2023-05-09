@@ -6,7 +6,7 @@ import { NextApiRequest, NextApiResponse } from "next"
 //get:http://localhost:3000/api/post
 export async function getPost(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const post = await Post.find()
+    const post = await Post.find().populate("idUser", "name")
     if (!post) return res.status(404).json({ error: "Data Not Found" })
 
     res.status(200).json(post)
