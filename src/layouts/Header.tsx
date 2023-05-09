@@ -88,7 +88,7 @@ const Header = (props: Props) => {
       </div>
       <div className="relative flex h-fit w- items-center bg-[#049803] ">
         <div className="container mx-auto">
-          <ul className="flex text-sm items-center">
+          <ul className="flex text-sm ">
             <li className="flex-none px-3 py-3 text-white font-bold uppercase cursor-pointer hover:bg-[#0cb306] text-center">
               <Link href="/">trang chủ</Link>
             </li>
@@ -108,13 +108,16 @@ const Header = (props: Props) => {
               truyền thông
             </li>
             <li className="flex-none px-3 py-3 text-white font-bold uppercase cursor-pointer hover:bg-[#0cb306]  text-center relative group">
-              <h1>chứng nhận ATTP</h1>
-              <ul className="absolute bg-[#0cb306] right-0 rounded-md p-2 z-20 text-white w-full hidden group-hover:block ">
-                <li className="hover:text-gray-900 hover:font-bold my-2">
-                  <Link href={"/atvstp/store"}>cơ sở kinh doanh</Link>
+              <h1>an toàn vệ sinh thực phẩm</h1>
+              <ul className="absolute bg-[#0cb306] right-0 capitalize rounded-md p-2 z-10 text-white w-full hidden group-hover:block  ">
+                <li className="hover:text-gray-300 hover:font-extrabold my-2">
+                  <Link href={"/atvstp/store"}>đăng kí cơ sở kinh doanh</Link>
                 </li>
-                <li className="hover:text-gray-900 hover:font-bold my-2">
-                  <Link href={"/atvstp/license"}>đăng kí giấy phép</Link>
+                <li className="hover:text-gray-300 hover:font-extrabold my-2">
+                  <Link href={"/atvstp/license"}>đăng kí giấy phép ATVSTP</Link>
+                </li>
+                <li className="hover:text-gray-300 hover:font-extrabold my-2">
+                  <Link href={"/atvstp/report"}>báo cáo cơ sở kinh doanh</Link>
                 </li>
               </ul>
             </li>

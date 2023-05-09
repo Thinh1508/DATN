@@ -291,6 +291,13 @@ export async function addCertificateReg(formData: any) {
 }
 
 //inspectionPlan
+// get all inspectionPlan
+export const getInspectionPlan = async () => {
+  const response = await fetch(`${BASE_URL}/api/inspectionPlan`)
+  const json = await response.json()
+
+  return json
+}
 //post inspectionPlan
 export async function addInspectionPlan(formData: any) {
   try {
@@ -306,4 +313,46 @@ export async function addInspectionPlan(formData: any) {
   } catch (error) {
     return error
   }
+}
+
+//report
+//get all report
+export const getReport = async () => {
+  const response = await fetch(`${BASE_URL}/api/report`)
+  const json = await response.json()
+
+  return json
+}
+
+//post report
+export async function addReport(formData: any) {
+  try {
+    const Options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    }
+    const response = await fetch(`${BASE_URL}/api/report`, Options)
+    const json = await response.json()
+
+    return json
+  } catch (error) {
+    return error
+  }
+}
+
+//put report
+export async function updateReport({ reportId, formData }: any) {
+  const Options = {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(formData),
+  }
+  const response = await fetch(
+    `${BASE_URL}/api/report/?reportId=${reportId}`,
+    Options
+  )
+  const json = await response.json()
+
+  return json
 }

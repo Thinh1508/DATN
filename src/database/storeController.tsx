@@ -1,5 +1,3 @@
-// user controller
-
 import CertificateRegistration from "@/model/CertificateRegistration"
 import Store from "@/model/Store"
 import { NextApiRequest, NextApiResponse } from "next"

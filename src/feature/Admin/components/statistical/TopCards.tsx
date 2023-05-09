@@ -8,7 +8,7 @@ const TopCards = (props: Props) => {
       <div className="lg:col-span-2 col-span-1 bg-white flex justify-center w-full border p-4 rounded-lg">
         <div className="flex flex-col w-full pb-4">
           <p className="text-gray-900 text-2xl font-bold">10</p>
-          <p className="text-gray-600">New Account</p>
+          <p className="text-gray-600">Tài khoản mới</p>
         </div>
         <p className="bg-green-200 flex justify-center items-center p-2 rounded-lg">
           <span className="text-green-700 text-lg">+30%</span>
@@ -17,7 +17,7 @@ const TopCards = (props: Props) => {
       <div className="lg:col-span-2 col-span-1 bg-white flex justify-center w-full border p-4 rounded-lg">
         <div className="flex flex-col w-full pb-4">
           <p className="text-gray-900 text-2xl font-bold">17</p>
-          <p className="text-gray-600">New Store</p>
+          <p className="text-gray-600">Cơ sở kinh daonh mới</p>
         </div>
         <p className="bg-green-200 flex justify-center items-center p-2 rounded-lg">
           <span className="text-green-700 text-lg">+18%</span>
@@ -26,7 +26,7 @@ const TopCards = (props: Props) => {
       <div className=" bg-white flex justify-center w-full border p-4 rounded-lg">
         <div className="flex flex-col w-full pb-4">
           <p className="text-gray-900 text-2xl font-bold">10</p>
-          <p className="text-gray-600">All new</p>
+          <p className="text-gray-600">Bài viết</p>
         </div>
         <p className="bg-green-200 flex justify-center items-center p-2 rounded-lg">
           <span className="text-green-700 text-lg">+15%</span>

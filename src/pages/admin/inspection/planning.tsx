@@ -9,6 +9,7 @@ import {
   addInspectionPlan,
   getCategory,
   getStore,
+  updateReport,
   updateStore,
 } from "@/lib/helper"
 import { ToastContainer, toast } from "react-toastify"
@@ -36,8 +37,8 @@ const Planning: NextPageWithLayout = (props: Props) => {
   }
 
   const router = useRouter()
-  const { store, idCertificateReg } = router.query
-  console.log(idCertificateReg)
+  const { store, idCertificateReg, type } = router.query
+  console.log(type)
   const parsedStore = JSON.parse(store as string)
 
   const { data: session }: { data: any } = useSession()
@@ -62,6 +63,15 @@ const Planning: NextPageWithLayout = (props: Props) => {
     },
   })
 
+  const updateMutation1 = useMutation(updateReport, {
+    onSuccess: () => {
+      console.log("success")
+    },
+    onError: () => {
+      console.log("error")
+    },
+  })
+
   const addMutation = useMutation(addInspectionPlan, {
     onSuccess: () => {
       toast.success("Thành công", {
@@ -74,10 +84,17 @@ const Planning: NextPageWithLayout = (props: Props) => {
         progress: undefined,
         theme: "light",
       })
-      updateMutation.mutate({
-        storeId: idCertificateReg,
-        formData: { status: "checking" },
-      })
+      if (type === "inspection") {
+        updateMutation.mutate({
+          storeId: idCertificateReg,
+          formData: { status: "checking" },
+        })
+      } else {
+        updateMutation1.mutate({
+          reportId: idCertificateReg,
+          formData: { status: "checking" },
+        })
+      }
     },
     onError: () => {
       toast.error("Thất bại", {

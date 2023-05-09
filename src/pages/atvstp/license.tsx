@@ -129,7 +129,7 @@ const license = (props: Props) => {
   if (isLoading) return <div>Đang tải dữ liệu...</div>
   if (isError) return <div>Lỗi khi tải dữ liệu {`${error}`}</div>
   return (
-    <div className="bg-white h-[63vh]">
+    <div className="bg-white flex-1">
       <div className="container mx-auto text-gray-900">
         {data?.length !== 0 ? (
           <form method="POST" onSubmit={handleSubmit}>

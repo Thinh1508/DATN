@@ -8,7 +8,7 @@ export const data = [
     total: 2795.95,
     status: "On Hold",
     method: "PayPal",
-    date: "15 Minutes ago",
+    date: "15 phút trước",
   },
   {
     id: 2,
@@ -19,7 +19,7 @@ export const data = [
     total: 1195.95,
     status: "Processing",
     method: "PayPal",
-    date: "23 Minutes ago",
+    date: "23 phút trước",
   },
   {
     id: 3,
@@ -30,7 +30,7 @@ export const data = [
     total: 495.85,
     status: "Completed",
     method: "Visa",
-    date: "1 Hour ago",
+    date: "1 giờ trước",
   },
   {
     id: 4,
@@ -41,7 +41,7 @@ export const data = [
     total: 150.45,
     status: "Processing",
     method: "MasterCard",
-    date: "1 Hour ago",
+    date: "1 giờ trước",
   },
   {
     id: 5,
@@ -52,7 +52,7 @@ export const data = [
     total: 175.25,
     status: "On Hold",
     method: "PayPal",
-    date: "2 Hour ago",
+    date: "2 giờ trước",
   },
   {
     id: 6,
@@ -63,7 +63,7 @@ export const data = [
     total: 1295.75,
     status: "Completed",
     method: "Check",
-    date: "3 Hour ago",
+    date: "3 giờ trước",
   },
   {
     id: 7,
@@ -74,7 +74,7 @@ export const data = [
     total: 89.95,
     status: "Completed",
     method: "MasterCard",
-    date: "3 Hour ago",
+    date: "3 giờ trước",
   },
   {
     id: 8,
@@ -85,7 +85,7 @@ export const data = [
     total: 689.45,
     status: "Completed",
     method: "Visa",
-    date: "7 Hour ago",
+    date: "7 giờ trước",
   },
   {
     id: 9,
@@ -96,7 +96,7 @@ export const data = [
     total: 14.99,
     status: "Completed",
     method: "PayPal",
-    date: "1 Day ago",
+    date: "1 ngày trước",
   },
   {
     id: 10,
@@ -107,6 +107,6 @@ export const data = [
     total: 218.99,
     status: "Completed",
     method: "MasterCard",
-    date: "1 Day ago",
+    date: "1 ngày trước",
   },
 ]

@@ -23,10 +23,10 @@ const BarChart = (props) => {
 
   useEffect(() => {
     setChartData({
-      labels: ["Mon", "Tues", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      labels: ["Hai", "Ba", "Tư", "Năm", "Sáu", "Bảy", "CN"],
       datasets: [
         {
-          label: "Sales $",
+          label: "Lược truy cập",
           data: [18127, 22201, 19490, 17938, 24182, 17842, 22475],
           borderColor: "rgb(53,162,235)",
           backgroundColor: "rgb(53,162,235,0.4)",

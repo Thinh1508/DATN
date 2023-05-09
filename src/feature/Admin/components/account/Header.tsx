@@ -74,11 +74,11 @@ const Header = (props: Props) => {
             Người dùng
           </span>
         </Link>
-        <Link href={"/admin/account/"}>
+        {/* <Link href={"/admin/account/"}>
           <span className="text-gray-500 hover:text-gray-900 font-medium text-xl cursor-pointer relative after:absolute after:bottom-0 after:left-0 after:bg-slate-900 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-300">
             Cửa hàng
           </span>
-        </Link>
+        </Link> */}
       </div>
       <div className="flex flex-row items-center gap-2">
         <button
