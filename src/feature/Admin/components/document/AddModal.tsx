@@ -37,11 +37,6 @@ const AddModal = (props: Props) => {
 
   const [pdfFile, setPdfFile] = useState(null)
   const [viewFdf, setViewFdf] = useState(null)
-  const [fileName, setFileName] = useState("")
-  function handleFileChange(event: any) {
-    const file = event.target.files[0]
-    setFileName(file.name)
-  }
 
   const handelFileChange = (e: any) => {
     setViewFdf(null)
@@ -65,6 +60,26 @@ const AddModal = (props: Props) => {
   }
 
   const handleChange = () => {}
+  const handleSubmit = async (e: any) => {
+    e.preventDefault()
+    if (!pdfFile) {
+      console.log(pdfFile)
+    } else {
+      const formDataI = new FormData()
+      formDataI.append("file", pdfFile)
+      formDataI.append("upload_preset", "imageBusiness")
+
+      const data = await fetch(
+        "https://api.cloudinary.com/v1_1/dv5h57yvq/image/upload",
+        {
+          method: "POST",
+          body: formDataI,
+        }
+      ).then((r) => r.json())
+      console.log("success")
+    }
+  }
+
   const newPlugin = defaultLayoutPlugin()
 
   if (isLoading) return <div>Đang tải dữ liệu...</div>
@@ -76,7 +91,7 @@ const AddModal = (props: Props) => {
         <div className="relative bg-white rounded-lg shadow ">
           <div className="flex items-start justify-between p-4 border-b rounded-t ">
             <h3 className="text-2xl font-semibold text-gray-900 ">
-              Add New Document
+              Thêm mới văn bản
             </h3>
             <button
               type="button"
@@ -99,7 +114,7 @@ const AddModal = (props: Props) => {
               <span className="sr-only">Close modal</span>
             </button>
           </div>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="p-6 space-y-5 ">
               <div className="relative border-2 border-gray-400 rounded-lg">
                 <input
@@ -109,7 +124,7 @@ const AddModal = (props: Props) => {
                   placeholder=" "
                 />
                 <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
-                  Symbol
+                  Số hiệu
                 </label>
               </div>
               <div className="relative border-2 border-gray-400 rounded-lg">
@@ -118,7 +133,7 @@ const AddModal = (props: Props) => {
                   placeholder=""
                 />
                 <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
-                  Abridgment
+                  Tóm tắc
                 </label>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -130,7 +145,7 @@ const AddModal = (props: Props) => {
                     className="block px-2.5 py-2.5 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                   >
                     <option className="relative" value="DEFAULT">
-                      Choose Issuing Agency
+                      Chọn cơ quan ban hành
                     </option>
                     {agencyCategory().map((category: Category) => (
                       <option key={category._id} value={category.title}>
@@ -147,7 +162,7 @@ const AddModal = (props: Props) => {
                     className="block px-2.5 py-2.5 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                   >
                     <option className="relative" value="DEFAULT">
-                      Choose Category Document
+                      Chọn loại văn bản
                     </option>
                     {documentCategory().map((category: Category) => (
                       <option key={category._id} value={category.title}>
@@ -166,7 +181,7 @@ const AddModal = (props: Props) => {
                     className="bg-gray-50 border-2 border-gray-400 text-gray-900 text-xl rounded-lg outline-none  block w-full p-2.5 "
                   />
                   <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
-                    Date Issued
+                    Ngày ban hành
                   </label>
                 </div>
                 <div className="relative sm:max-w-sm">
@@ -177,7 +192,7 @@ const AddModal = (props: Props) => {
                     className="bg-gray-50 border-2 border-gray-400 text-gray-900 text-xl rounded-lg outline-none  block w-full p-2.5 "
                   />
                   <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
-                    Date Effective
+                    Ngày áp dụng
                   </label>
                 </div>
               </div>
@@ -238,7 +253,7 @@ const AddModal = (props: Props) => {
                     className="text-red-700 cursor-pointer border-2 border-red-700 rounded-lg text-lg p-1 hover:text-white hover:bg-red-700 "
                     onClick={handleShowFile}
                   >
-                    Show file
+                    Hiển thị
                   </span>
                 </div>
               </div>
@@ -258,13 +273,13 @@ const AddModal = (props: Props) => {
                 type="submit"
                 className="sm:w-1/2 text-green-900 bg-white border border-green-900 hover:bg-green-800  hover:transition-all hover:duration-500 ease-in-out hover:text-white  font-medium rounded-lg text-lg px-5 py-2.5 text-center "
               >
-                Add
+                Thêm
               </button>
               <button
                 onClick={() => props.onClose("close")}
                 className="sm:w-1/2 text-gray-950 bg-white border border-gray-900 hover:bg-gray-900 hover:transition-all hover:duration-500 ease-in-out hover:text-white  font-medium rounded-lg text-lg px-5 py-2.5 text-center "
               >
-                Close
+                Đóng
               </button>
             </div>
           </form>

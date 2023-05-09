@@ -18,32 +18,32 @@ const Table = (props: Props) => {
           className="bg-white py-2 px-6 border-green-600 text-green-600 border-2 rounded-lg hover:bg-green-600 hover:text-white"
           onClick={() => setAddModal(true)}
         >
-          <span className="font-medium">Add New Document</span>
+          <span className="font-medium">Thêm văn bản mới</span>
         </button>
       </div>
       <table className="w-full text-sm text-left text-gray-500 ">
         <thead className="text-xs text-gray-300 uppercase bg-gray-900">
           <tr>
             <th scope="col" className="px-4 py-3 xl:text-lg">
-              Symbol
+              Số hiệu
             </th>
             <th scope="col" className="px-4 py-3 xl:text-lg">
-              Issuing Agency
+              Cơ quan ban hành
             </th>
             <th scope="col" className="px-4 py-3 xl:text-lg">
-              Category Document
+              Loại văn bản
             </th>
             <th scope="col" className="px-4 py-3 xl:text-lg">
-              Date Issued
+              Ngày ban hành
             </th>
             <th scope="col" className="px-4 py-3  xl:text-lg">
-              Date Effective
+              Ngày áp dụng
             </th>
             <th scope="col" className="px-4 py-3 xl:text-lg">
-              Status
+              Trạng thái
             </th>
             <th scope="col" className="px-4 py-3 xl:text-lg">
-              Action
+              Tùy chọn
             </th>
           </tr>
         </thead>
