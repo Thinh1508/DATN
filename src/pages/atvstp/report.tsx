@@ -162,7 +162,7 @@ const report = (props: Props) => {
             <div className="relative border-2 border-gray-400 rounded-lg my-6">
               <div className="h-[55vh] overflow-y-auto scrollbar-style">
                 {selectImage ? (
-                  <img src={selectImage} alt="anh tai len" className="p-4" />
+                  <img src={selectImage} alt="anh tai len" className="p-4 " />
                 ) : (
                   <></>
                 )}

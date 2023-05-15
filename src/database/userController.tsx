@@ -1,7 +1,9 @@
 // user controller
 
-import Users from "@/model/Users"
 import { NextApiRequest, NextApiResponse } from "next"
+import Users from "@/model/Users"
+import District from "@/model/district"
+import Ward from "@/model/ward"
 
 //get:http://localhost:3000/api/users
 export async function getUser(req: NextApiRequest, res: NextApiResponse) {
@@ -73,5 +75,59 @@ export async function deleteUser(req: NextApiRequest, res: NextApiResponse) {
     res.status(400).json({ error: "User Not Selected...!" })
   } catch (error) {
     res.status(400).json(error)
+  }
+}
+
+// District
+//get:http://localhost:3000/api/users/district
+export async function getDistrict(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    const district = await District.find()
+    if (!district) return res.status(404).json({ error: "Data Not Found" })
+
+    res.status(200).json(district)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
+//post:http://localhost:3000/api/district
+export async function postDistrict(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    const formData = req.body
+    if (!formData)
+      return res.status(400).json({ error: "Form Data Not Provided...!" })
+
+    const district = await District.create(formData)
+    if (district) res.status(200).json({ data: district })
+    else res.status(400).json({})
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
+
+// Ward
+//get:http://localhost:3000/api/users/ward
+export async function getWard(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    const ward = await Ward.find().populate("idDistrict")
+    if (!ward) return res.status(404).json({ error: "Data Not Found" })
+
+    res.status(200).json(ward)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
+//post:http://localhost:3000/api/district
+export async function postWard(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    const formData = req.body
+    if (!formData)
+      return res.status(400).json({ error: "Form Data Not Provided...!" })
+
+    const ward = await Ward.create(formData)
+    if (ward) res.status(200).json({ data: ward })
+    else res.status(400).json({})
+  } catch (error) {
+    res.status(500).json(error)
   }
 }
