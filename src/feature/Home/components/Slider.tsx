@@ -122,13 +122,19 @@ export function SliderUser(props: Props) {
 
 export function SliderBanner(props: Props) {
   const listSlider = [
-    "https://scontent.fdad3-6.fna.fbcdn.net/v/t1.6435-9/64504703_512765892595520_7340542718856134656_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=e3f864&_nc_ohc=qwlqRvEzhxkAX-yr-b4&_nc_ht=scontent.fdad3-6.fna&oh=00_AfB-3bJF2McW-2b11zmjVWxeoj4yxtsjxQqhM_OWrWW_FA&oe=647DD0F0",
-    "https://scontent.fdad3-6.fna.fbcdn.net/v/t1.6435-9/64504703_512765892595520_7340542718856134656_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=e3f864&_nc_ohc=qwlqRvEzhxkAX-yr-b4&_nc_ht=scontent.fdad3-6.fna&oh=00_AfB-3bJF2McW-2b11zmjVWxeoj4yxtsjxQqhM_OWrWW_FA&oe=647DD0F0",
+    {
+      id: 1,
+      img: "https://scontent.fdad3-6.fna.fbcdn.net/v/t1.6435-9/64504703_512765892595520_7340542718856134656_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=e3f864&_nc_ohc=qwlqRvEzhxkAX-yr-b4&_nc_ht=scontent.fdad3-6.fna&oh=00_AfB-3bJF2McW-2b11zmjVWxeoj4yxtsjxQqhM_OWrWW_FA&oe=647DD0F0",
+    },
+    {
+      id: 2,
+      img: "https://scontent.fdad3-6.fna.fbcdn.net/v/t1.6435-9/64504703_512765892595520_7340542718856134656_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=e3f864&_nc_ohc=qwlqRvEzhxkAX-yr-b4&_nc_ht=scontent.fdad3-6.fna&oh=00_AfB-3bJF2McW-2b11zmjVWxeoj4yxtsjxQqhM_OWrWW_FA&oe=647DD0F0",
+    },
   ]
   const listItems = listSlider.map((slide) => (
-    <SwiperSlide key={slide}>
+    <SwiperSlide key={slide.id}>
       <img
-        src={slide}
+        src={slide.img}
         alt="thông điệp"
         className="w-full max-h-[200px] rounded-md"
       />

@@ -132,10 +132,11 @@ const SideBar = (props: Props) => {
           <div className="flex-1 border-b-[3px] border-slate-900/40"></div>
         </div>
         <div className="space-y-2 overflow-x-auto max-h-64 scrollbar-style">
-          {documents.map((document) => (
+          {documents.map((document, index) => (
             <Link
               className="text-green-600 font-bold flex gap-1 mb-2 hover:text-red-600 text-sm"
               href=""
+              key={index}
             >
               <div className="h-3 w-3 mt-1 text-teal-600">
                 <svg
@@ -160,8 +161,8 @@ const SideBar = (props: Props) => {
           <div className="flex-1 border-b-[3px] border-slate-900/40"></div>
         </div>
         <div className="space-y-2">
-          {banners.map((banner) => (
-            <Link className="block" href="">
+          {banners.map((banner, index) => (
+            <Link className="block" href="" key={index}>
               <img src={banner} alt="" className="w-full" />
             </Link>
           ))}

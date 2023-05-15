@@ -39,7 +39,9 @@ const Modal = (props: Props) => {
       }
     })
     const dataDistrict = districts.map((district) => (
-      <option value={district}>{district}</option>
+      <option value={district} key={district}>
+        {district}
+      </option>
     ))
     return dataDistrict
   }
@@ -332,6 +334,7 @@ const Modal = (props: Props) => {
                       }}
                       className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-950 bg-transparent peer  appearance-none  focus:outline-none focus:ring-0 capitalize"
                       placeholder=" "
+                      required
                     />
                     <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
                       Họ tên
@@ -356,6 +359,7 @@ const Modal = (props: Props) => {
                       }}
                       className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-900 bg-transparent   appearance-none  focus:outline-none focus:ring-0 focus:border-3 peer"
                       placeholder=" "
+                      required
                     />
                     <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
                       Email
@@ -396,7 +400,6 @@ const Modal = (props: Props) => {
                           onChange={(e: any) => {
                             setValWard(e.target.value)
                           }}
-                          defaultValue={"DEFAULT"}
                           className="block px-2.5 py-2.5 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                           required
                         >
