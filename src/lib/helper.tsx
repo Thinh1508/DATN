@@ -356,3 +356,12 @@ export async function updateReport({ reportId, formData }: any) {
 
   return json
 }
+
+//ward
+//get all ward
+export const getWard = async () => {
+  const response = await fetch(`${BASE_URL}/api/user/ward`)
+  const json = await response.json()
+
+  return json
+}

@@ -2,8 +2,8 @@ import React, { useState } from "react"
 
 import { BsChevronDown } from "react-icons/bs"
 
-import { addUser, getUser, updateUser } from "@/lib/helper"
-import { useMutation, useQueryClient } from "react-query"
+import { addUser, getUser, getWard, updateUser } from "@/lib/helper"
+import { useMutation, useQuery, useQueryClient } from "react-query"
 
 type User = {
   _id: string
@@ -25,14 +25,40 @@ type Props = {
 
 const Modal = (props: Props) => {
   const queryClient = useQueryClient()
-  const { userData: data } = props
-  const [formData, setFormData] = useState(data)
+
+  const { isLoading, isError, data, error } = useQuery("ward", getWard)
+  const showDistricts = () => {
+    const districts: Array<string> = []
+    data.map((ward: any) => {
+      if (districts.length === 0) {
+        districts.push(ward.idDistrict.name)
+      } else {
+        if (ward.idDistrict.name !== districts[districts.length - 1]) {
+          districts.push(ward.idDistrict.name)
+        }
+      }
+    })
+    const dataDistrict = districts.map((district) => (
+      <option value={district}>{district}</option>
+    ))
+    return dataDistrict
+  }
+  const showWard = (district: string) => {
+    const wards = data
+    return wards.filter((ward: any) => ward.idDistrict.name === district)
+  }
+
+  const { userData: dataUser } = props
+  const [formData, setFormData] = useState(dataUser)
 
   //check value name and email
   const [isValEmail, setValEmail] = useState(true)
   const [isValName, setValName] = useState(true)
-  const [isEmail, setEmail] = useState(data.email)
-  const [isName, setName] = useState(data.name)
+  const [isEmail, setEmail] = useState(dataUser.email)
+  const [isName, setName] = useState(dataUser.name)
+  const [isDistrict, setDistrict] = useState(false)
+  const [valDistrict, setValDistrict] = useState("")
+  const [valWar, setValWard] = useState("")
 
   const verifyEmail = (email: string) => {
     let regex = new RegExp(/[\w]+@[\w]+\.[\w]/)
@@ -78,12 +104,15 @@ const Modal = (props: Props) => {
       if (!model.permissions) model.permissions == "user"
       if (props.action === "add") addMutation.mutate(model)
       if (props.action === "edit")
-        updateMutation.mutate({ userId: data._id, formData: model })
-      setFormData(data)
+        updateMutation.mutate({ userId: dataUser._id, formData: model })
+      setFormData(dataUser)
       setEmail("")
       setName("")
     }
   }
+
+  if (isLoading) return <div>Đang tải dữ liệu...</div>
+  if (isError) return <div>Lỗi khi tải dữ liệu {`${error}`}</div>
 
   switch (props.action) {
     case "view":
@@ -122,7 +151,7 @@ const Modal = (props: Props) => {
                     <input
                       type="text"
                       name="name"
-                      defaultValue={data.name}
+                      defaultValue={dataUser.name}
                       className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-950 bg-transparent peer  appearance-none  focus:outline-none focus:ring-0 "
                       placeholder=" "
                       disabled
@@ -137,7 +166,7 @@ const Modal = (props: Props) => {
                       type="text"
                       name="email"
                       disabled
-                      defaultValue={data.email}
+                      defaultValue={dataUser.email}
                       className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-900 bg-transparent   appearance-none  focus:outline-none focus:ring-0 focus:border-3 peer"
                       placeholder=" "
                     />
@@ -151,7 +180,7 @@ const Modal = (props: Props) => {
                       type="text"
                       name="address"
                       disabled
-                      defaultValue={data.address}
+                      defaultValue={dataUser.address}
                       className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-900 bg-transparent   appearance-none  focus:outline-none focus:ring-0 focus:border-3 peer"
                       placeholder=" "
                     />
@@ -165,7 +194,7 @@ const Modal = (props: Props) => {
                       <input
                         type="date"
                         name="dob"
-                        defaultValue={data.dob}
+                        defaultValue={dataUser.dob}
                         disabled
                         className="bg-gray-50 border-2 border-gray-400 text-gray-900 text-xl rounded-lg outline-none  block w-full p-2.5 "
                         placeholder="Select date"
@@ -178,7 +207,7 @@ const Modal = (props: Props) => {
                       <select
                         name="gender"
                         disabled
-                        defaultValue={data.gender}
+                        defaultValue={dataUser.gender}
                         className="block px-2.5 py-2.5 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                       >
                         <option className="relative" value="DEFAULT">
@@ -192,7 +221,7 @@ const Modal = (props: Props) => {
                       <select
                         name="permissions"
                         disabled
-                        defaultValue={data.permissions}
+                        defaultValue={dataUser.permissions}
                         className="block px-2.5 py-2.5 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                       >
                         <option className="relative" value="DEFAULT">
@@ -212,7 +241,7 @@ const Modal = (props: Props) => {
                         id="radioDefault1"
                         disabled
                         name="status"
-                        defaultChecked={data.status == "active"}
+                        defaultChecked={dataUser.status == "active"}
                         className="form-check-input appearance-none rounded-full h-5 w-5 border border-gray-300 checked:bg-green-500 checked:border-green-500 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                       />
                       <label
@@ -229,7 +258,7 @@ const Modal = (props: Props) => {
                         id="radioDefault2"
                         name="status"
                         disabled
-                        defaultChecked={data.status !== "active"}
+                        defaultChecked={dataUser.status !== "active"}
                         className="form-check-input appearance-none rounded-full h-5 w-5 border border-gray-300 checked:bg-red-500 checked:border-red-500 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                       />
                       <label
@@ -301,7 +330,7 @@ const Modal = (props: Props) => {
                           ? setValName(true)
                           : setValName(false)
                       }}
-                      className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-950 bg-transparent peer  appearance-none  focus:outline-none focus:ring-0 "
+                      className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-950 bg-transparent peer  appearance-none  focus:outline-none focus:ring-0 capitalize"
                       placeholder=" "
                     />
                     <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
@@ -340,18 +369,64 @@ const Modal = (props: Props) => {
                     </span>
                   </div>
 
-                  <div className="relative border-2 border-gray-400 rounded-lg">
-                    <input
-                      type="text"
-                      name="address"
-                      onChange={handleChange}
-                      className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-900 bg-transparent   appearance-none  focus:outline-none focus:ring-0 focus:border-3 peer"
-                      placeholder=" "
-                    />
-                    <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
-                      Địa chỉ
-                    </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="relative border-2 border-gray-400 rounded-lg">
+                      <select
+                        name="district"
+                        onChange={(e) => {
+                          setDistrict(true)
+                          setValDistrict(e.target.value)
+                        }}
+                        defaultValue={"DEFAULT"}
+                        className="block px-2.5 py-2.5 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        required
+                      >
+                        <option className="relative" value="DEFAULT">
+                          Quận/Huyện
+                        </option>
+                        {showDistricts()}
+                        <option value="đảo Hoàng Sa">đảo Hoàng Sa</option>
+                      </select>
+                      <BsChevronDown className="absolute right-3 top-[30%] text-gray-600" />
+                    </div>
+                    {isDistrict && (
+                      <div className="relative border-2 border-gray-400 rounded-lg">
+                        <select
+                          name="ward"
+                          onChange={(e: any) => {
+                            setValWard(e.target.value)
+                          }}
+                          defaultValue={"DEFAULT"}
+                          className="block px-2.5 py-2.5 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                          required
+                        >
+                          <option className="relative" value="DEFAULT">
+                            Phường/Xã
+                          </option>
+                          {showWard(valDistrict).map((ward: any) => (
+                            <option value={ward.name}>{ward.name}</option>
+                          ))}
+                        </select>
+                        <BsChevronDown className="absolute right-3 top-[30%] text-gray-600" />
+                      </div>
+                    )}
                   </div>
+
+                  {isDistrict && (
+                    <div className="relative border-2 border-gray-400 rounded-lg">
+                      <input
+                        type="text"
+                        name="address"
+                        onChange={handleChange}
+                        className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-900 bg-transparent   appearance-none  focus:outline-none focus:ring-0 focus:border-3 peer"
+                        placeholder=" "
+                        required
+                      />
+                      <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
+                        Địa chỉ
+                      </label>
+                    </div>
+                  )}
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="relative sm:max-w-sm">
@@ -361,6 +436,7 @@ const Modal = (props: Props) => {
                         onChange={handleChange}
                         className="bg-gray-50 border-2 border-gray-400 text-gray-900 text-xl rounded-lg outline-none  block w-full p-2.5 "
                         placeholder=""
+                        required
                       />
                       <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
                         Ngày sinh
@@ -465,7 +541,7 @@ const Modal = (props: Props) => {
                           ? setValName(true)
                           : setValName(false)
                       }}
-                      defaultValue={data.name}
+                      defaultValue={dataUser.name}
                       className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-950 bg-transparent peer  appearance-none  focus:outline-none focus:ring-0 "
                       placeholder=" "
                     />
@@ -490,7 +566,7 @@ const Modal = (props: Props) => {
                         const isVal = verifyEmail(e.target.value)
                         isVal ? setValEmail(true) : setValEmail(false)
                       }}
-                      defaultValue={data.email}
+                      defaultValue={dataUser.email}
                       className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-900 bg-transparent   appearance-none  focus:outline-none focus:ring-0 focus:border-3 peer"
                       placeholder=" "
                     />
@@ -511,7 +587,7 @@ const Modal = (props: Props) => {
                       type="text"
                       name="address"
                       onChange={handleChange}
-                      defaultValue={data.address}
+                      defaultValue={dataUser.address}
                       className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-900 bg-transparent   appearance-none  focus:outline-none focus:ring-0 focus:border-3 peer"
                       placeholder=" "
                     />
@@ -525,7 +601,7 @@ const Modal = (props: Props) => {
                       <input
                         type="date"
                         name="dob"
-                        defaultValue={data.dob}
+                        defaultValue={dataUser.dob}
                         onChange={handleChange}
                         className="bg-gray-50 border-2 border-gray-400 text-gray-900 text-xl rounded-lg outline-none  block w-full p-2.5 "
                         placeholder="Select date"
@@ -538,7 +614,7 @@ const Modal = (props: Props) => {
                       <select
                         name="gender"
                         onChange={handleChange}
-                        defaultValue={data.gender}
+                        defaultValue={dataUser.gender}
                         className="block px-2.5 py-2.5 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                       >
                         <option className="relative" value="DEFAULT">
@@ -553,7 +629,7 @@ const Modal = (props: Props) => {
                       <select
                         name="permissions"
                         onChange={handleChange}
-                        defaultValue={data.permissions}
+                        defaultValue={dataUser.permissions}
                         className="block px-2.5 py-2.5 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                       >
                         <option value="user">Người dùng</option>
@@ -571,7 +647,7 @@ const Modal = (props: Props) => {
                         id="radioDefault1"
                         onChange={handleChange}
                         name="status"
-                        defaultChecked={data.status == "active"}
+                        defaultChecked={dataUser.status == "active"}
                         className="form-check-input appearance-none rounded-full h-5 w-5 border border-gray-300 checked:bg-green-500 checked:border-green-500 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                       />
                       <label
@@ -588,7 +664,7 @@ const Modal = (props: Props) => {
                         id="radioDefault2"
                         name="status"
                         onChange={handleChange}
-                        defaultChecked={data.status !== "active"}
+                        defaultChecked={dataUser.status !== "active"}
                         className="form-check-input appearance-none rounded-full h-5 w-5 border border-gray-300 checked:bg-red-500 checked:border-red-500 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                       />
                       <label

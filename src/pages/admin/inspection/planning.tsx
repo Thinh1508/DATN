@@ -38,7 +38,6 @@ const Planning: NextPageWithLayout = (props: Props) => {
 
   const router = useRouter()
   const { store, idCertificateReg, type } = router.query
-  console.log(type)
   const parsedStore = JSON.parse(store as string)
 
   const { data: session }: { data: any } = useSession()
@@ -145,6 +144,7 @@ const Planning: NextPageWithLayout = (props: Props) => {
                   onChange={handleChange}
                   className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-950 bg-transparent peer  appearance-none  focus:outline-none focus:ring-0 "
                   placeholder=" "
+                  required
                 />
                 <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
                   Tên kế hoạch
@@ -203,17 +203,20 @@ const Planning: NextPageWithLayout = (props: Props) => {
                   Địa chỉ
                 </label>
               </div>
-              <div className="relative  rounded-lg">
-                <input
-                  type="date"
-                  name="actionTime"
-                  onChange={handleChange}
-                  className="bg-gray-50 border-2 border-gray-400 text-gray-900 text-xl rounded-lg outline-none  block w-full p-2.5 "
-                  placeholder=""
-                />
-                <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
-                  Ngày thực hiện
-                </label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="relative  rounded-lg">
+                  <input
+                    type="date"
+                    name="actionTime"
+                    onChange={handleChange}
+                    className="bg-gray-50 border-2 border-gray-400 text-gray-900 text-xl rounded-lg outline-none  block w-full p-2.5 "
+                    placeholder=""
+                    required
+                  />
+                  <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
+                    Ngày thực hiện
+                  </label>
+                </div>
               </div>
             </div>
             <div className="relative border-2 border-gray-400 rounded-lg">
