@@ -13,7 +13,6 @@ const Header = (props: Props) => {
   const [userInfo, setUserInfo] = useState(Object)
 
   const handleOnClose = (mess: String) => {
-    console.log(mess)
     setModal(false)
     if (mess !== "close") {
       switch (mess) {

@@ -20,7 +20,7 @@ type Props = {
   onClose: (mess: string) => void
   visible: boolean
   action: string
-  userData: User
+  userData: any
 }
 
 const Modal = (props: Props) => {
@@ -61,6 +61,7 @@ const Modal = (props: Props) => {
   const [isDistrict, setDistrict] = useState(false)
   const [valDistrict, setValDistrict] = useState("")
   const [valWar, setValWard] = useState("")
+  const [valStreet, setValStreet] = useState("")
 
   const verifyEmail = (email: string) => {
     let regex = new RegExp(/[\w]+@[\w]+\.[\w]/)
@@ -102,8 +103,22 @@ const Modal = (props: Props) => {
   const handleSubmit = (e: any) => {
     e.preventDefault()
     if (isEmail.length > 0 && isName.length > 0) {
-      const model = formData
+      const model = {
+        name: formData.name,
+        address: {
+          district:
+            valDistrict.length > 0 ? valDistrict : dataUser.address.district,
+          ward: valWar.length > 0 ? valWar : formData.address.ward,
+          street: valStreet.length > 0 ? valStreet : dataUser.address.street,
+        },
+        email: formData.email,
+        gender: formData.gender,
+        dob: formData.dob,
+        permissions: formData.permissions,
+      }
       if (!model.permissions) model.permissions == "user"
+      console.log(model)
+      console.log(valDistrict + valWar)
       if (props.action === "add") addMutation.mutate(model)
       if (props.action === "edit")
         updateMutation.mutate({ userId: dataUser._id, formData: model })
@@ -182,7 +197,14 @@ const Modal = (props: Props) => {
                       type="text"
                       name="address"
                       disabled
-                      defaultValue={dataUser.address}
+                      defaultValue={
+                        dataUser.address.street +
+                        ", " +
+                        dataUser.address.ward +
+                        ", " +
+                        dataUser.address.district +
+                        ", Đà nẵng"
+                      }
                       className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-900 bg-transparent   appearance-none  focus:outline-none focus:ring-0 focus:border-3 peer"
                       placeholder=" "
                     />
@@ -420,7 +442,7 @@ const Modal = (props: Props) => {
                       <input
                         type="text"
                         name="address"
-                        onChange={handleChange}
+                        onChange={(e) => setValStreet(e.target.value)}
                         className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-900 bg-transparent   appearance-none  focus:outline-none focus:ring-0 focus:border-3 peer"
                         placeholder=" "
                         required
@@ -585,14 +607,60 @@ const Modal = (props: Props) => {
                     </span>
                   </div>
 
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="relative border-2 border-gray-400 rounded-lg">
+                      <select
+                        name="district"
+                        onChange={(e) => {
+                          setDistrict(true)
+                          setValDistrict(e.target.value)
+                        }}
+                        defaultValue={dataUser.address.district}
+                        className="block px-2.5 py-2.5 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        required
+                      >
+                        <option className="relative" value="DEFAULT">
+                          Quận/Huyện
+                        </option>
+                        {showDistricts()}
+                        <option value="đảo Hoàng Sa">đảo Hoàng Sa</option>
+                      </select>
+                      <BsChevronDown className="absolute right-3 top-[30%] text-gray-600" />
+                    </div>
+                    <div className="relative border-2 border-gray-400 rounded-lg">
+                      <select
+                        name="ward"
+                        onChange={(e: any) => {
+                          setValWard(e.target.value)
+                        }}
+                        defaultValue={dataUser.address.ward}
+                        className="block px-2.5 py-2.5 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        required
+                      >
+                        <option className="relative" value="DEFAULT">
+                          Phường/Xã
+                        </option>
+                        {showWard(
+                          valDistrict.length <= 0
+                            ? dataUser.address.district
+                            : valDistrict
+                        ).map((ward: any) => (
+                          <option value={ward.name}>{ward.name}</option>
+                        ))}
+                      </select>
+                      <BsChevronDown className="absolute right-3 top-[30%] text-gray-600" />
+                    </div>
+                  </div>
+
                   <div className="relative border-2 border-gray-400 rounded-lg">
                     <input
                       type="text"
                       name="address"
-                      onChange={handleChange}
-                      defaultValue={dataUser.address}
-                      className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-900 bg-transparent   appearance-none  focus:outline-none focus:ring-0 focus:border-3 peer"
+                      onChange={(e) => setValStreet(e.target.value)}
+                      defaultValue={dataUser.address.street}
+                      className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-900 bg-transparent   appearance-none  focus:outline-none focus:ring-0 focus:border-3 peer "
                       placeholder=" "
+                      required
                     />
                     <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
                       Địa chỉ

@@ -7,6 +7,7 @@ const postSchema = new Schema(
     content: { type: String, required: true },
     description: { type: String },
     idUser: { type: Schema.Types.ObjectId, ref: "user" },
+    background: { type: String, required: true },
     status: { type: String, default: "active" },
   },
   {

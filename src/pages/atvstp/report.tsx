@@ -30,7 +30,9 @@ const report = (props: Props) => {
   const [formData, setFormData] = useState<Store | any>()
 
   function handleFileChange(event: any) {
-    setSelectImage(URL.createObjectURL(event.target.files[0]))
+    setSelectImage("")
+    if (event.target.files[0])
+      setSelectImage(URL.createObjectURL(event.target.files[0]))
     const file = event.target.files[0]
     setFileImage(file)
   }
@@ -162,7 +164,11 @@ const report = (props: Props) => {
             <div className="relative border-2 border-gray-400 rounded-lg my-6">
               <div className="h-[55vh] overflow-y-auto scrollbar-style">
                 {selectImage ? (
-                  <img src={selectImage} alt="anh tai len" className="p-4 " />
+                  <img
+                    src={selectImage}
+                    alt="anh tai len"
+                    className="p-4 w-full h-full"
+                  />
                 ) : (
                   <></>
                 )}

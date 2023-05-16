@@ -6,7 +6,20 @@ const storeSchema = new Schema(
     name: { type: String, required: true },
     imageBusiness: { type: String, required: true },
     type: { type: String, required: true },
-    address: { type: String, required: true },
+    address: {
+      district: {
+        type: String,
+        required: true,
+      },
+      ward: {
+        type: String,
+        required: true,
+      },
+      street: {
+        type: String,
+        required: true,
+      },
+    },
     status: { type: String, default: "active" },
   },
   {

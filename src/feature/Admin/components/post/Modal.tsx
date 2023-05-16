@@ -13,6 +13,7 @@ type Post = {
   content: string
   description: string
   userCreate: string
+  background: string
   status: string
 }
 type Category = {
@@ -72,7 +73,13 @@ const Modal = (props: Props) => {
     },
   })
 
-  const handleSubmit = (e: any) => {
+  const [fileImage, setFileImage] = useState<File | any>(null)
+  function handleFileChange(event: any) {
+    setFileImage(null)
+    if (event.target.files[0]) setFileImage(event.target.files[0])
+  }
+
+  const handleSubmit = async (e: any) => {
     e.preventDefault()
     formData.content = value
     const model = {
@@ -82,6 +89,22 @@ const Modal = (props: Props) => {
       category: formData.category,
       content: value,
       idUser: session?.user?._id,
+      background: formData.background,
+    }
+    if (fileImage !== null) {
+      const formDataI = new FormData()
+      formDataI.append("file", fileImage)
+      formDataI.append("upload_preset", "imageBusiness")
+
+      const dataBg = await fetch(
+        "https://api.cloudinary.com/v1_1/dv5h57yvq/image/upload",
+        {
+          method: "POST",
+          body: formDataI,
+        }
+      ).then((r) => r.json())
+
+      model.background = dataBg.secure_url
     }
     if (props.action === "add") {
       addMutation.mutate(model)
@@ -164,10 +187,10 @@ const Modal = (props: Props) => {
                       ))}
                     </select>
                   </div>
-                  <div className="relative border-2 border-gray-400 rounded-lg h-72 overflow-y-auto scrollbar-style ">
+                  <div className="relative border-2 border-gray-400 rounded-lg h-[400px] ">
                     <ReactQuill
                       placeholder="Mội dung..."
-                      className="text-gray-950 h-full"
+                      className="text-gray-950 h-5/6 "
                       readOnly={true}
                       defaultValue={postData.content}
                       modules={Modal.modules}
@@ -277,6 +300,7 @@ const Modal = (props: Props) => {
                     <input
                       type="text"
                       name="title"
+                      required
                       className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-950 bg-transparent peer  appearance-none  focus:outline-none focus:ring-0 capitalize"
                       placeholder=" "
                       onChange={handleChange}
@@ -317,12 +341,26 @@ const Modal = (props: Props) => {
                     <input
                       type="text"
                       name="description"
+                      required
                       className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-950 bg-transparent peer  appearance-none  focus:outline-none focus:ring-0 "
                       placeholder=" "
                       onChange={handleChange}
                     />
                     <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
                       Mô tả
+                    </label>
+                  </div>
+                  <div className="relative border-2 border-gray-400 rounded-lg">
+                    <input
+                      type="file"
+                      required
+                      placeholder="Image"
+                      accept=".png, .jpg"
+                      onChange={handleFileChange}
+                      className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-900 bg-transparent   appearance-none  focus:outline-none focus:ring-0 focus:border-3 peer"
+                    />
+                    <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
+                      Ảnh nền
                     </label>
                   </div>
                 </div>
@@ -387,6 +425,7 @@ const Modal = (props: Props) => {
                       onChange={handleChange}
                       className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-950 bg-transparent peer  appearance-none  focus:outline-none focus:ring-0 capitalize"
                       placeholder=" "
+                      required
                     />
                     <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
                       Tiêu đề
