@@ -1,6 +1,16 @@
-import { getInspectionPlan } from "@/lib/helper"
-import React from "react"
-import { useQuery } from "react-query"
+import React, { useState } from "react"
+import { BiEdit, BiTrashAlt } from "react-icons/bi"
+import { useMutation, useQuery, useQueryClient } from "react-query"
+
+import {
+  deleteInspectionPlan,
+  getInspectionPlan,
+  updateReport,
+  updateStore,
+} from "@/lib/helper"
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+import Modal from "./Modal"
 
 type Props = {}
 type InspectionPlan = {
@@ -17,6 +27,115 @@ const Table = (props: Props) => {
     "inspectionPlan",
     getInspectionPlan
   )
+  const queryClient = useQueryClient()
+
+  //delete InspectionPlan
+  const [modalDelete, setModalDelete] = useState(false)
+  const [planIdDelete, setPlanIdDelete] = useState(String)
+  const [updateId, setUpdateId] = useState("")
+  const [type, setType] = useState("")
+
+  const updateMutation = useMutation(updateStore, {
+    onSuccess: () => {
+      console.log("success")
+    },
+    onError: () => {
+      console.log("error")
+    },
+  })
+
+  const updateMutation1 = useMutation(updateReport, {
+    onSuccess: () => {
+      console.log("success")
+    },
+    onError: () => {
+      console.log("error")
+    },
+  })
+  const onDelete = async (planId: string) => {
+    await deleteInspectionPlan(planId)
+
+    await queryClient.prefetchQuery("inspectionPlan", getInspectionPlan)
+    toast.success("Xóa kế hoạch thành công", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    })
+    if (type === "report") {
+      updateMutation1.mutate({
+        reportId: updateId,
+        formData: { status: "pending" },
+      })
+    } else {
+      updateMutation.mutate({
+        storeId: updateId,
+        formData: { status: "pending" },
+      })
+    }
+  }
+
+  const [modal, setModal] = useState(false)
+  const [action, setAction] = useState("")
+  const [insInfo, setInsInfo] = useState(Object)
+
+  const handleOnClose = (mess: String) => {
+    setModal(false)
+    if (mess !== "close") {
+      switch (mess) {
+        case "success":
+          toast.success("Chỉnh sửa thông tin thành công!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          })
+          break
+        case "error":
+          toast.error("Chỉnh sửa thộng tin thất bại!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          })
+          break
+        default:
+          toast("Đang thực hiện...", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          })
+          toast.success("Chỉnh sửa thông tin thành công!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          })
+      }
+    }
+  }
+
   if (isLoading) return <div>Đang tải dữ liệu...</div>
   if (isError) return <div>Lỗi khi tải dữ liệu {`${error}`}</div>
   return (
@@ -42,6 +161,9 @@ const Table = (props: Props) => {
               </th>
               <th scope="col" className="px-4 py-3 xl:text-lg cursor-pointer">
                 Trạng thái
+              </th>
+              <th scope="col" className="px-4 py-3 xl:text-lg cursor-pointer">
+                Tùy chọn
               </th>
             </tr>
           </thead>
@@ -70,8 +192,56 @@ const Table = (props: Props) => {
                   {plan.actionTime}
                 </td>
                 <td className="px-4 py-4 text-lg cursor-pointer capitalize">
-                  {plan.status === "pending" ? "Đợi sử lý" : "Đang thanh tra"}
+                  {plan.status === "pending"
+                    ? "Chờ sử lý"
+                    : plan.status === "checking"
+                    ? "Đang thanh tra"
+                    : "Đã báo cáo"}
                 </td>
+                {plan.status === "pending" && (
+                  <td className="flex items-center px-4 py-4 space-x-3 relative">
+                    <button
+                      className="cursor"
+                      onClick={() => {
+                        setInsInfo(plan)
+                        setAction("edit")
+                        setModal(true)
+                      }}
+                    >
+                      <BiEdit size={25} color="rgb(34,197,94)" />
+                    </button>
+                    <button
+                      className="cursor"
+                      onClick={() => {
+                        setPlanIdDelete(plan._id)
+                        if (plan.idReport) {
+                          setType("report")
+                          setUpdateId(plan.idReport._id)
+                        } else {
+                          setType("inspection")
+                          setUpdateId(plan.idStore)
+                        }
+                        setModalDelete(true)
+                      }}
+                    >
+                      <BiTrashAlt size={25} color="rgb(244,63,94)" />
+                    </button>
+                  </td>
+                )}
+                {plan.status === "checked" ? (
+                  <td
+                    className="px-4 py-4 text-lg cursor-pointer capitalize hover:text-red-700 hover:underline"
+                    onClick={() => {
+                      setInsInfo(plan)
+                      setAction("view")
+                      setModal(true)
+                    }}
+                  >
+                    Xem kết quả
+                  </td>
+                ) : (
+                  <td></td>
+                )}
               </tr>
             ))}
           </tbody>
@@ -123,6 +293,46 @@ const Table = (props: Props) => {
       </ul>
     </nav>
   </div> */}
+      <div
+        className={`${
+          !modalDelete ? "hidden" : "block "
+        } fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center z-20`}
+      >
+        <div
+          className={`bg-white p-8 bottom-0 border-4 border-green-600  rounded-lg flex flex-col items-center transition ease-in-out delay-150 duration-1000`}
+        >
+          <span className="font-medium text-3xl text-gray-950">
+            Bạn có muôn xóa tài kế hoạch không?
+          </span>
+          <div className="mt-6 grid grid-cols-2 gap-10">
+            <button
+              onClick={() => {
+                onDelete(planIdDelete)
+                setModalDelete(false)
+                setPlanIdDelete("")
+              }}
+              className="bg-white border-2 border-red-600 text-red-600 px-6 py-0 rounded-lg hover:bg-red-600 hover:text-white"
+            >
+              <span className="text-xl font-medium capitalize ">Có</span>
+            </button>
+            <button
+              onClick={() => setModalDelete(false)}
+              className="bg-white border-2 border-gray-600 text-gray-600 px-6 py-0 rounded-lg hover:bg-gray-600 hover:text-white"
+            >
+              <span className="text-xl font-medium capitalize">Không</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      {modal && (
+        <Modal
+          action={action}
+          visible={modal}
+          onClose={handleOnClose}
+          InsData={insInfo}
+        />
+      )}
+      <ToastContainer />
     </div>
   )
 }

@@ -2,11 +2,12 @@ import { Schema, models, model } from "mongoose"
 
 const inspectionResultSchema = new Schema(
   {
-    idUser: { type: String, required: true },
-    idStore: { type: String },
+    idUser: { type: Schema.Types.ObjectId, ref: "user", required: true },
+    idInspectionPlan: { type: Schema.Types.ObjectId, ref: "inspectionPlan" },
     idDocument: { type: String },
-    actionTine: { type: String, required: true },
-    status: { type: String, default: "pending" },
+    content: { type: String, required: true },
+    note: { type: String },
+    img: { type: String },
   },
   {
     timestamps: true,

@@ -2,10 +2,9 @@ import type { NextApiRequest, NextApiResponse } from "next"
 
 import connectMongo from "@/database/conn"
 import {
-  getInspectionPlan,
-  postInspectionPlan,
-  putInspectionPlan,
-  deleteInspectionPlan,
+  getInspectionResult,
+  postInspectionResult,
+  putInspectionResult,
 } from "@/database/planController"
 
 export default async function handler(
@@ -21,16 +20,13 @@ export default async function handler(
 
   switch (method) {
     case "GET":
-      getInspectionPlan(req, res)
+      getInspectionResult(req, res)
       break
     case "POST":
-      postInspectionPlan(req, res)
+      postInspectionResult(req, res)
       break
     case "PUT":
-      putInspectionPlan(req, res)
-      break
-    case "DELETE":
-      deleteInspectionPlan(req, res)
+      putInspectionResult(req, res)
       break
     default:
       res.status(405).end(`Method ${method} Not Allowd`)

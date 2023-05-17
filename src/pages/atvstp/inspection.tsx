@@ -1,11 +1,13 @@
 import React, { useState } from "react"
 import { useSession } from "next-auth/react"
 import { useQuery } from "react-query"
+import { BiEdit, BiTrashAlt } from "react-icons/bi"
 
 import { getInspectionPlan } from "@/lib/helper"
 import IModal from "./iModal"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import ResultModal from "./ResultModal"
 
 type Props = {}
 
@@ -18,18 +20,23 @@ const inspection = (props: Props) => {
   const { data: session }: { data: any } = useSession()
 
   const showInspection = () => {
-    const addressI = session?.user?.address.ward
-    const inspectionData = data
-    return inspectionData.filter(
-      (inspection: any) => inspection.idStore.address.ward === addressI
-    )
+    const addressI = session?.user?.address?.ward
+    let inspectionData = data
+    if (Array.isArray(inspectionData)) {
+      inspectionData = inspectionData.filter(
+        (inspection: any) => inspection.idStore.address.ward === addressI
+      )
+    }
+    return inspectionData
   }
 
   const [modal, setModal] = useState(false)
+  const [modalResult, setModalResult] = useState(false)
   const [insInfo, setInsInfo] = useState(Object)
 
   const handleOnClose = (mess: string) => {
     setModal(false)
+    setModalResult(false)
     if (mess !== "close") {
       switch (mess) {
         case "success":
@@ -81,8 +88,16 @@ const inspection = (props: Props) => {
     }
   }
 
-  if (isLoading) return <div>Đang tải dữ liệu...</div>
-  if (isError) return <div>Lỗi khi tải dữ liệu {`${error}`}</div>
+  if (isLoading)
+    return (
+      <div className="flex-1 bg-white text-gray-950">Đang tải dữ liệu...</div>
+    )
+  if (isError)
+    return (
+      <div className="flex-1 bg-white text-gray-950">
+        Lỗi khi tải dữ liệu {`${error}`}
+      </div>
+    )
   return (
     <div className="bg-white flex-1">
       <div className="container mx-auto text-gray-900">
@@ -110,45 +125,106 @@ const inspection = (props: Props) => {
               <td className="px-4 py-4 text-lg cursor-pointer uppercase">
                 Trạng thái
               </td>
+              <td></td>
             </tr>
           </thead>
           <tbody>
-            {showInspection().map((plan: any, index: any) => (
-              <tr
-                key={plan._id}
-                onClick={() => {
-                  setInsInfo(plan)
-                  setModal(true)
-                }}
-              >
-                <td className="px-4 py-4 text-lg cursor-pointer capitalize">
-                  {index + 1}
-                </td>
-                <td className="px-4 py-4 text-lg cursor-pointer capitalize">
-                  {plan.name}
-                </td>
-                <td className="px-4 py-4 text-lg cursor-pointer capitalize">
-                  {plan.idStore.name}
-                </td>
-                <td className="px-4 py-4 text-lg cursor-pointer capitalize">
-                  {plan.category}
-                </td>
-                <td className="px-4 py-4 text-lg cursor-pointer capitalize">
-                  {plan.startTime}
-                </td>
-                <td className="px-4 py-4 text-lg cursor-pointer capitalize">
-                  {plan.actionTime}
-                </td>
-                <td className="px-4 py-4 text-lg cursor-pointer capitalize">
-                  {plan.status === "pending" ? "Chờ sử lý" : "Đang thanh tra"}
-                </td>
-              </tr>
-            ))}
+            {Array.isArray(showInspection()) &&
+              showInspection().map((plan: any, index: any) => (
+                <tr key={plan._id}>
+                  <td
+                    onClick={() => {
+                      setInsInfo(plan)
+                      setModal(true)
+                    }}
+                    className="px-4 py-4 text-lg cursor-pointer capitalize"
+                  >
+                    {index + 1}
+                  </td>
+                  <td
+                    onClick={() => {
+                      setInsInfo(plan)
+                      setModal(true)
+                    }}
+                    className="px-4 py-4 text-lg cursor-pointer capitalize"
+                  >
+                    {plan.name}
+                  </td>
+                  <td
+                    onClick={() => {
+                      setInsInfo(plan)
+                      setModal(true)
+                    }}
+                    className="px-4 py-4 text-lg cursor-pointer capitalize"
+                  >
+                    {plan.idStore.name}
+                  </td>
+                  <td
+                    onClick={() => {
+                      setInsInfo(plan)
+                      setModal(true)
+                    }}
+                    className="px-4 py-4 text-lg cursor-pointer capitalize"
+                  >
+                    {plan.category}
+                  </td>
+                  <td
+                    onClick={() => {
+                      setInsInfo(plan)
+                      setModal(true)
+                    }}
+                    className="px-4 py-4 text-lg cursor-pointer capitalize"
+                  >
+                    {plan.startTime}
+                  </td>
+                  <td
+                    onClick={() => {
+                      setInsInfo(plan)
+                      setModal(true)
+                    }}
+                    className="px-4 py-4 text-lg cursor-pointer capitalize"
+                  >
+                    {plan.actionTime}
+                  </td>
+                  <td
+                    onClick={() => {
+                      setInsInfo(plan)
+                      setModal(true)
+                    }}
+                    className="px-4 py-4 text-lg cursor-pointer capitalize flex flex-row items-center justify-center"
+                  >
+                    {plan.status === "pending"
+                      ? "Chờ sử lý"
+                      : plan.status === "checking"
+                      ? "Đang thanh tra"
+                      : "Đã báo cáo"}
+                  </td>
+                  {plan.status === "checked" && (
+                    <td
+                      className="px-4 py-4 text-lg cursor-pointer capitalize hover:text-red-700 hover:underline"
+                      onClick={() => {
+                        setInsInfo(plan)
+                        setModalResult(true)
+                      }}
+                    >
+                      {" "}
+                      Xem kết quả
+                    </td>
+                  )}
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
       {modal && (
         <IModal visible={modal} onClose={handleOnClose} insData={insInfo} />
+      )}
+      {modalResult && (
+        <ResultModal
+          visible={modalResult}
+          onClose={handleOnClose}
+          insData={insInfo}
+        />
       )}
       <ToastContainer />
     </div>

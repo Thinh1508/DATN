@@ -50,7 +50,7 @@ export async function postStore(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-//put:http://localhost:3000/api/users/1
+//put:http://localhost:3000/api/store
 export async function putStore(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { storeId } = req.query

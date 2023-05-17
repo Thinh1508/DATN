@@ -73,16 +73,7 @@ const Planning: NextPageWithLayout = (props: Props) => {
 
   const addMutation = useMutation(addInspectionPlan, {
     onSuccess: () => {
-      toast.success("Thành công", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      })
+      alert("Thêm thành công")
       if (type === "inspection") {
         updateMutation.mutate({
           storeId: idCertificateReg,
@@ -94,6 +85,7 @@ const Planning: NextPageWithLayout = (props: Props) => {
           formData: { status: "checking" },
         })
       }
+      router.push("/admin/inspection")
     },
     onError: () => {
       toast.error("Thất bại", {

@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { useMutation, useQueryClient } from "react-query"
 
 import { getInspectionPlan, updateInspectionPlan } from "@/lib/helper"
+import Link from "next/link"
 
 type Props = {
   onClose: (mess: string) => void
@@ -66,7 +67,7 @@ const IModal = (props: Props) => {
             </button>
           </div>
           <form onSubmit={handleSubmit}>
-            <div className="p-6 space-y-10">
+            <div className="p-6 space-y-10 ">
               <div className="relative border-2 border-gray-400 rounded-lg">
                 <input
                   type="text"
@@ -182,12 +183,17 @@ const IModal = (props: Props) => {
               )}
 
               {data.status === "checking" && (
-                <button
-                  type="submit"
+                <Link
+                  href={{
+                    pathname: "/atvstp/result",
+                    query: {
+                      inspectionPlan: data._id,
+                    },
+                  }}
                   className="sm:w-1/2 text-green-900 bg-white border border-green-900 hover:bg-green-800  hover:transition-all hover:duration-500 ease-in-out hover:text-white  font-medium rounded-lg text-lg px-5 py-2.5 text-center "
                 >
                   Báo cáo kết quả
-                </button>
+                </Link>
               )}
               <button
                 onClick={() => props.onClose("close")}

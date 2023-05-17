@@ -24,22 +24,18 @@ const userSchema = new Schema(
     address: {
       district: {
         type: String,
-        required: true,
       },
       ward: {
         type: String,
-        required: true,
       },
       street: {
         type: String,
-        required: true,
       },
     },
     dob: { type: String },
     gender: { type: Number },
     permissions: {
       type: String,
-      required: true,
       default: "user",
     },
     status: { type: String, default: "active" },

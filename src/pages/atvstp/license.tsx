@@ -126,8 +126,16 @@ const license = (props: Props) => {
     addMutation.mutate(model)
   }
 
-  if (isLoading) return <div>Đang tải dữ liệu...</div>
-  if (isError) return <div>Lỗi khi tải dữ liệu {`${error}`}</div>
+  if (isLoading)
+    return (
+      <div className="flex-1 bg-white text-gray-950">Đang tải dữ liệu...</div>
+    )
+  if (isError)
+    return (
+      <div className="flex-1 bg-white text-gray-950">
+        Lỗi khi tải dữ liệu {`${error}`}
+      </div>
+    )
   return (
     <div className="bg-white flex-1">
       <div className="container mx-auto text-gray-900">

@@ -298,6 +298,16 @@ export const getInspectionPlan = async () => {
 
   return json
 }
+
+// get one inspectionPlan
+export const getInspectionPlanId = async (id: string) => {
+  const response = await fetch(`${BASE_URL}/api/inspectionPlan/${id}`)
+  const json = await response.json()
+
+  if (json) return json
+  return {}
+}
+
 //post inspectionPlan
 export async function addInspectionPlan(formData: any) {
   try {
@@ -321,6 +331,22 @@ export async function updateInspectionPlan({ planId, formData }: any) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(formData),
   }
+  const response = await fetch(
+    `${BASE_URL}/api/inspectionPlan/?planId=${planId}`,
+    Options
+  )
+  const json = await response.json()
+
+  return json
+}
+
+//delete inspectionPlan
+export async function deleteInspectionPlan(planId: string) {
+  const Options = {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+  }
+
   const response = await fetch(
     `${BASE_URL}/api/inspectionPlan/?planId=${planId}`,
     Options
@@ -376,6 +402,56 @@ export async function updateReport({ reportId, formData }: any) {
 //get all ward
 export const getWard = async () => {
   const response = await fetch(`${BASE_URL}/api/user/ward`)
+  const json = await response.json()
+
+  return json
+}
+
+//inspectionResult
+// get all inspectionResult
+export const getInspectionResult = async () => {
+  const response = await fetch(`${BASE_URL}/api/inspectionResult`)
+  const json = await response.json()
+
+  return json
+}
+
+// get one inspectionResult
+export const getInspectionResultId = async (id: string) => {
+  const response = await fetch(`${BASE_URL}/api/inspectionResult/${id}`)
+  const json = await response.json()
+
+  if (json) return json
+  return {}
+}
+
+//post inspectionResult
+export async function addInspectionResult(formData: any) {
+  try {
+    const Options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    }
+    const response = await fetch(`${BASE_URL}/api/inspectionResult`, Options)
+    const json = await response.json()
+
+    return json
+  } catch (error) {
+    return error
+  }
+}
+//put inspectionResult
+export async function updateInspectionResult({ resultId, formData }: any) {
+  const Options = {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(formData),
+  }
+  const response = await fetch(
+    `${BASE_URL}/api/inspectionResult/?resultId=${resultId}`,
+    Options
+  )
   const json = await response.json()
 
   return json
