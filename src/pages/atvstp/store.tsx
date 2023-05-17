@@ -131,7 +131,6 @@ const store = (props: Props) => {
       const model = formData
       model.imageBusiness = data.secure_url
       model.idUser = session?.user?._id
-      console.log(model)
       addMutation.mutate(model)
     }
   }

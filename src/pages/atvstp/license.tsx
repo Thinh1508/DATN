@@ -234,10 +234,4 @@ const license = (props: Props) => {
   )
 }
 
-export const getServerSideProps = checkAuth(async () => {
-  return {
-    props: {},
-  }
-})
-
 export default license

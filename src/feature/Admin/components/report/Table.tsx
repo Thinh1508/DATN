@@ -19,7 +19,11 @@ type Report = {
     name: string
     imageBusiness: string
     type: string
-    address: string
+    address: {
+      district: string
+      ward: string
+      street: string
+    }
     status: string
   }
   content: string
@@ -92,7 +96,12 @@ const Table = (props: Props) => {
                       {report.content}
                     </td>
                     <td className="px-4 py-4 text-lg cursor-pointer capitalize">
-                      {report.idStore.address}
+                      {report.idStore.address.street +
+                        ", " +
+                        report.idStore.address.ward +
+                        ", " +
+                        report.idStore.address.district +
+                        ", Đà Nẵng"}
                     </td>
                     <td className="px-4 py-4 text-lg cursor-pointer capitalize">
                       {report.createdAt.slice(0, 10)}

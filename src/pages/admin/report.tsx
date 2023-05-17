@@ -2,7 +2,7 @@ import React from "react"
 import { NextPageWithLayout } from "../_app"
 
 import AdminLayout from "@/layouts/AdminLayout"
-import Table from "@/feature/Admin/components/report/table"
+import Table from "@/feature/Admin/components/report/Table"
 
 type Props = {}
 

@@ -7,7 +7,7 @@ type Props = {}
 const Header = (props: Props) => {
   const { data: session }: { data: any } = useSession()
   return (
-    <header className=" bg-[#049803] sticky top-0 z-[999]">
+    <header className=" bg-[#049803] sticky top-0 z-[30]">
       <div className="container  items-center mx-auto flex flex-row">
         <div className="relative flex h-[4rem] w-max items-center basis-1/4 mt-1 mb-1">
           <Link href="/" className=" flex items-center">
@@ -99,14 +99,16 @@ const Header = (props: Props) => {
               tin tức - sự kiện
             </li>
             <li className="flex-none px-3 py-3 text-white font-bold uppercase cursor-pointer hover:bg-[#0cb306]  text-center">
-              thanh tra - kiểm tra
-            </li>
-            <li className="flex-none px-3 py-3 text-white font-bold uppercase cursor-pointer hover:bg-[#0cb306]  text-center">
               hệ thống - văn bản
             </li>
             <li className="flex-none px-3 py-3 text-white font-bold uppercase cursor-pointer hover:bg-[#0cb306]  text-center">
-              truyền thông
+              {session?.user?.permissions === "inspection" ? (
+                <Link href={"/atvstp/inspection"}>thanh tra - kiểm tra</Link>
+              ) : (
+                <Link href={"/inspection"}>thanh tra - kiểm tra</Link>
+              )}
             </li>
+
             <li className="flex-none px-3 py-3 text-white font-bold uppercase cursor-pointer hover:bg-[#0cb306]  text-center relative group">
               <h1>an toàn vệ sinh thực phẩm</h1>
               <ul className="absolute bg-[#0cb306] right-0 capitalize rounded-md p-2 z-10 text-white w-full hidden group-hover:block  ">

@@ -4,6 +4,7 @@ import connectMongo from "@/database/conn"
 import {
   getInspectionPlan,
   postInspectionPlan,
+  putInspectionPlan,
 } from "@/database/planController"
 
 export default async function handler(
@@ -23,6 +24,9 @@ export default async function handler(
       break
     case "POST":
       postInspectionPlan(req, res)
+      break
+    case "PUT":
+      putInspectionPlan(req, res)
       break
     default:
       res.status(405).end(`Method ${method} Not Allowd`)

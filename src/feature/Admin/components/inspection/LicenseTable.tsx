@@ -19,7 +19,11 @@ type License = {
     name: string
     imageBusiness: string
     type: string
-    address: string
+    address: {
+      district: string
+      ward: string
+      street: string
+    }
     status: string
   }
   proposal: string
@@ -91,7 +95,12 @@ const LicenseTable = (props: Props) => {
                       {license.idStore.type}
                     </td>
                     <td className="px-4 py-4 text-lg cursor-pointer capitalize">
-                      {license.idStore.address}
+                      {license.idStore.address.street +
+                        ", " +
+                        license.idStore.address.ward +
+                        ", " +
+                        license.idStore.address.district +
+                        ", Đà Nẵng"}
                     </td>
                     <td className="px-4 py-4 text-lg cursor-pointer capitalize">
                       {license.createdAt.slice(0, 10)}

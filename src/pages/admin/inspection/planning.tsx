@@ -8,7 +8,6 @@ import AdminLayout from "@/layouts/AdminLayout"
 import {
   addInspectionPlan,
   getCategory,
-  getStore,
   updateReport,
   updateStore,
 } from "@/lib/helper"
@@ -45,6 +44,7 @@ const Planning: NextPageWithLayout = (props: Props) => {
   const [formData, setFormData] = useState({
     name: "",
     category: "",
+    startTime: "",
     actionTime: "",
   })
 
@@ -111,17 +111,32 @@ const Planning: NextPageWithLayout = (props: Props) => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault()
-    const model = {
-      idUser: session?.user?._id,
-      idStore: parsedStore._id,
-      name: formData.name,
-      category: formData.category,
-      actionTime: formData.actionTime,
+    if (type === "inspection") {
+      const model = {
+        idUser: session?.user?._id,
+        idStore: parsedStore._id,
+        name: formData.name,
+        category: formData.category,
+        startTime: formData.startTime,
+        actionTime: formData.actionTime,
+      }
+      addMutation.mutate(model)
+    } else {
+      const model = {
+        idUser: session?.user?._id,
+        idStore: parsedStore._id,
+        idReport: idCertificateReg,
+        name: formData.name,
+        category: formData.category,
+        startTime: formData.startTime,
+        actionTime: formData.actionTime,
+      }
+      addMutation.mutate(model)
     }
-    addMutation.mutate(model)
     setFormData({
       name: "",
       category: "",
+      startTime: "",
       actionTime: "",
     })
   }
@@ -194,7 +209,14 @@ const Planning: NextPageWithLayout = (props: Props) => {
               <div className="relative border-2 border-gray-400 rounded-lg mb-10">
                 <input
                   type="text"
-                  defaultValue={parsedStore.address}
+                  defaultValue={
+                    parsedStore.address.street +
+                    ", " +
+                    parsedStore.address.ward +
+                    ", " +
+                    parsedStore.address.district +
+                    ", Đà Nẵng"
+                  }
                   className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-950 bg-transparent peer  appearance-none  focus:outline-none focus:ring-0 capitalize"
                   placeholder=" "
                   disabled
@@ -207,7 +229,7 @@ const Planning: NextPageWithLayout = (props: Props) => {
                 <div className="relative  rounded-lg">
                   <input
                     type="date"
-                    name="actionTime"
+                    name="startTime"
                     onChange={handleChange}
                     className="bg-gray-50 border-2 border-gray-400 text-gray-900 text-xl rounded-lg outline-none  block w-full p-2.5 "
                     placeholder=""
@@ -215,6 +237,18 @@ const Planning: NextPageWithLayout = (props: Props) => {
                   />
                   <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
                     Ngày thực hiện
+                  </label>
+                </div>
+                <div className="relative border-2 border-gray-400 rounded-lg mb-10">
+                  <input
+                    name="actionTime"
+                    onChange={handleChange}
+                    className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-950 bg-transparent peer  appearance-none  focus:outline-none focus:ring-0 capitalize"
+                    placeholder=" "
+                    required
+                  />
+                  <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
+                    Thời hạn(ngày)
                   </label>
                 </div>
               </div>

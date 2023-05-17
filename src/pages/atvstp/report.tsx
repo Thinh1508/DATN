@@ -2,7 +2,7 @@ import React, { useState } from "react"
 
 import checkAuth from "../middleware/checkAuth"
 import { useMutation, useQuery } from "react-query"
-import { addReport, getStore } from "@/lib/helper"
+import { addReport, getStore, getWard } from "@/lib/helper"
 import { useSession } from "next-auth/react"
 
 import { ToastContainer, toast } from "react-toastify"
@@ -23,7 +23,40 @@ type Store = {
 const report = (props: Props) => {
   const { data: session }: { data: any } = useSession()
 
-  const { isLoading, isError, data, error } = useQuery("Store", getStore)
+  const listStore = useQuery("store", getStore)
+  const listWard = useQuery("ward", getWard)
+
+  const showDistricts = () => {
+    const districts: Array<string> = []
+    listWard.data.map((ward: any) => {
+      if (districts.length === 0) {
+        districts.push(ward.idDistrict.name)
+      } else {
+        if (ward.idDistrict.name !== districts[districts.length - 1]) {
+          districts.push(ward.idDistrict.name)
+        }
+      }
+    })
+    const dataDistrict = districts.map((district) => (
+      <option value={district} key={district}>
+        {district}
+      </option>
+    ))
+    return dataDistrict
+  }
+  const showWard = (district: string) => {
+    const wards = listWard.data
+    return wards.filter((ward: any) => ward.idDistrict.name === district)
+  }
+
+  const [isDistrict, setDistrict] = useState(false)
+  const [valDistrict, setValDistrict] = useState("")
+  const [valWard, setValWard] = useState("")
+
+  const showStore = () => {
+    const stores = listStore.data
+    return stores.filter((store: any) => store.address.ward === valWard)
+  }
 
   const [fileImage, setFileImage] = useState<File | any>(null)
   const [selectImage, setSelectImage] = useState("")
@@ -44,28 +77,10 @@ const report = (props: Props) => {
 
   const addMutation = useMutation(addReport, {
     onSuccess: () => {
-      toast.success("Thành công", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      })
+      console.log("sucess")
     },
     onError: (e) => {
-      toast.error("Thất bại", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      })
+      console.log("error")
     },
   })
 
@@ -103,30 +118,79 @@ const report = (props: Props) => {
     }
   }
 
-  if (isLoading) return <div>Đang tải dữ liệu...</div>
-  if (isError) return <div>Lỗi khi tải dữ liệu {`${error}`}</div>
+  if (listStore.isLoading || listWard.isLoading) {
+    return <div className="bg-white text-gray-950">Đang tải dữ liêu...</div>
+  }
+
+  if (listStore.isError || listWard.isError) {
+    return (
+      <div className="bg-white text-gray-950">
+        Lỗi khi tải dữ liệu! Hãy tải lại trang
+      </div>
+    )
+  }
   return (
     <div className="bg-white flex-1">
       <div className="container mx-auto text-gray-900">
         <form method="POST" onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 h-[90%] sm:h-fit">
             <div className="p-6 space-y-10 flex flex-col">
-              <div className="relative border-2 border-gray-400 rounded-lg">
-                <select
-                  name="idStore"
-                  onChange={handleChange}
-                  className="block px-2.5 py-2.5 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                >
-                  <option className="relative" value="DEFAULT">
-                    Tên cơ sở kinh doanh
-                  </option>
-                  {data.map((store: Store) => (
-                    <option key={store._id} value={store._id}>
-                      {store.name}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="relative border-2 border-gray-400 rounded-lg">
+                  <select
+                    name="district"
+                    onChange={(e) => {
+                      setDistrict(true)
+                      setValDistrict(e.target.value)
+                    }}
+                    defaultValue={"DEFAULT"}
+                    className="block px-2.5 py-2.5 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    required
+                  >
+                    <option className="relative" value="DEFAULT">
+                      Quận/Huyện
                     </option>
-                  ))}
-                </select>
+                    {showDistricts()}
+                    <option value="đảo Hoàng Sa">đảo Hoàng Sa</option>
+                  </select>
+                </div>
+                <div className="relative border-2 border-gray-400 rounded-lg">
+                  <select
+                    name="ward"
+                    onChange={(e: any) => {
+                      setValWard(e.target.value)
+                    }}
+                    className="block px-2.5 py-2.5 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    required
+                  >
+                    <option className="relative" value="DEFAULT">
+                      Phường/Xã
+                    </option>
+                    {showWard(valDistrict).map((ward: any) => (
+                      <option value={ward.name}>{ward.name}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
+
+              {isDistrict && (
+                <div className="relative border-2 border-gray-400 rounded-lg">
+                  <select
+                    name="idStore"
+                    onChange={handleChange}
+                    className="block px-2.5 py-2.5 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  >
+                    <option className="relative" value="DEFAULT">
+                      Tên cơ sở kinh doanh
+                    </option>
+                    {showStore().map((store: Store) => (
+                      <option key={store._id} value={store._id}>
+                        {store.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
               <div className="relative border-2 border-gray-400 rounded-lg">
                 <textarea

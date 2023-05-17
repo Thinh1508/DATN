@@ -256,7 +256,7 @@ export async function updateStore({ storeId, formData }: any) {
   return json
 }
 
-//get by userId
+//get store by userId
 export const getStoreUserId = async (userId: string) => {
   const response = await fetch(`${BASE_URL}/api/store/${userId}`)
   const json = await response.json()
@@ -313,6 +313,21 @@ export async function addInspectionPlan(formData: any) {
   } catch (error) {
     return error
   }
+}
+//put inspectionPlan
+export async function updateInspectionPlan({ planId, formData }: any) {
+  const Options = {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(formData),
+  }
+  const response = await fetch(
+    `${BASE_URL}/api/inspectionPlan/?planId=${planId}`,
+    Options
+  )
+  const json = await response.json()
+
+  return json
 }
 
 //report

@@ -18,7 +18,11 @@ type Report = {
     name: string
     imageBusiness: string
     type: string
-    address: string
+    address: {
+      district: string
+      ward: string
+      street: string
+    }
     status: string
   }
   content: string
@@ -102,7 +106,14 @@ const Modal = (props: Props) => {
               <div className="relative border-2 border-gray-400 rounded-lg">
                 <input
                   type="text"
-                  defaultValue={data.idStore.address}
+                  defaultValue={
+                    data.idStore.address.street +
+                    ", " +
+                    data.idStore.address.ward +
+                    ", " +
+                    data.idStore.address.district +
+                    ", Đà Nẵng"
+                  }
                   className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-950 bg-transparent peer  appearance-none  focus:outline-none focus:ring-0 "
                   placeholder=" "
                   disabled

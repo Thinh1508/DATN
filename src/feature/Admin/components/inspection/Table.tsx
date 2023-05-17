@@ -7,6 +7,7 @@ type InspectionPlan = {
   _id: string
   name: string
   category: string
+  startTime: string
   actionTime: string
   status: string
 }
@@ -28,10 +29,16 @@ const Table = (props: Props) => {
                 Tên kế hoạch
               </th>
               <th scope="col" className="px-4 py-3 xl:text-lg cursor-pointer">
+                tên cơ sở
+              </th>
+              <th scope="col" className="px-4 py-3 xl:text-lg cursor-pointer">
                 Loại kết hoạch
               </th>
               <th scope="col" className="px-4 py-3 xl:text-lg cursor-pointer">
-                Thời gian thực hiện
+                Ngày bắt đầu
+              </th>
+              <th scope="col" className="px-4 py-3 xl:text-lg cursor-pointer">
+                Thời hạn
               </th>
               <th scope="col" className="px-4 py-3 xl:text-lg cursor-pointer">
                 Trạng thái
@@ -39,7 +46,7 @@ const Table = (props: Props) => {
             </tr>
           </thead>
           <tbody>
-            {data.map((plan: InspectionPlan) => (
+            {data.map((plan: any) => (
               <tr
                 className="bg-gray-200 border-b text-gray-900 hover:bg-gray-300"
                 key={plan._id}
@@ -51,13 +58,19 @@ const Table = (props: Props) => {
                   {plan.name}
                 </th>
                 <td className="px-4 py-4 text-lg cursor-pointer capitalize">
+                  {plan.idStore.name}
+                </td>
+                <td className="px-4 py-4 text-lg cursor-pointer capitalize">
                   {plan.category}
+                </td>
+                <td className="px-4 py-4 text-lg cursor-pointer capitalize">
+                  {plan.startTime}
                 </td>
                 <td className="px-4 py-4 text-lg cursor-pointer capitalize">
                   {plan.actionTime}
                 </td>
                 <td className="px-4 py-4 text-lg cursor-pointer capitalize">
-                  {plan.status === "pending" ? "Đợi sử lý" : "Đang kiểm tra"}
+                  {plan.status === "pending" ? "Đợi sử lý" : "Đang thanh tra"}
                 </td>
               </tr>
             ))}
