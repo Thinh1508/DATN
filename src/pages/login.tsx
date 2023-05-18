@@ -74,7 +74,8 @@ const Login = (props: Props) => {
                 isLogin
                   ? "font-bold text-2xl text-gray-900"
                   : "font-semibold text-lg text-gray-500"
-              }  capitalize`}
+              }  capitalize relative after:absolute after:-bottom-1 after:left-0 after:bg-slate-900 after:h-1 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-300
+              hover:font-bold hover:text-2xl hover:text-gray-900 `}
               onClick={() => setIsLogin(true)}
             >
               đăng nhập
@@ -84,7 +85,7 @@ const Login = (props: Props) => {
                 !isLogin
                   ? "font-bold text-2xl text-gray-900"
                   : "font-semibold text-lg text-gray-500"
-              }  capitalize`}
+              }  capitalize relative after:absolute after:-bottom-1 after:left-0 after:bg-slate-900 after:h-1 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-300 hover:font-bold hover:text-2xl hover:text-gray-900`}
               onClick={() => setIsLogin(false)}
             >
               đăng kí
