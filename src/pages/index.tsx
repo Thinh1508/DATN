@@ -4,28 +4,32 @@ import SideBar from "@/layouts/SideBar"
 // Import Swiper sty
 import Link from "next/link"
 import {
-  SliderTop,
   SliderUser,
   SliderBanner,
+  SliderTop,
 } from "@/feature/Home/components/Slider"
 import Notification from "@/feature/Home/components/Notification"
 
-type Props = {}
+type Props = {
+  data: any
+  data1: any
+  data2: any
+}
 
-const HomePage = (props: Props) => {
+const HomePage = ({ data, data1, data2 }: Props) => {
   return (
     <div className="bg-white">
       <div className="grid grid-cols-10 space-x-8 pt-4 container mx-auto scrollbar-style">
         <div className="col-span-10 lg:col-span-7 pt-2 pb-6 space-y-4 ">
           <div className="min-h-[450px] border-slate-900 gird grid-cols-8 space-x-4 drop-shadow-md">
-            <SliderTop />
+            <SliderTop data={data} />
           </div>
 
           <div>
-            <SliderBanner />
+            <SliderBanner data={data} />
           </div>
 
-          <Notification />
+          <Notification data={data2} />
 
           <div className="grid grid-cols-3 min-h-[350px] py-10">
             <div className="relative gird grid-cols-1 items-center">
@@ -77,7 +81,7 @@ const HomePage = (props: Props) => {
 
           <div className="relative min-h-[250px] border-[1px] border-slate-400 !mt-10">
             <div className="p-2 gird grid-cols-3">
-              <SliderUser />
+              <SliderUser data={data1} />
             </div>
             <Link href="#">
               <span className="absolute col-span-3 px-3 py-1 bg-green-600 uppercase text-slate-100  hover:text-yellow-400 -translate-y-5 text-sm font-bold top-0 left-3">
@@ -90,6 +94,24 @@ const HomePage = (props: Props) => {
       </div>
     </div>
   )
+}
+
+export async function getServerSideProps() {
+  try {
+    const res = await fetch(`http://localhost:3000/api/post/top3`)
+    const data = await res.json()
+
+    const res1 = await fetch(`http://localhost:3000/api/post/use`)
+    const data1 = await res1.json()
+
+    const res2 = await fetch(`http://localhost:3000/api/post/view`)
+    const data2 = await res2.json()
+
+    return { props: { data, data1, data2 } }
+  } catch (error) {
+    console.error(error)
+    return { props: { data: [], data1: [], data2: [] } }
+  }
 }
 
 export default HomePage

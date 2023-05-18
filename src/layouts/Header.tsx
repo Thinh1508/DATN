@@ -78,7 +78,7 @@ const Header = (props: Props) => {
             </div>
           ) : (
             <Link
-              href="login"
+              href="/login"
               className="text-white font-medium hover:text-gray-300 pl-2"
             >
               Đăng nhập

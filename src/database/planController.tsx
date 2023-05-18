@@ -160,3 +160,21 @@ export async function putInspectionResult(
     res.status(400).json(error)
   }
 }
+
+//delete:http://localhost:3000/api/inspectionResult
+export async function deleteInspectionResult(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  try {
+    const { resultId } = req.query
+    if (resultId) {
+      await InspectionResult.findByIdAndDelete(resultId)
+      return res.status(200).json({ delete: resultId })
+    }
+
+    res.status(400).json({ error: "User Not Selected...!" })
+  } catch (error) {
+    res.status(400).json(error)
+  }
+}

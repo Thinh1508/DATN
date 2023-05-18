@@ -1,5 +1,5 @@
 import React from "react"
-import Image from "next/image"
+
 import { Swiper, SwiperSlide } from "swiper/react"
 import {
   Navigation,
@@ -16,39 +16,29 @@ import "swiper/css/pagination"
 import "swiper/css/scrollbar"
 import "swiper/css/effect-creative"
 import Link from "next/link"
-type Props = {}
+type Props = {
+  data: any
+  idPost: string
+}
 
-export function SliderTop(props: Props) {
-  const listSlider = [
-    {
-      title: "CHI BỘ BAN QUẢN LÝ AN TOÀN THỰC PHẨM “VỀ QUÊ MẸ” 2023",
-      img: "https://antoanthucpham.danang.gov.vn/documents/10181/53698/2803_Thuong_h1.jpg",
-    },
-    {
-      title:
-        "BAN QUẢN LÝ AN TOÀN THỰC PHẨM TIẾP TỤC PHÁT TRIỂN CHUỖI CUNG ỨNG THỊT HEO ĐẢM BẢO NGUỒN GỐC VÀ XUẤT XỨ",
-      img: "https://antoanthucpham.danang.gov.vn/documents/10181/53698/H2_TXNG.jpg/411d8757-58a3-49da-bbef-99948b6a60ae?t=1679383105698",
-    },
-    {
-      title: "BAN QUẢN LÝ AN TOÀN THỰC PHẨM HƯỞNG ỨNG “TUẦN LỄ ÁO DÀI”",
-      img: "https://antoanthucpham.danang.gov.vn/documents/10181/53698/tuan+le+ao+dai_h1.jpg/2bc36080-880f-4cc1-ad79-444929b116ea?t=1677642914239",
-    },
-    {
-      title:
-        "ĐÀ NẴNG KIỂM TRA, GIÁM SÁT ĐẢM BẢO AN TOÀN THỰC PHẨM TẾT NGUYÊN ĐÁN QUÝ MÃO NĂM 2023 TRÊN ĐỊA BÀN THÀNH PHỐ",
-      img: "https://antoanthucpham.danang.gov.vn/documents/10181/0/09597b9a46929dccc483.jpg/9bdbea52-8670-4ad4-a438-fe2514bdee44?t=1673938201366",
-    },
-  ]
-  const listItems = listSlider.map((slide) => (
-    <SwiperSlide key={slide.img}>
+export function SliderTop({ data }: Props) {
+  const listSlider = data
+  const listItems = listSlider.map((slide: any) => (
+    <SwiperSlide key={slide._id}>
       <div className="space-y-2">
         <Link
           className="relative text-slate-900 font-bold gap-4 hover:text-green-600 group block"
-          href="#"
+          href={{
+            pathname: "/postDetail",
+            query: {
+              idPost: slide._id,
+              category: slide.category,
+            },
+          }}
         >
           <div className="h-[500px]">
             <img
-              src={slide.img}
+              src={slide.background}
               alt=""
               className="w-full h-full object-cover"
             />
@@ -76,35 +66,25 @@ export function SliderTop(props: Props) {
   )
 }
 
-export function SliderUser(props: Props) {
-  const listSlider = [
-    {
-      title: "Thải độc gan sau Tết với dinh dưỡng lành mạnh",
-      img: "https://vfa.gov.vn/storage/upload/23-9400867.jpg",
-    },
-    {
-      title:
-        "An toàn thực phẩm cho các bữa tiệc nhiều món lựa chọn(dạng buffet)",
-      img: "https://vfa.gov.vn/storage/upload/22-1289129.jpg",
-    },
-    {
-      title:
-        "Một số loại thực phẩm cải thiện mức cholesterol và giúp ngừa bệnh tim",
-      img: "https://suckhoedoisong.qltns.mediacdn.vn/324455921873985536/2021/12/27/thuc-pham-tot-cho-tim-1-16406179307891614213387.jpg",
-    },
-    {
-      title: "Lầm tưởng về dinh dưỡng khiến bạn khó giảm cân",
-      img: "https://antoanthucpham.danang.gov.vn/documents/10181/0/09597b9a46929dccc483.jpg/9bdbea52-8670-4ad4-a438-fe2514bdee44?t=1673938201366",
-    },
-  ]
-  const listItems = listSlider.map((slide) => (
-    <SwiperSlide key={slide.img}>
-      <div className="min-h-[240px] col-span-3 bg-[#ebebeb] h-full rounded-lg">
-        <img src={slide.img} alt="" className="w-full h-40 p-2" />
+export function SliderUser({ data }: Props) {
+  const listSlider = data
+  const listItems = listSlider.map((slide: any) => (
+    <SwiperSlide key={slide._id}>
+      <Link
+        className="min-h-[240px] col-span-3 bg-[#ebebeb] h-full rounded-lg"
+        href={{
+          pathname: "/postDetail",
+          query: {
+            idPost: slide._id,
+            category: slide.category,
+          },
+        }}
+      >
+        <img src={slide.background} alt="" className="w-full h-40 p-2" />
         <p className="text-gray-700 text-base p-2 hover:text-green-600 cursor-pointer uppercase">
           {slide.title}
         </p>
-      </div>
+      </Link>
     </SwiperSlide>
   ))
   return (
@@ -154,6 +134,41 @@ export function SliderBanner(props: Props) {
         },
       }}
       modules={[EffectCreative]}
+    >
+      {listItems}
+    </Swiper>
+  )
+}
+
+export function SliderSame({ data, idPost }: Props) {
+  const listSlider = data.filter((slide: any) => slide._id !== idPost)
+  console.log(data)
+  const listItems = listSlider.map((slide: any) => (
+    <SwiperSlide key={slide._id}>
+      <Link
+        className="min-h-[240px] col-span-3 bg-[#ebebeb] h-full rounded-lg"
+        href={{
+          pathname: "/postDetail",
+          query: {
+            idPost: slide._id,
+            category: slide.category,
+          },
+        }}
+      >
+        <img src={slide.background} alt="" className="w-full h-40 p-2" />
+        <p className="text-gray-700 text-base p-2 hover:text-green-600 cursor-pointer uppercase">
+          {slide.title}
+        </p>
+      </Link>
+    </SwiperSlide>
+  ))
+  return (
+    <Swiper
+      modules={[Navigation, Pagination, Scrollbar, A11y]}
+      spaceBetween={10}
+      slidesPerView={3}
+      navigation
+      className="ml-0 "
     >
       {listItems}
     </Swiper>

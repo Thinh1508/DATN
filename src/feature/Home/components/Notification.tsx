@@ -1,66 +1,26 @@
-import { count } from "console"
-import React from "react"
+import React, { useState } from "react"
 import Link from "next/link"
 
-type Props = {}
+type Props = {
+  data: any
+}
 
-const Notification = (props: Props) => {
-  const listNoti = [
-    {
-      id: 0,
-      title: "HOÀ VANG TRIỂN KHAI HƯỚNG DẪN HỆ THỐNG TXNG TRÊN ĐỊA BÀN CÁC XÃ",
-      img: "https://antoanthucpham.danang.gov.vn/documents/10181/45038/Nhanh_1011_h3.jpg/ed8251b4-a7d9-40cb-820f-bb7a7dfa89c4?t=1668062075138",
-    },
-    {
-      id: 1,
-      title:
-        "KHAI GIẢNG LỚP BỒI DƯỠNG NGHIỆP VỤ THANH TRA CHUYÊN NGÀNH AN TOÀN THỰC PHẨM",
-      img: "",
-    },
-    {
-      id: 2,
-      title:
-        "TUYÊN TRUYỀN, TẬP HUẤN NÂNG CAO KIẾN THỨC VỀ AN TOÀN THỰC PHẨM CHO CÁN BỘ CÔNG ĐOÀN CƠ SỞ THUỘC LIÊN ĐOÀN LAO ĐỘNG THÀNH PHỐ ĐÀ NẴNG",
-      img: "",
-    },
-    {
-      id: 3,
-      title:
-        "TỔ CHỨC THÀNH CÔNG HỘI THI TÌM HIỂU KIẾN THỨC AN TOÀN THỰC PHẨM NĂM 2023",
-      img: "",
-    },
-    {
-      id: 4,
-      title:
-        "GIÁM SÁT VIỆC LƯU HÀNH SẢN PHẨM THỰC PHẨM BẢO VỆ SỨC KHỎE XTRA MAN",
-      img: "",
-    },
-    {
-      id: 5,
-      title:
-        "TIẾP TỤC THỰC HIỆN NGHỊ ĐỊNH 09/2016/NĐ-CP TĂNG CƯỜNG VI CHẤT DINH DƯỠNG VÀO THỰC PHẨM",
-      img: "",
-    },
-    {
-      id: 6,
-      title:
-        "MỜI BÁO GIÁ DỊCH VỤ THUÊ MÁY CHỦ ẢO HOSTING CSDL VÀ PHẦN MỀM QLNN CHUYÊN NGÀNH AN TOÀN THỰC PHẨM",
-      img: "",
-    },
-    {
-      id: 7,
-      title:
-        "KẾT QUẢ XÉT TUYỂN VIÊN CHỨC TRUNG TÂM KIỂM NGHIỆM THỰC PHẨM CHUYÊN SÂU TRỰC THUỘC BAN QUẢN LÝ AN TOÀN THỰC PHẨM THÀNH PHỐ ĐÀ NẴNG NĂM 2022",
-      img: "",
-    },
-  ]
-  const renderList = listNoti.map((noti) => {
-    if (noti.id > 0)
+const Notification = ({ data }: Props) => {
+  const listNoti = data
+  const firstValue: any = Object.values(listNoti)[0]
+  const renderList = listNoti.map((noti: any, index: any) => {
+    if (index > 0)
       return (
-        <li key={noti.id}>
+        <li key={noti._id}>
           <Link
             className="text-slate-900 font-bold flex gap-2 mb-2 hover:text-green-600 text-sm"
-            href=""
+            href={{
+              pathname: "/postDetail",
+              query: {
+                idPost: noti._id,
+                category: noti.category,
+              },
+            }}
           >
             <div className="h-3 w-3 mt-1 text-teal-600">
               <svg
@@ -79,20 +39,35 @@ const Notification = (props: Props) => {
   return (
     <div className="relative min-h-[250px] border-[1px] rounded-lg border-slate-400 !mt-10">
       <div className="flex h-full p-4 gap-6">
-        <a className="h-full w-[350px] block" href="#">
+        <Link
+          className="h-full w-[350px] block"
+          href={{
+            pathname: "/postDetail",
+            query: {
+              idPost: firstValue._id,
+              category: firstValue.category,
+            },
+          }}
+        >
           <img
-            src={listNoti[0].img}
+            src={firstValue.background}
             alt=""
             className="w-full max-h-[350px] object-cover"
           />
-        </a>
+        </Link>
         <div className="flex-1 space-y-2">
-          <a
+          <Link
             className="text-slate-900 font-bold block gap-4 hover:text-green-600 border-b-[1px] border-slate-900 pb-2 !mb-5"
-            href="#"
+            href={{
+              pathname: "/postDetail",
+              query: {
+                idPost: firstValue._id,
+                category: firstValue.category,
+              },
+            }}
           >
-            <p className="flex-1 text-green-600">{listNoti[0].title}</p>
-          </a>
+            <p className="flex-1 text-green-600">{firstValue.title}</p>
+          </Link>
           <ul>{renderList}</ul>
         </div>
       </div>

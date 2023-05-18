@@ -4,6 +4,7 @@ import connectMongo from "@/database/conn"
 import {
   getCertificateReg,
   postCertificateReg,
+  deleteCertificateReg,
 } from "@/database/storeController"
 
 export default async function handler(
@@ -27,9 +28,9 @@ export default async function handler(
     // case "PUT":
     //   putUser(req, res)
     //   break
-    // case "DELETE":
-    //   deleteUser(req, res)
-    //   break
+    case "DELETE":
+      deleteCertificateReg(req, res)
+      break
     default:
       // res.setHeader("Allowd", ["GET", "POST", "PUT", "DELETE"])
       res.status(405).end(`Method ${method} Not Allowd`)

@@ -1,7 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 
 import connectMongo from "@/database/conn"
-import { getReport, postReport, putReport } from "@/database/reportController"
+import {
+  getReport,
+  postReport,
+  putReport,
+  deleteReport,
+} from "@/database/reportController"
 
 export default async function handler(
   req: NextApiRequest,
@@ -23,6 +28,9 @@ export default async function handler(
       break
     case "PUT":
       putReport(req, res)
+      break
+    case "DELETE":
+      deleteReport(req, res)
       break
     default:
       // res.setHeader("Allowd", ["GET", "POST", "PUT", "DELETE"])

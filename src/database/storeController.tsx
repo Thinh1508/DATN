@@ -66,23 +66,23 @@ export async function putStore(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-// //delete:http://localhost:3000/api/users/1
-// export async function deleteUser(req: NextApiRequest, res: NextApiResponse) {
-//   try {
-//     const { userId } = req.query
-//     console.log(userId)
-//     if (userId) {
-//       await Users.findByIdAndDelete(userId)
-//       return res.status(200).json({ delete: userId })
-//     }
+//delete:http://localhost:3000/api/store/1
+export async function deleteStore(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    const { storeId } = req.query
+    console.log(storeId)
+    if (storeId) {
+      await Store.findByIdAndDelete(storeId)
+      return res.status(200).json({ delete: storeId })
+    }
 
-//     res.status(400).json({ error: "User Not Selected...!" })
-//   } catch (error) {
-//     res.status(400).json(error)
-//   }
-// }
+    res.status(400).json({ error: "User Not Selected...!" })
+  } catch (error) {
+    res.status(400).json(error)
+  }
+}
 
-//get:http://localhost:3000/api/CertificateReg
+//get:http://localhost:3000/api/certificateReg
 export async function getCertificateReg(
   req: NextApiRequest,
   res: NextApiResponse
@@ -99,7 +99,7 @@ export async function getCertificateReg(
     res.status(500).json(error)
   }
 }
-//post:http://localhost:3000/api/CertificateReg
+//post:http://localhost:3000/api/certificateReg
 export async function postCertificateReg(
   req: NextApiRequest,
   res: NextApiResponse
@@ -114,5 +114,23 @@ export async function postCertificateReg(
     else res.status(400).json({})
   } catch (error) {
     res.status(500).json(error)
+  }
+}
+
+//delete:http://localhost:3000/api/certificateReg/1
+export async function deleteCertificateReg(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  try {
+    const { cerId } = req.query
+    if (cerId) {
+      await CertificateRegistration.findByIdAndDelete(cerId)
+      return res.status(200).json({ delete: cerId })
+    }
+
+    res.status(400).json({ error: "User Not Selected...!" })
+  } catch (error) {
+    res.status(400).json(error)
   }
 }

@@ -5,6 +5,7 @@ import {
   getInspectionResult,
   postInspectionResult,
   putInspectionResult,
+  deleteInspectionResult,
 } from "@/database/planController"
 
 export default async function handler(
@@ -27,6 +28,9 @@ export default async function handler(
       break
     case "PUT":
       putInspectionResult(req, res)
+      break
+    case "DELETE":
+      deleteInspectionResult(req, res)
       break
     default:
       res.status(405).end(`Method ${method} Not Allowd`)

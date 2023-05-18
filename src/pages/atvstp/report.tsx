@@ -77,6 +77,16 @@ const report = (props: Props) => {
 
   const addMutation = useMutation(addReport, {
     onSuccess: () => {
+      toast.success("Thành công", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
       console.log("sucess")
     },
     onError: (e) => {

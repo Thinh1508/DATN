@@ -24,12 +24,15 @@ const userSchema = new Schema(
     address: {
       district: {
         type: String,
+        default: "",
       },
       ward: {
         type: String,
+        default: "",
       },
       street: {
         type: String,
+        default: "",
       },
     },
     dob: { type: String },

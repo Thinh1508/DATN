@@ -1,10 +1,12 @@
 import React, { useMemo, useState } from "react"
 import { useMutation, useQuery, useQueryClient } from "react-query"
+import { useSession } from "next-auth/react"
 
 import { addPost, getCategory, getPost, updatePost } from "@/lib/helper"
 import dynamic from "next/dynamic"
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 import "react-quill/dist/quill.snow.css"
-import { useSession } from "next-auth/react"
 
 type Post = {
   _id: string
@@ -92,6 +94,16 @@ const Modal = (props: Props) => {
       background: formData.background,
     }
     if (fileImage !== null) {
+      toast("Đang tải ảnh lên!", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
       const formDataI = new FormData()
       formDataI.append("file", fileImage)
       formDataI.append("upload_preset", "imageBusiness")
@@ -262,6 +274,7 @@ const Modal = (props: Props) => {
               </form>
             </div>
           </div>
+          <ToastContainer />
         </div>
       )
     case "add":

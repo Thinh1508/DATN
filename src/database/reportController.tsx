@@ -46,3 +46,19 @@ export async function putReport(req: NextApiRequest, res: NextApiResponse) {
     res.status(400).json(error)
   }
 }
+
+//delete:http://localhost:3000/api/report
+export async function deleteReport(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    const { reportId } = req.query
+    console.log(reportId)
+    if (reportId) {
+      await Report.findByIdAndDelete(reportId)
+      return res.status(200).json({ delete: reportId })
+    }
+
+    res.status(400).json({ error: "User Not Selected...!" })
+  } catch (error) {
+    res.status(400).json(error)
+  }
+}

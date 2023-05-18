@@ -415,26 +415,24 @@ const Modal = (props: Props) => {
                       </select>
                       <BsChevronDown className="absolute right-3 top-[30%] text-gray-600" />
                     </div>
-                    {isDistrict && (
-                      <div className="relative border-2 border-gray-400 rounded-lg">
-                        <select
-                          name="ward"
-                          onChange={(e: any) => {
-                            setValWard(e.target.value)
-                          }}
-                          className="block px-2.5 py-2.5 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                          required
-                        >
-                          <option className="relative" value="DEFAULT">
-                            Phường/Xã
-                          </option>
-                          {showWard(valDistrict).map((ward: any) => (
-                            <option value={ward.name}>{ward.name}</option>
-                          ))}
-                        </select>
-                        <BsChevronDown className="absolute right-3 top-[30%] text-gray-600" />
-                      </div>
-                    )}
+                    <div className="relative border-2 border-gray-400 rounded-lg">
+                      <select
+                        name="ward"
+                        onChange={(e: any) => {
+                          setValWard(e.target.value)
+                        }}
+                        className="block px-2.5 py-2.5 w-full text-xl text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        required
+                      >
+                        <option className="relative" value="DEFAULT">
+                          Phường/Xã
+                        </option>
+                        {showWard(valDistrict).map((ward: any) => (
+                          <option value={ward.name}>{ward.name}</option>
+                        ))}
+                      </select>
+                      <BsChevronDown className="absolute right-3 top-[30%] text-gray-600" />
+                    </div>
                   </div>
 
                   {isDistrict && (
