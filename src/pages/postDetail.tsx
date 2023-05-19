@@ -37,12 +37,12 @@ const postDetail = ({ data, dataSame }: Props) => {
             <p className="float-right mt-2">Ban Quản lý An toàn thực phẩm</p>
           </div>
           <hr />
-          <div className="relative min-h-[250px]  border-slate-400 !mt-10">
+          <div className="relative min-h-[250px]  border-t-4 border-t-green-600 !mt-10">
             <div className="p-2 gird grid-cols-3">
               <SliderSame data={dataSame} idPost={data._id} />
             </div>
             <Link href="#">
-              <span className="absolute col-span-3 px-3 py-1 bg-green-600 uppercase text-slate-100  hover:text-yellow-400 -translate-y-5 text-sm font-bold top-0 left-3">
+              <span className="absolute col-span-3 px-3 py-1 bg-green-600 uppercase text-slate-100  hover:text-yellow-400 -translate-y-5 text-sm font-bold top-0.5 rounded-r-full">
                 Bài viết tương tự
               </span>
             </Link>

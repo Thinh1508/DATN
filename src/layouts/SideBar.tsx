@@ -54,9 +54,18 @@ const SideBar = (props: Props) => {
     },
   ]
   const banners = [
-    "https://antoanthucpham.danang.gov.vn/documents/10181/10940/a-min.jpg?t=1560500879407",
-    "https://antoanthucpham.danang.gov.vn/documents/10181/10940/d-min.jpg?t=1560500879407",
-    "https://antoanthucpham.danang.gov.vn/documents/10181/10940/ddn-min.png?t=1560500879408",
+    {
+      link: "https://dichvucong.danang.gov.vn/thu-tuc-hanh-chinh",
+      img: "https://antoanthucpham.danang.gov.vn/documents/10181/10940/a-min.jpg?t=1560500879407",
+    },
+    {
+      link: "https://dichvucong.danang.gov.vn/",
+      img: "https://antoanthucpham.danang.gov.vn/documents/10181/10940/d-min.jpg?t=1560500879407",
+    },
+    {
+      link: "/",
+      img: "https://antoanthucpham.danang.gov.vn/documents/10181/10940/a-min.jpg?t=1560500879407",
+    },
   ]
 
   return (
@@ -73,52 +82,64 @@ const SideBar = (props: Props) => {
 
         <ul className="max-w-md divide-y divide-green-200 dark:divide-green-600 p2">
           <li className="p-2 ">
-            <div className=" flex items-center space-x-4">
+            <Link
+              href={"/"}
+              className=" flex items-center space-x-4 text-green-600 hover:text-green-800"
+            >
               <div className="flex-shrink-0">
-                <FaCalendar className="text-green-600 w-5 h-5 " />
+                <FaCalendar className=" w-5 h-5 " />
               </div>
-              <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-black">
-                <p className="text-base font-medium text-lg text-green-600 truncate dark:text-gr cursor-pointer uppercase hover:text-red-600">
+              <div className="inline-flex items-center text-base font-semibold ">
+                <p className="font-medium text-lg  truncate dark:text-gr cursor-pointer uppercase ">
                   Lịch thanh kiểm tra
                 </p>
               </div>
-            </div>
+            </Link>
           </li>
           <li className="p-2 ">
-            <div className=" flex items-center space-x-4">
+            <Link
+              href={"/atvstp/report"}
+              className=" flex items-center space-x-4 text-green-600 hover:text-green-800"
+            >
               <div className="flex-shrink-0">
-                <FaRegCalendarTimes className="text-green-600 w-5 h-5 " />
+                <FaRegCalendarTimes className=" w-5 h-5 " />
               </div>
-              <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-black">
-                <p className="text-base font-medium text-lg text-green-600 truncate dark:text-gr cursor-pointer uppercase hover:text-red-600">
+              <div className="inline-flex items-center text-base font-semibold">
+                <p className="font-medium text-lg  truncate dark:text-gr cursor-pointer uppercase">
                   Báo cáo vi phạm
                 </p>
               </div>
-            </div>
+            </Link>
           </li>
           <li className="p-2 ">
-            <div className=" flex items-center space-x-4">
+            <Link
+              href={"/"}
+              className=" flex items-center space-x-4 text-green-600 hover:text-green-800"
+            >
               <div className="flex-shrink-0">
-                <FaPenSquare className="text-green-600 w-5 h-5 " />
+                <FaPenSquare className=" w-5 h-5 " />
               </div>
-              <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-black">
-                <p className="text-base font-medium text-lg text-green-600 truncate dark:text-gr cursor-pointer uppercase hover:text-red-600">
+              <div className="inline-flex items-center text-base font-semibold ">
+                <p className="font-medium text-lg  truncate dark:text-gr cursor-pointer uppercase ">
                   Dự thảo góp ý
                 </p>
               </div>
-            </div>
+            </Link>
           </li>
           <li className="p-2 ">
-            <div className=" flex items-center space-x-4">
+            <Link
+              href={"/"}
+              className=" flex items-center space-x-4 text-green-600 hover:text-green-800"
+            >
               <div className="flex-shrink-0">
-                <FaComment className="text-green-600 w-5 h-5 " />
+                <FaComment className=" w-5 h-5 " />
               </div>
-              <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-black">
-                <p className="text-base font-medium text-lg text-green-600 truncate dark:text-gr cursor-pointer uppercase hover:text-red-600">
+              <div className="inline-flex items-center text-base font-semibold ">
+                <p className="font-medium text-lg  truncate dark:text-gr cursor-pointer uppercase ">
                   hỏi đáp
                 </p>
               </div>
-            </div>
+            </Link>
           </li>
         </ul>
       </div>
@@ -134,11 +155,11 @@ const SideBar = (props: Props) => {
         <div className="space-y-2 overflow-x-auto max-h-64 scrollbar-style">
           {documents.map((document, index) => (
             <Link
-              className="text-green-600 font-bold flex gap-1 mb-2 hover:text-red-600 text-sm"
+              className="text-green-600 font-bold flex gap-1 mb-2 hover:text-green-800 text-sm"
               href=""
               key={index}
             >
-              <div className="h-3 w-3 mt-1 text-teal-600">
+              <div className="h-3 w-3 mt-1">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 448 512"
@@ -162,8 +183,13 @@ const SideBar = (props: Props) => {
         </div>
         <div className="space-y-2">
           {banners.map((banner, index) => (
-            <Link className="block" href="" key={index}>
-              <img src={banner} alt="" className="w-full" />
+            <Link
+              className="block"
+              href={banner.link}
+              key={index}
+              target="_blank"
+            >
+              <img src={banner.img} alt="" className="w-full" />
             </Link>
           ))}
         </div>

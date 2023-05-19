@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 
 import { Swiper, SwiperSlide } from "swiper/react"
 import {
@@ -25,7 +25,7 @@ export function SliderTop({ data }: Props) {
   const listSlider = data
   const listItems = listSlider.map((slide: any) => (
     <SwiperSlide key={slide._id}>
-      <div className="space-y-2">
+      <div className="space-y-2 shadow-xl">
         <Link
           className="relative text-slate-900 font-bold gap-4 hover:text-green-600 group block"
           href={{
@@ -87,11 +87,27 @@ export function SliderUser({ data }: Props) {
       </Link>
     </SwiperSlide>
   ))
+  const [perView, setPerView] = useState(3)
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth < 769 && window.innerWidth > 370) {
+        setPerView(2)
+      } else {
+        if (window.innerWidth < 370) {
+          setPerView(1)
+        } else {
+          setPerView(3)
+        }
+      }
+    }
+
+    window.addEventListener("resize", handleResize)
+  }, [])
   return (
     <Swiper
       modules={[Navigation, Pagination, Scrollbar, A11y]}
       spaceBetween={10}
-      slidesPerView={3}
+      slidesPerView={perView}
       navigation
       className="ml-0 "
     >
@@ -116,7 +132,7 @@ export function SliderBanner(props: Props) {
       <img
         src={slide.img}
         alt="thông điệp"
-        className="w-full max-h-[200px] rounded-md"
+        className="w-full max-h-[200px]  shadow-xl"
       />
     </SwiperSlide>
   ))
@@ -142,11 +158,10 @@ export function SliderBanner(props: Props) {
 
 export function SliderSame({ data, idPost }: Props) {
   const listSlider = data.filter((slide: any) => slide._id !== idPost)
-  console.log(data)
   const listItems = listSlider.map((slide: any) => (
     <SwiperSlide key={slide._id}>
       <Link
-        className="min-h-[240px] col-span-3 bg-[#ebebeb] h-full rounded-lg"
+        className="min-h-[240px] col-span-3 bg-[#ebebeb] h-full "
         href={{
           pathname: "/postDetail",
           query: {
@@ -162,11 +177,27 @@ export function SliderSame({ data, idPost }: Props) {
       </Link>
     </SwiperSlide>
   ))
+  const [perView, setPerView] = useState(3)
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth < 769 && window.innerWidth > 370) {
+        setPerView(2)
+      } else {
+        if (window.innerWidth < 370) {
+          setPerView(1)
+        } else {
+          setPerView(3)
+        }
+      }
+    }
+
+    window.addEventListener("resize", handleResize)
+  }, [])
   return (
     <Swiper
       modules={[Navigation, Pagination, Scrollbar, A11y]}
       spaceBetween={10}
-      slidesPerView={3}
+      slidesPerView={perView}
       navigation
       className="ml-0 "
     >

@@ -3,26 +3,33 @@ import React, { useState } from "react"
 import { useRouter } from "next/router"
 import { AxiosError } from "axios"
 
-import { addUser, loginUser } from "@/lib/helper"
-import { useMutation } from "react-query"
+import { addUser, getUser, loginUser } from "@/lib/helper"
+import { useMutation, useQuery } from "react-query"
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"
+
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 type Props = {}
 
 const Login = (props: Props) => {
+  const listUser = useQuery("user", getUser)
+
   const [userInfo, setUserInfo] = useState({ email: "", password: "" })
   const [userName, setUserName] = useState("")
-  const [pass, setPass] = useState("")
   const [confirmPass, setConfirmPass] = useState("")
+  const [showPass, setShowPass] = useState(false)
+  const [showConfirmPass, setShowConfirmPass] = useState(false)
 
   const [loading, setLoading] = useState(false)
-  const [submitError, setSubmitError] = useState(false)
   const [isLogin, setIsLogin] = useState(true)
   const route = useRouter()
 
   const addMutation = useMutation(addUser, {
     onSuccess: () => {
-      console.log("success")
+      showMess("Đăng kí tài khoản thành công", "success")
       setIsLogin(true)
+      setShowPass(false)
     },
     onError: () => {
       console.log("error")
@@ -40,34 +47,77 @@ const Login = (props: Props) => {
         })
 
         if (loginRes && !loginRes.ok) {
-          setSubmitError(true)
+          showMess("Email hoặc mật khẩu không đúng", "error")
         } else {
           route.push("/")
         }
       } catch (error) {
         if (error instanceof AxiosError) {
-          setSubmitError(true)
+          showMess("Email hoặc mật khẩu không đúng", "error")
         }
       }
       setLoading(false)
     } else {
       if (userInfo.password !== confirmPass) {
-        setSubmitError(true)
+        showMess("Xát nhận mật khẩu không đúng", "error")
       } else {
-        setSubmitError(false)
-        const model = {
-          name: userName,
-          email: userInfo.email,
-          password: userInfo.password,
+        if (!checkEmail(userInfo.email)) {
+          const model = {
+            name: userName,
+            email: userInfo.email,
+            password: userInfo.password,
+          }
+          addMutation.mutate(model)
+        } else {
+          showMess("Email đã tồn tại", "error")
         }
-        addMutation.mutate(model)
       }
     }
   }
+  function checkEmail(email: string) {
+    let check: boolean = false
+    listUser.data.map((user: any) => {
+      if (user.email === email) check = true
+    })
+    return check
+  }
+  function showMess(mess: string, type: string) {
+    if (type !== "error") {
+      toast.success(mess, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
+    } else {
+      toast.error(mess, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
+    }
+  }
+  if (listUser.isLoading)
+    return <div className="bg-white flex-1">Đang tải dữ liệu...</div>
+  if (listUser.isError)
+    return (
+      <div className="bg-white flex-1">
+        Lỗi dữ liệu! Vui lòng tải lại trang...
+      </div>
+    )
   return (
-    <div className="bg-[#f1f1f1]">
-      <div className="min-h-[67vh] flex container mx-auto justify-center items-center bg-[#f1f1f1]">
-        <div className="w-1/3 p-6 shadow-lg bg-white rounded-md">
+    <div className="bg-white flex flex-1 justify-center">
+      <div className="flex  container mx-auto justify-center items-center">
+        <div className="w-1/3 p-6 bg-white shadow-xl rounded-b-md border-t-4 border-t-green-700  ">
           <div className=" capitalize flex items-center justify-center my-2">
             <span
               className={`cursor-pointer mr-10 ${
@@ -76,7 +126,13 @@ const Login = (props: Props) => {
                   : "font-semibold text-lg text-gray-500"
               }  capitalize relative after:absolute after:-bottom-1 after:left-0 after:bg-slate-900 after:h-1 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-300
               hover:font-bold hover:text-2xl hover:text-gray-900 `}
-              onClick={() => setIsLogin(true)}
+              onClick={() => {
+                setIsLogin(true)
+                setShowPass(false)
+                setShowConfirmPass(false)
+                setUserName("")
+                setConfirmPass("")
+              }}
             >
               đăng nhập
             </span>
@@ -86,7 +142,11 @@ const Login = (props: Props) => {
                   ? "font-bold text-2xl text-gray-900"
                   : "font-semibold text-lg text-gray-500"
               }  capitalize relative after:absolute after:-bottom-1 after:left-0 after:bg-slate-900 after:h-1 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-300 hover:font-bold hover:text-2xl hover:text-gray-900`}
-              onClick={() => setIsLogin(false)}
+              onClick={() => {
+                setIsLogin(false)
+                setShowPass(false)
+                setUserInfo({ email: "", password: "" })
+              }}
             >
               đăng kí
             </span>
@@ -129,39 +189,63 @@ const Login = (props: Props) => {
                 required
               />
             </div>
-            <div className="mb-6">
+            <div className="mb-6 ">
               <label className="block mb-2 text-sm font-medium text-gray-900">
                 Mật khẩu
               </label>
-              <input
-                type="password"
-                name="password"
-                value={userInfo.password}
-                onChange={(e) =>
-                  setUserInfo({
-                    ...userInfo,
-                    password: e.target.value,
-                  })
-                }
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-              focus:outline-none focus:ring-green-500 focus:border-green-500 block w-full p-2.5 "
-                required
-              />
+              <div className="relative ">
+                <input
+                  type={!showPass ? "password" : "text"}
+                  name="password"
+                  value={userInfo.password}
+                  onChange={(e) =>
+                    setUserInfo({
+                      ...userInfo,
+                      password: e.target.value,
+                    })
+                  }
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+              focus:outline-none focus:ring-green-500 focus:border-green-500 block w-full p-2.5 pr-10 "
+                  required
+                />
+                <div
+                  className="text-gray-500 absolute right-2 top-[27%] cursor-pointer"
+                  onClick={() => setShowPass(!showPass)}
+                >
+                  {!showPass ? (
+                    <AiOutlineEye size={20} />
+                  ) : (
+                    <AiOutlineEyeInvisible size={20} />
+                  )}
+                </div>
+              </div>
             </div>
             {!isLogin && (
               <div className="mb-6">
                 <label className="block mb-2 text-sm font-medium text-gray-900">
                   Nhập lại mật khẩu
                 </label>
-                <input
-                  type="password"
-                  name="confirmPass"
-                  value={confirmPass}
-                  onChange={(e) => setConfirmPass(e.target.value)}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+                <div className="relative">
+                  <input
+                    type={showConfirmPass ? "text" : "password"}
+                    name="confirmPass"
+                    value={confirmPass}
+                    onChange={(e) => setConfirmPass(e.target.value)}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
               focus:outline-none focus:ring-green-500 focus:border-green-500 block w-full p-2.5 "
-                  required
-                />
+                    required
+                  />
+                  <div
+                    className="text-gray-500 absolute right-2 top-[27%] cursor-pointer"
+                    onClick={() => setShowConfirmPass(!showConfirmPass)}
+                  >
+                    {!showConfirmPass ? (
+                      <AiOutlineEye size={20} />
+                    ) : (
+                      <AiOutlineEyeInvisible size={20} />
+                    )}
+                  </div>
+                </div>
               </div>
             )}
             {isLogin && (
@@ -194,13 +278,6 @@ const Login = (props: Props) => {
               >
                 {isLogin ? "Đăng nhập" : "Đăng kí"}
               </button>
-              {submitError && (
-                <label className="block my-2 text-sm font-medium text-red-600 mx-auto">
-                  {isLogin
-                    ? "Email hoặc mật khẩu không đúng"
-                    : "Mật khẩu xát nhận khôn trùng khớp"}
-                </label>
-              )}
             </div>
           </form>
 
@@ -212,6 +289,8 @@ const Login = (props: Props) => {
                 onClick={() => {
                   if (isLogin) {
                     setIsLogin(false)
+                    setShowPass(false)
+                    setUserInfo({ email: "", password: "" })
                   }
                 }}
                 className="hover:text-white w-full hover:bg-green-700   font-medium rounded-lg text-sm  px-5 py-2.5 text-center bg-white border-green-700 border-2 text-green-700 "
@@ -222,6 +301,7 @@ const Login = (props: Props) => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   )
 }
