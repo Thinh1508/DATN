@@ -2,8 +2,8 @@ import React from "react"
 
 type Props = {}
 
-const inspection = (props: Props) => {
+const InspectionPage = (props: Props) => {
   return <div className="bg-white flex-1">inspection</div>
 }
 
-export default inspection
+export default InspectionPage

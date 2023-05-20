@@ -11,7 +11,7 @@ import ResultModal from "./ResultModal"
 
 type Props = {}
 
-const inspection = (props: Props) => {
+const InspectionAtvstp = (props: Props) => {
   const { isLoading, isError, data, error } = useQuery(
     "inspectionPlan",
     getInspectionPlan
@@ -231,4 +231,4 @@ const inspection = (props: Props) => {
   )
 }
 
-export default inspection
+export default InspectionAtvstp

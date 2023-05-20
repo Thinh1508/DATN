@@ -24,7 +24,7 @@ type Result = {
   img: string
 }
 
-const result = ({ data }: Props) => {
+const ResultPage = ({ data }: Props) => {
   const router = useRouter()
   const { data: session }: { data: any } = useSession()
 
@@ -214,4 +214,4 @@ export async function getServerSideProps(context: any) {
   return { props: { data } }
 }
 
-export default result
+export default ResultPage

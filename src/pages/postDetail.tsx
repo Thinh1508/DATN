@@ -18,7 +18,7 @@ type Props = {
   dataSame: any
 }
 
-const postDetail = ({ data, dataSame }: Props) => {
+const PostDetail = ({ data, dataSame }: Props) => {
   return (
     <div className="bg-white">
       <div className="grid grid-cols-10 space-x-8 pt-4 container mx-auto scrollbar-style">
@@ -76,4 +76,4 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-export default postDetail
+export default PostDetail

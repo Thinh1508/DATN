@@ -24,7 +24,7 @@ type Category = {
   updatedAt: string
 }
 
-const Planning: NextPageWithLayout = (props: Props) => {
+const PlanningAdmin: NextPageWithLayout = (props: Props) => {
   const queryClient = useQueryClient()
 
   const { isLoading, isError, data, error } = useQuery("category", getCategory)
@@ -274,6 +274,6 @@ const Planning: NextPageWithLayout = (props: Props) => {
   )
 }
 
-Planning.getLayout = (page) => <AdminLayout>{page}</AdminLayout>
+PlanningAdmin.getLayout = (page) => <AdminLayout>{page}</AdminLayout>
 
-export default Planning
+export default PlanningAdmin

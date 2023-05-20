@@ -30,7 +30,7 @@ type CertificateRegistration = {
   status: string
 }
 
-const license = ({ data }: Props) => {
+const LicensePage = ({ data }: Props) => {
   const [fileImage1, setFileImage1] = useState<File | any>(null)
   const [fileImage2, setFileImage2] = useState<File | any>(null)
   const [fileImage4, setFileImage3] = useState<File | any>(null)
@@ -235,4 +235,4 @@ export async function getServerSideProps(context: any) {
   return { props: { data } }
 }
 
-export default license
+export default LicensePage

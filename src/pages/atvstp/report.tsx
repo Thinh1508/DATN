@@ -20,7 +20,7 @@ type Store = {
   status: string
 }
 
-const report = (props: Props) => {
+const ReportPage = (props: Props) => {
   const { data: session }: { data: any } = useSession()
 
   const listStore = useQuery("store", getStore)
@@ -262,4 +262,4 @@ export const getServerSideProps = checkAuth(async () => {
   }
 })
 
-export default report
+export default ReportPage

@@ -21,7 +21,7 @@ type Store = {
   }
 }
 
-const store = (props: Props) => {
+const StorePage = (props: Props) => {
   const { isLoading, isError, data, error } = useQuery("ward", getWard)
   const showDistricts = () => {
     const districts: Array<string> = []
@@ -275,4 +275,4 @@ export const getServerSideProps = checkAuth(async () => {
   }
 })
 
-export default store
+export default StorePage
