@@ -43,7 +43,16 @@ const HomePage = ({ data, data1, data2 }: Props) => {
                   className="font-bold text-base uppercase
                 text-gray-900 p-4 bg-white opacity-70 cursor-pointer  hover:text-green-600 "
                 >
-                  tin tức hoat động
+                  <Link
+                    href={{
+                      pathname: "/post",
+                      query: {
+                        category: "Hoạt động thanh kiểm tra",
+                      },
+                    }}
+                  >
+                    tin tức hoat động
+                  </Link>
                 </h1>
               </div>
             </div>
@@ -58,7 +67,16 @@ const HomePage = ({ data, data1, data2 }: Props) => {
                   className="font-bold text-base uppercase
                 text-gray-900 p-4 bg-white opacity-70 cursor-pointer  hover:text-green-600"
                 >
-                  truyền thông
+                  <Link
+                    href={{
+                      pathname: "/post",
+                      query: {
+                        category: "Truyền thông",
+                      },
+                    }}
+                  >
+                    truyền thông
+                  </Link>
                 </h1>
               </div>
             </div>
@@ -73,7 +91,16 @@ const HomePage = ({ data, data1, data2 }: Props) => {
                   className="font-bold text-base uppercase
                 text-gray-900 p-4 bg-white opacity-70 cursor-pointer  hover:text-green-600"
                 >
-                  Thực phẩm và sức khỏe
+                  <Link
+                    href={{
+                      pathname: "/post",
+                      query: {
+                        category: "Thực phẩm Và Sức Khoẻ",
+                      },
+                    }}
+                  >
+                    thực phẩm và sức khỏe
+                  </Link>
                 </h1>
               </div>
             </div>
@@ -83,7 +110,14 @@ const HomePage = ({ data, data1, data2 }: Props) => {
             <div className="p-2 gird grid-cols-3">
               <SliderUser data={data1} idPost="" />
             </div>
-            <Link href="#">
+            <Link
+              href={{
+                pathname: "/post",
+                query: {
+                  category: "Thực phẩm Và Sức Khoẻ",
+                },
+              }}
+            >
               <span className="absolute col-span-3 px-3 py-1 bg-green-600 uppercase text-slate-100  hover:text-yellow-400 -translate-y-5 text-sm font-bold top-0.5 rounded-r-full">
                 dành cho người tiêu dùng
               </span>

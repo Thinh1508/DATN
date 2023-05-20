@@ -121,7 +121,7 @@ const SideBar = (props: Props) => {
               </div>
               <div className="inline-flex items-center text-base font-semibold ">
                 <p className="font-medium text-lg  truncate dark:text-gr cursor-pointer uppercase ">
-                  Dự thảo góp ý
+                  Đăng kí cơ sở kinh doanh
                 </p>
               </div>
             </Link>

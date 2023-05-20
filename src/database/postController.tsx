@@ -91,7 +91,6 @@ export async function postPostView(req: NextApiRequest, res: NextApiResponse) {
     if (!category) return res.status(400).json({ error: category })
     const post = await Post.find({ category: category, status: "active" })
     if (!post) return res.status(404).json({ error: "Data Not Found" })
-
     res.status(200).json(post)
   } catch (error) {
     res.status(501).json(error)

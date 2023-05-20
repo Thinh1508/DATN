@@ -49,7 +49,7 @@ const store = (props: Props) => {
   const { data: session }: { data: any } = useSession()
   const [fileImage, setFileImage] = useState<File | any>(null)
   const [selectImage, setSelectImage] = useState("")
-  const [formData, setFormData] = useState<Store | any>()
+  const [formData, setFormData] = useState<Store | any>({})
   const [isDistrict, setDistrict] = useState(false)
   const [valDistrict, setValDistrict] = useState("")
 
@@ -150,7 +150,7 @@ const store = (props: Props) => {
     <div className="bg-white flex-1">
       <div className="container mx-auto text-gray-900">
         <form method="POST" onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 h-[90%] sm:h-fit">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 h-[90%] sm:h-fit relative">
             <div className="p-6 space-y-10">
               <div className="relative border-2 border-gray-400 rounded-lg">
                 <input
@@ -243,7 +243,7 @@ const store = (props: Props) => {
                   Bản sao giấy phép kinh doanh
                 </label>
               </div>
-              <div className="relative border-2 border-gray-400 rounded-lg">
+              <div className="absolute bottom-3 w-1/2 lg:w-full lg:relative border-2 border-gray-400 rounded-lg">
                 <button
                   type="submit"
                   className="w-full text-green-900 bg-white  hover:bg-green-800  hover:transition-all hover:duration-500 ease-in-out hover:text-white  font-medium rounded-lg text-lg px-5 py-2.5 text-center "
@@ -252,7 +252,7 @@ const store = (props: Props) => {
                 </button>
               </div>
             </div>
-            <div className="relative border-2 border-gray-400 rounded-lg my-6">
+            <div className="mx-6 mb-20 lg:mx-0 lg:mt-6 lg:mb-6 relative border-2 border-gray-400 rounded-lg ">
               <div className="h-[55vh] overflow-y-auto scrollbar-style">
                 {selectImage ? (
                   <img src={selectImage} alt="anh tai len" className="p-4" />

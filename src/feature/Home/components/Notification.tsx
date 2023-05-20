@@ -73,11 +73,18 @@ const Notification = ({ data }: Props) => {
           <ul>{renderList}</ul>
         </div>
       </div>
-      <a href="#">
+      <Link
+        href={{
+          pathname: "/post",
+          query: {
+            category: "Truyền thông",
+          },
+        }}
+      >
         <span className="absolute col-span-3 px-3 py-1 bg-green-600 uppercase text-slate-100  hover:text-yellow-400 -translate-y-5 text-sm font-bold top-0.5 rounded-r-full">
           thông báo
         </span>
-      </a>
+      </Link>
     </div>
   )
 }

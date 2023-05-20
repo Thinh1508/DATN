@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { useMutation, useQuery, useQueryClient } from "react-query"
-import { useSession } from "next-auth/react"
+import { getSession, useSession } from "next-auth/react"
 import Link from "next/link"
 
 import checkAuth from "../middleware/checkAuth"
@@ -9,7 +9,9 @@ import { addCertificateReg, getStoreUserId } from "@/lib/helper"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 
-type Props = {}
+type Props = {
+  data: any
+}
 type Store = {
   _id: string
   idUser: string
@@ -28,14 +30,7 @@ type CertificateRegistration = {
   status: string
 }
 
-const license = (props: Props) => {
-  const queryClient = useQueryClient()
-  const { data: session }: { data: any } = useSession()
-
-  const { isLoading, isError, data, error } = useQuery("Store", () =>
-    getStoreUserId(session?.user?._id)
-  )
-
+const license = ({ data }: Props) => {
   const [fileImage1, setFileImage1] = useState<File | any>(null)
   const [fileImage2, setFileImage2] = useState<File | any>(null)
   const [fileImage4, setFileImage3] = useState<File | any>(null)
@@ -125,21 +120,10 @@ const license = (props: Props) => {
     model.trainCertificate = await uploadImage(fileImage4)
     addMutation.mutate(model)
   }
-
-  if (isLoading)
-    return (
-      <div className="flex-1 bg-white text-gray-950">Đang tải dữ liệu...</div>
-    )
-  if (isError)
-    return (
-      <div className="flex-1 bg-white text-gray-950">
-        Lỗi khi tải dữ liệu {`${error}`}
-      </div>
-    )
   return (
     <div className="bg-white flex-1">
       <div className="container mx-auto text-gray-900">
-        {data?.length !== 0 ? (
+        {data?.map ? (
           <form method="POST" onSubmit={handleSubmit}>
             <div className="p-6 space-y-10">
               <div className="relative border-2 border-gray-400 rounded-lg">
@@ -168,7 +152,7 @@ const license = (props: Props) => {
                   onChange={handleFileChange1}
                   className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-900 bg-transparent   appearance-none  focus:outline-none focus:ring-0 focus:border-3 peer"
                 />
-                <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
+                <label className="absolute -top-7 lg:-top-3 bg-white left-3">
                   Đơn đề nghị cấp Giấy chứng nhận
                 </label>
               </div>
@@ -181,7 +165,7 @@ const license = (props: Props) => {
                   onChange={handleFileChange2}
                   className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-900 bg-transparent   appearance-none  focus:outline-none focus:ring-0 focus:border-3 peer"
                 />
-                <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
+                <label className="absolute -top-7 lg:-top-3 bg-white left-3">
                   Bản thuyết minh về cơ sở vật chất, trang thiết bị
                 </label>
               </div>
@@ -194,9 +178,8 @@ const license = (props: Props) => {
                   onChange={handleFileChange3}
                   className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-900 bg-transparent   appearance-none  focus:outline-none focus:ring-0 focus:border-3 peer"
                 />
-                <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
-                  Giấy xác nhận đã được tập huấn kiến thức về an toàn về sinh
-                  thực phẩm
+                <label className="absolute -top-7 lg:-top-3 bg-white left-3">
+                  Giấy xác nhận tập huấn an toàn về sinh thực phẩm
                 </label>
               </div>
               <div className="relative border-2 border-gray-400 rounded-lg">
@@ -208,9 +191,8 @@ const license = (props: Props) => {
                   onChange={handleFileChange4}
                   className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-900 bg-transparent   appearance-none  focus:outline-none focus:ring-0 focus:border-3 peer"
                 />
-                <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
-                  Giấy xác nhận đủ sức khỏe của chủ cơ sở và người trực tiếp sản
-                  xuất, kinh doanh thực phẩm
+                <label className="absolute -top-7 lg:-top-3 bg-white left-3">
+                  Giấy xác nhận đủ sức khỏe của chủ cơ sở
                 </label>
               </div>
             </div>
@@ -225,7 +207,7 @@ const license = (props: Props) => {
           </form>
         ) : (
           <div className="flex flex-col items-center justify-center h-full bg-white">
-            <h1 className="text-4xl font-bold text-gray-800 mt-20">
+            <h1 className="text-xl md:text-4xl font-bold text-gray-800 mt-20 ">
               Bạn chưa có cơ sở kinh doanh nào
             </h1>
             <Link
@@ -240,6 +222,17 @@ const license = (props: Props) => {
       <ToastContainer />
     </div>
   )
+}
+
+export async function getServerSideProps(context: any) {
+  const session: any = await getSession(context)
+  let data = null
+  if (session?.user?._id) {
+    data = await getStoreUserId(session?.user?._id)
+  }
+
+  // Pass data to the page via props
+  return { props: { data } }
 }
 
 export default license

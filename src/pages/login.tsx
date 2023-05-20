@@ -117,7 +117,7 @@ const Login = (props: Props) => {
   return (
     <div className="bg-white flex flex-1 justify-center">
       <div className="flex  container mx-auto justify-center items-center">
-        <div className="w-1/3 p-6 bg-white shadow-xl rounded-b-md border-t-4 border-t-green-700  ">
+        <div className="w-[500px] p-6 bg-white shadow-xl rounded-b-md border-t-4 border-t-green-700  ">
           <div className=" capitalize flex items-center justify-center my-2">
             <span
               className={`cursor-pointer mr-10 ${

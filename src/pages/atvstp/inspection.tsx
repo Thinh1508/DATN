@@ -100,7 +100,7 @@ const inspection = (props: Props) => {
     )
   return (
     <div className="bg-white flex-1">
-      <div className="container mx-auto text-gray-900">
+      <div className="container mx-auto text-gray-900 overflow-x-auto scrollbar-style">
         <table className="border w-full mt-4 ">
           <thead>
             <tr className="bg-slate-600 text-white">
