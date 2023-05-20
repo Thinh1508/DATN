@@ -7,7 +7,9 @@ import { useRouter } from "next/router"
 import {
   addInspectionResult,
   getInspectionPlanId,
+  updateCertificateReg,
   updateInspectionPlan,
+  updateReport,
 } from "@/lib/helper"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
@@ -44,10 +46,43 @@ const ResultPage = ({ data }: Props) => {
     setFormData({ ...formData, [name]: value })
   }
 
+  const updateCer = useMutation(updateCertificateReg, {
+    onError: () => {
+      console.log("error")
+    },
+  })
+  const updateRep = useMutation(updateReport, {
+    onError: () => {
+      console.log("error")
+    },
+  })
+
   const updateMutation = useMutation(updateInspectionPlan, {
     onSuccess: () => {
-      alert("Thành công")
-      router.push("/atvstp/inspection")
+      toast.success("Thành công", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
+      if (data.idReport) {
+        updateRep.mutate({
+          reportId: data.idReport._id,
+          formData: { status: "checked" },
+        })
+      } else {
+        updateCer.mutate({
+          storeId: data.idStore._id,
+          formData: { status: "checked" },
+        })
+      }
+      setTimeout(() => {
+        router.push("/atvstp/inspection")
+      }, 2000)
     },
     onError: () => {
       console.log("error")

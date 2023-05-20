@@ -5,8 +5,8 @@ import { useMutation, useQuery, useQueryClient } from "react-query"
 import {
   deleteInspectionPlan,
   getInspectionPlan,
+  updateCertificateReg,
   updateReport,
-  updateStore,
 } from "@/lib/helper"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
@@ -35,7 +35,7 @@ const Table = (props: Props) => {
   const [updateId, setUpdateId] = useState("")
   const [type, setType] = useState("")
 
-  const updateMutation = useMutation(updateStore, {
+  const updateMutation = useMutation(updateCertificateReg, {
     onSuccess: () => {
       console.log("success")
     },
@@ -219,7 +219,7 @@ const Table = (props: Props) => {
                           setUpdateId(plan.idReport._id)
                         } else {
                           setType("inspection")
-                          setUpdateId(plan.idStore)
+                          setUpdateId(plan.idStore._id)
                         }
                         setModalDelete(true)
                       }}
@@ -302,7 +302,7 @@ const Table = (props: Props) => {
           className={`bg-white p-8 bottom-0 border-4 border-green-600  rounded-lg flex flex-col items-center transition ease-in-out delay-150 duration-1000`}
         >
           <span className="font-medium text-3xl text-gray-950">
-            Bạn có muôn xóa tài kế hoạch không?
+            Bạn có muôn xóa kế hoạch không?
           </span>
           <div className="mt-6 grid grid-cols-2 gap-10">
             <button

@@ -159,6 +159,14 @@ const Modal = (props: Props) => {
                   Lên kế hoạch
                 </Link>
               )}
+              {data.status === "checked" && (
+                <Link
+                  href={"/admin/inspection"}
+                  className="sm:w-1/2 text-green-900 bg-white border border-green-900 hover:bg-green-800  hover:transition-all hover:duration-500 ease-in-out hover:text-white  font-medium rounded-lg text-lg px-5 py-2.5 text-center "
+                >
+                  Xem kết quả
+                </Link>
+              )}
               <button
                 type="button"
                 onClick={props.onClose}

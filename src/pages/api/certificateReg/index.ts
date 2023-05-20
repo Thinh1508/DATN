@@ -4,6 +4,7 @@ import connectMongo from "@/database/conn"
 import {
   getCertificateReg,
   postCertificateReg,
+  putCertificateReg,
   deleteCertificateReg,
 } from "@/database/storeController"
 
@@ -25,9 +26,9 @@ export default async function handler(
     case "POST":
       postCertificateReg(req, res)
       break
-    // case "PUT":
-    //   putUser(req, res)
-    //   break
+    case "PUT":
+      putCertificateReg(req, res)
+      break
     case "DELETE":
       deleteCertificateReg(req, res)
       break

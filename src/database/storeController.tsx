@@ -117,6 +117,28 @@ export async function postCertificateReg(
   }
 }
 
+//put:http://localhost:3000/api/certificateReg
+export async function putCertificateReg(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  try {
+    const { storeId } = req.query
+    const formData = req.body
+
+    if (storeId && formData) {
+      await CertificateRegistration.findOneAndUpdate(
+        { idStore: storeId },
+        formData
+      )
+      return res.status(200).json(formData)
+    }
+    res.status(400).json({ error: "CertificateRegistration Not Selected...!" })
+  } catch (error) {
+    res.status(400).json(error)
+  }
+}
+
 //delete:http://localhost:3000/api/certificateReg/1
 export async function deleteCertificateReg(
   req: NextApiRequest,

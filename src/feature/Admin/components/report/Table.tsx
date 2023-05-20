@@ -37,15 +37,40 @@ const Table = (props: Props) => {
 
   const [reportData, setReportData] = useState(Object)
   const [showModal, setShowModal] = useState(false)
+  const [showData, setShowData] = useState(false)
 
   const handleOnClose = () => {
     setShowModal(false)
+  }
+
+  const tableBody = () => {
+    const reportData = data
+    if (!showData) {
+      return reportData.filter((report: any) => report.status !== "checked")
+    }
+    return reportData.filter((report: any) => report.status === "checked")
   }
 
   if (isLoading) return <div>Đang tải dữ liệu...</div>
   if (isError) return <div>Lỗi khi tải dữ liệu {`${error}`}</div>
   return (
     <div className="bg-white w-full border p-4 mt-4  rounded-lg h-[84vh] xl:h-[82vh] ">
+      <div className="absolute right-8 top-8">
+        <select
+          defaultValue={"DEFAULT"}
+          onChange={(e) => {
+            if (e.target.value === "checked") {
+              setShowData(true)
+            } else {
+              setShowData(false)
+            }
+          }}
+          className="bg-white outline-none flex items-center  text-gray-900 text-sm rounded-lg focus:ring-blue-500  w-full p-1.5 sm:p-2.5 "
+        >
+          <option value="checking">Đang sử lý</option>
+          <option value="checked">Đã sử lý</option>
+        </select>
+      </div>
       <div className="max-h-[91%] overflow-y-auto scrollbar-style">
         <table className="w-full text-sm text-left text-gray-500 ">
           <thead className="text-xs text-gray-300 uppercase bg-gray-900 sticky top-0 z-10">
@@ -72,97 +97,50 @@ const Table = (props: Props) => {
             </tr>
           </thead>
           <tbody>
-            {data.map(
-              (report: Report) =>
-                report.status !== "processed" && (
-                  <tr
-                    className="bg-gray-200 border-b text-gray-900 hover:bg-gray-300"
-                    key={report._id}
-                    onClick={() => {
-                      setReportData(report)
-                      setShowModal(true)
-                    }}
-                  >
-                    <th
-                      scope="row"
-                      className="px-4 py-4 font-medium  whitespace-nowrap text-lg cursor-pointer capitalize"
-                    >
-                      {report.idUser.name}
-                    </th>
-                    <td className="px-4 py-4 text-lg cursor-pointer capitalize">
-                      {report.idStore.name}
-                    </td>
-                    <td className="px-4 py-4 text-lg cursor-pointer capitalize">
-                      {report.content}
-                    </td>
-                    <td className="px-4 py-4 text-lg cursor-pointer capitalize">
-                      {report.idStore.address.street +
-                        ", " +
-                        report.idStore.address.ward +
-                        ", " +
-                        report.idStore.address.district +
-                        ", Đà Nẵng"}
-                    </td>
-                    <td className="px-4 py-4 text-lg cursor-pointer capitalize">
-                      {report.createdAt.slice(0, 10)}
-                    </td>
-                    <td className="px-4 py-4 text-lg cursor-pointer capitalize">
-                      {report.status === "pending"
-                        ? "Đợi sử lý"
-                        : "Đang kiểm tra"}
-                    </td>
-                  </tr>
-                )
-            )}
+            {tableBody().map((report: Report) => (
+              <tr
+                className="bg-gray-200 border-b text-gray-900 hover:bg-gray-300"
+                key={report._id}
+                onClick={() => {
+                  setReportData(report)
+                  setShowModal(true)
+                }}
+              >
+                <th
+                  scope="row"
+                  className="px-4 py-4 font-medium  whitespace-nowrap text-lg cursor-pointer capitalize"
+                >
+                  {report.idUser.name}
+                </th>
+                <td className="px-4 py-4 text-lg cursor-pointer capitalize">
+                  {report.idStore.name}
+                </td>
+                <td className="px-4 py-4 text-lg cursor-pointer capitalize">
+                  {report.content}
+                </td>
+                <td className="px-4 py-4 text-lg cursor-pointer capitalize">
+                  {report.idStore.address.street +
+                    ", " +
+                    report.idStore.address.ward +
+                    ", " +
+                    report.idStore.address.district +
+                    ", Đà Nẵng"}
+                </td>
+                <td className="px-4 py-4 text-lg cursor-pointer capitalize">
+                  {report.createdAt.slice(0, 10)}
+                </td>
+                <td className="px-4 py-4 text-lg cursor-pointer capitalize">
+                  {report.status === "pending"
+                    ? "Đợi sử lý"
+                    : report.status === "checking"
+                    ? "Đang kiểm tra"
+                    : "Đã kiểm tra"}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
-      {/* <div className="mt-7 w-full h-fit flex flex-row sm:justify-end justify-center">
-        <nav className="">
-          <ul className="inline-flex -space-x-px">
-            <li>
-              <Link
-                href={"/admin/document"}
-                className="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700"
-              >
-                Previous
-              </Link>
-            </li>
-            <li>
-              <Link
-                href={"/admin/document"}
-                className="px-3 py-2 text-gray-600 border border-gray-300 bg-gray-200 hover:bg-gray-300 hover:text-blue-700"
-              >
-                1
-              </Link>
-            </li>
-            <li>
-              <Link
-                href={"/admin/document"}
-                className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
-              >
-                ...
-              </Link>
-            </li>
-            <li>
-              <Link
-                href={"/admin/document"}
-                className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
-              >
-                10
-              </Link>
-            </li>
-            <li>
-              <Link
-                href={"/admin/document"}
-                className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700"
-              >
-                Next
-              </Link>
-            </li>
-          </ul>
-        </nav>
-      </div> */}
       <ToastContainer />
       {showModal && (
         <Modal

@@ -290,6 +290,22 @@ export async function addCertificateReg(formData: any) {
   }
 }
 
+//put certificateReg
+export async function updateCertificateReg({ storeId, formData }: any) {
+  const Options = {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(formData),
+  }
+  const response = await fetch(
+    `${BASE_URL}/api/certificateReg/?storeId=${storeId}`,
+    Options
+  )
+  const json = await response.json()
+
+  return json
+}
+
 //inspectionPlan
 // get all inspectionPlan
 export const getInspectionPlan = async () => {

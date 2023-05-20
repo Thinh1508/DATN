@@ -25,8 +25,6 @@ type Category = {
 }
 
 const PlanningAdmin: NextPageWithLayout = (props: Props) => {
-  const queryClient = useQueryClient()
-
   const { isLoading, isError, data, error } = useQuery("category", getCategory)
   const inspectionCategory = () => {
     const inspection = data
@@ -73,7 +71,17 @@ const PlanningAdmin: NextPageWithLayout = (props: Props) => {
 
   const addMutation = useMutation(addInspectionPlan, {
     onSuccess: () => {
-      alert("Thêm thành công")
+      toast.success("Thêm thành công", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
+
       if (type === "inspection") {
         updateMutation.mutate({
           storeId: idCertificateReg,
@@ -85,7 +93,9 @@ const PlanningAdmin: NextPageWithLayout = (props: Props) => {
           formData: { status: "checking" },
         })
       }
-      router.push("/admin/inspection")
+      setTimeout(() => {
+        router.push("/admin/inspection")
+      }, 2000)
     },
     onError: () => {
       toast.error("Thất bại", {
@@ -142,7 +152,7 @@ const PlanningAdmin: NextPageWithLayout = (props: Props) => {
       </h1>
       <form onSubmit={handleSubmit}>
         <div className="bg-white w-full border p-4 mt-4  rounded-lg h-fit  ">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 h-[90%] sm:h-fit">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 h-[90%] sm:h-fit">
             <div className="h-fit">
               <div className="relative border-2 border-gray-400 rounded-lg mb-10">
                 <input
@@ -234,7 +244,20 @@ const PlanningAdmin: NextPageWithLayout = (props: Props) => {
                 <div className="relative border-2 border-gray-400 rounded-lg mb-10">
                   <input
                     name="actionTime"
+                    type="number"
                     onChange={handleChange}
+                    min="0"
+                    onKeyPress={(event: any) => {
+                      if (event.key === "-" || event.key === "e") {
+                        event.preventDefault() // Ngăn chặn nhập các ký tự "-" và "e"
+                      }
+                    }}
+                    onInput={(event: any) => {
+                      const value = event.target.value
+                      if (value < 0) {
+                        event.target.value = 0 // Nếu giá trị nhỏ hơn 0, đặt lại giá trị là 0
+                      }
+                    }}
                     className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-950 bg-transparent peer  appearance-none  focus:outline-none focus:ring-0 capitalize"
                     placeholder=" "
                     required
