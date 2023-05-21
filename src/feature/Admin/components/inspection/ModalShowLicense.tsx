@@ -17,8 +17,8 @@ type License = {
     status: string
   }
   proposal: string
-  description: string
-  healthCertificate: string
+  description: []
+  healthCertificate: []
   trainCertificate: string
   status: string
   createdAt: string
@@ -132,7 +132,9 @@ const ModalShowLicense = (props: Props) => {
                 </label>
               </div>
               <div className="relative border-2 border-gray-400 rounded-lg p-4">
-                <img src={data.healthCertificate} className="w-full h-fit" />
+                {data.healthCertificate.map((image: any) => (
+                  <img src={image} className="w-full h-fit" />
+                ))}
                 <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
                   Giấy xác nhận đủ sức khỏe của chủ cơ sở
                 </label>
@@ -144,7 +146,9 @@ const ModalShowLicense = (props: Props) => {
                 </label>
               </div>
               <div className="relative border-2 border-gray-400 rounded-lg p-4">
-                <img src={data.description} className="w-full h-fit" />
+                {data.description.map((image: any) => (
+                  <img src={image} className="w-full h-fit" />
+                ))}
                 <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
                   Bản thuyết minh về cơ sở vật chất, trang thiết bị
                 </label>
