@@ -170,12 +170,20 @@ const Header = (props: Props) => {
             <li className="flex-none p-1 md:p-2 xl:p-3 text-white font-bold uppercase cursor-pointer hover:bg-[#0cb306]  text-center relative group">
               <h1>an toàn vệ sinh thực phẩm</h1>
               <ul className="absolute bg-[#0cb306] right-0 capitalize rounded-md p-2 z-10 text-white w-full hidden group-hover:block  ">
-                <li className="hover:text-gray-300 hover:font-extrabold my-2">
-                  <Link href={"/atvstp/store"}>đăng kí cơ sở kinh doanh</Link>
-                </li>
-                <li className="hover:text-gray-300 hover:font-extrabold my-2">
-                  <Link href={"/atvstp/license"}>đăng kí giấy phép ATVSTP</Link>
-                </li>
+                {session?.user?.permissions !== "inspection" && (
+                  <>
+                    <li className="hover:text-gray-300 hover:font-extrabold my-2">
+                      <Link href={"/atvstp/store"}>
+                        đăng kí cơ sở kinh doanh
+                      </Link>
+                    </li>
+                    <li className="hover:text-gray-300 hover:font-extrabold my-2">
+                      <Link href={"/atvstp/license"}>
+                        đăng kí giấy phép ATVSTP
+                      </Link>
+                    </li>
+                  </>
+                )}
                 <li className="hover:text-gray-300 hover:font-extrabold my-2">
                   <Link href={"/atvstp/report"}>báo cáo cơ sở kinh doanh</Link>
                 </li>
@@ -255,18 +263,26 @@ const Header = (props: Props) => {
           {showSubMenu && (
             <li className="px-2 pb-2 text-white font-bold uppercase">
               <ul className=" capitalize rounded-md px-2 z-10 text-white w-full">
-                <li
-                  className="hover:text-yellow-200 hover:font-extrabold my-2"
-                  onClick={() => setShowMenu(false)}
-                >
-                  <Link href={"/atvstp/store"}>đăng kí cơ sở kinh doanh</Link>
-                </li>
-                <li
-                  className="hover:text-yellow-200 hover:font-extrabold my-2"
-                  onClick={() => setShowMenu(false)}
-                >
-                  <Link href={"/atvstp/license"}>đăng kí giấy phép ATVSTP</Link>
-                </li>
+                {session?.user?.permissions !== "inspection" && (
+                  <>
+                    <li
+                      className="hover:text-yellow-200 hover:font-extrabold my-2"
+                      onClick={() => setShowMenu(false)}
+                    >
+                      <Link href={"/atvstp/store"}>
+                        đăng kí cơ sở kinh doanh
+                      </Link>
+                    </li>
+                    <li
+                      className="hover:text-yellow-200 hover:font-extrabold my-2"
+                      onClick={() => setShowMenu(false)}
+                    >
+                      <Link href={"/atvstp/license"}>
+                        đăng kí giấy phép ATVSTP
+                      </Link>
+                    </li>
+                  </>
+                )}
                 <li
                   className="hover:text-yellow-200 hover:font-extrabold my-2"
                   onClick={() => setShowMenu(false)}
@@ -286,7 +302,9 @@ const Header = (props: Props) => {
                 <IoMdAdd size={20} />
               </>
             ) : (
-              <Link href="/login">Đăng nhập</Link>
+              <Link href="/login" onClick={() => setShowMenu(false)}>
+                Đăng nhập
+              </Link>
             )}
           </li>
           {showSubMenuLogin && (

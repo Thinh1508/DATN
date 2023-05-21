@@ -13,6 +13,7 @@ import {
 } from "@/lib/helper"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import axios from "axios"
 
 type Props = {
   data: any
@@ -31,15 +32,18 @@ const ResultPage = ({ data }: Props) => {
   const { data: session }: { data: any } = useSession()
 
   const [fileImage, setFileImage] = useState<File | any>(null)
-  const [selectImage, setSelectImage] = useState("")
+  const [selectImage, setSelectImage] = useState<Array<String>>()
   const [formData, setFormData] = useState<Result | any>()
 
   function handleFileChange(event: any) {
-    setSelectImage("")
-    if (event.target.files[0])
-      setSelectImage(URL.createObjectURL(event.target.files[0]))
-    const file = event.target.files[0]
-    setFileImage(file)
+    if (event.target.files) {
+      const image = []
+      for (const file of event.target.files) {
+        image.push(URL.createObjectURL(file))
+      }
+      setSelectImage(image)
+    }
+    setFileImage(event.target.files)
   }
   const handleChange = (e: any) => {
     const { name, value } = e.target
@@ -106,12 +110,15 @@ const ResultPage = ({ data }: Props) => {
     const model = formData
     model.idInspectionPlan = data._id
     model.idUser = session?.user?._id
-    if (!fileImage) {
-      console.log(fileImage)
-    } else {
-      toast("Đang thực hiện...", {
+    model.img = await uploadFiles(fileImage)
+    addMutation.mutate(model)
+  }
+
+  const uploadFiles = async (files: any) => {
+    if (files) {
+      toast("Đang thực hiện", {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 8000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -119,21 +126,28 @@ const ResultPage = ({ data }: Props) => {
         progress: undefined,
         theme: "light",
       })
-      const formDataI = new FormData()
-      formDataI.append("file", fileImage)
-      formDataI.append("upload_preset", "imageBusiness")
+      const CLOUD_NAME = "dv5h57yvq"
+      const PRESET_NAME = "upload-result"
+      const FOLDER_NAME = "imageResult"
+      const url = []
+      const api = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`
 
-      const data = await fetch(
-        "https://api.cloudinary.com/v1_1/dv5h57yvq/image/upload",
-        {
-          method: "POST",
-          body: formDataI,
-        }
-      ).then((r) => r.json())
+      const formData = new FormData()
 
-      model.img = data.secure_url
+      formData.append("upload_preset", PRESET_NAME)
+      formData.append("folder", FOLDER_NAME)
+
+      for (const file of files) {
+        formData.append("file", file)
+        const response = await axios.post(api, formData, {
+          headers: {
+            "Content-Type": "multiple/form-data",
+          },
+        })
+        url.push(response.data.secure_url)
+      }
+      return url
     }
-    addMutation.mutate(model)
   }
 
   return (
@@ -206,17 +220,32 @@ const ResultPage = ({ data }: Props) => {
                   Ghi chú
                 </label>
               </div>
-              <div className="relative border-2 border-gray-400 rounded-lg">
-                <input
-                  type="file"
-                  placeholder="Image"
-                  accept=".png, .jpg"
-                  onChange={handleFileChange}
-                  className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-900 bg-transparent   appearance-none  focus:outline-none focus:ring-0 focus:border-3 peer"
-                />
-                <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
-                  Ảnh thuyết minh
-                </label>
+              <div className="relative border-2 border-gray-400 rounded-lg ">
+                <div className="">
+                  <input
+                    type="file"
+                    placeholder="Image"
+                    multiple
+                    accept=".png, .jpg"
+                    onChange={handleFileChange}
+                    className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-900 bg-transparent   appearance-none  focus:outline-none focus:ring-0 focus:border-3 peer"
+                  />
+                  <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
+                    Ảnh thuyết minh
+                  </label>
+                </div>
+                <div className=" text-gray-900">
+                  <div className="flex shrink-0 flex-wrap m-2">
+                    {selectImage?.map((image: any) => (
+                      <img
+                        src={image}
+                        alt=""
+                        className="w-32 h-32"
+                        key={image}
+                      />
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
             <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b ">

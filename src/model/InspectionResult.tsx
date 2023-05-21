@@ -7,7 +7,7 @@ const inspectionResultSchema = new Schema(
     idDocument: { type: String },
     content: { type: String, required: true },
     note: { type: String },
-    img: { type: String },
+    img: [],
   },
   {
     timestamps: true,

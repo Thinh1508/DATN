@@ -9,11 +9,15 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"
 
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import { NextApiRequest } from "next"
 
-type Props = {}
+type Props = {
+  pathName: string
+}
 
-const Login = (props: Props) => {
+const Login = ({ pathName }: Props) => {
   const listUser = useQuery("user", getUser)
+  const route = useRouter()
 
   const [userInfo, setUserInfo] = useState({ email: "", password: "" })
   const [userName, setUserName] = useState("")
@@ -23,7 +27,6 @@ const Login = (props: Props) => {
 
   const [loading, setLoading] = useState(false)
   const [isLogin, setIsLogin] = useState(true)
-  const route = useRouter()
 
   const addMutation = useMutation(addUser, {
     onSuccess: () => {
@@ -49,7 +52,9 @@ const Login = (props: Props) => {
         if (loginRes && !loginRes.ok) {
           showMess("Email hoặc mật khẩu không đúng", "error")
         } else {
-          route.push("/")
+          if (pathName) {
+            route.push(pathName)
+          } else route.push(`/`)
         }
       } catch (error) {
         if (error instanceof AxiosError) {
@@ -304,6 +309,14 @@ const Login = (props: Props) => {
       <ToastContainer />
     </div>
   )
+}
+
+export async function getServerSideProps(context: any) {
+  // Fetch data from external API
+  const pathName = context.query.pathName || null
+
+  // Pass data to the page via props
+  return { props: { pathName } }
 }
 
 export default Login
