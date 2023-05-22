@@ -85,15 +85,15 @@ const Header = (props: Props) => {
                 {session?.user?.name}
               </Link>
               <ul className="absolute bg-white right-0 rounded-md p-2 z-20 text-gray-900 w-32 hidden group-hover:block ">
-                <li className="hover:text-green-700 hover:font-medium">
-                  <Link href={"/"}>Trang cá nhân</Link>
+                <li className="hover:text-yellow-700 hover:font-medium">
+                  <Link href={"/profile"}>Trang cá nhân</Link>
                 </li>
                 {session?.user?.permissions === "admin" && (
-                  <li className="hover:text-green-700 hover:font-medium">
+                  <li className="hover:text-yellow-700 hover:font-medium">
                     <Link href={"/admin"}>Trang quản lý</Link>
                   </li>
                 )}
-                <li className="hover:text-green-700 hover:font-medium">
+                <li className="hover:text-yellow-700 hover:font-medium">
                   <button onClick={() => signOut()} className="cursor-pointer">
                     Đăng xuất
                   </button>
@@ -172,19 +172,19 @@ const Header = (props: Props) => {
               <ul className="absolute bg-[#0cb306] right-0 capitalize rounded-md p-2 z-10 text-white w-full hidden group-hover:block  ">
                 {session?.user?.permissions !== "inspection" && (
                   <>
-                    <li className="hover:text-gray-300 hover:font-extrabold my-2">
+                    <li className="hover:text-yellow-300 hover:font-extrabold my-2">
                       <Link href={"/atvstp/store"}>
                         đăng kí cơ sở kinh doanh
                       </Link>
                     </li>
-                    <li className="hover:text-gray-300 hover:font-extrabold my-2">
+                    <li className="hover:text-yellow-300 hover:font-extrabold my-2">
                       <Link href={"/atvstp/license"}>
                         đăng kí giấy phép ATVSTP
                       </Link>
                     </li>
                   </>
                 )}
-                <li className="hover:text-gray-300 hover:font-extrabold my-2">
+                <li className="hover:text-yellow-300 hover:font-extrabold my-2">
                   <Link href={"/atvstp/report"}>báo cáo cơ sở kinh doanh</Link>
                 </li>
               </ul>
@@ -311,13 +311,13 @@ const Header = (props: Props) => {
             <li className="px-2 text-white font-bold uppercase">
               <ul className=" capitalize rounded-md px-2 z-10 text-white w-full">
                 <li
-                  className="hover:text-yellow-200 hover:font-extrabold my-2"
+                  className="hover:text-yellow-300 hover:font-extrabold my-2"
                   onClick={() => setShowMenu(false)}
                 >
-                  <Link href={"/"}>Trang cá nhân</Link>
+                  <Link href={"/profile"}>Trang cá nhân</Link>
                 </li>
                 {session?.user?.permissions === "admin" && (
-                  <li className="hover:text-yellow-200 hover:font-extrabold my-2">
+                  <li className="hover:text-yellow-300 hover:font-extrabold my-2">
                     <Link href={"/admin"}>Trang quản lý</Link>
                   </li>
                 )}
