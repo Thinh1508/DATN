@@ -366,7 +366,6 @@ const Modal = (props: Props) => {
                   <div className="relative border-2 border-gray-400 rounded-lg">
                     <input
                       type="file"
-                      required
                       placeholder="Image"
                       accept=".png, .jpg"
                       onChange={handleFileChange}

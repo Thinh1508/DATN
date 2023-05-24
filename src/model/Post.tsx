@@ -8,7 +8,7 @@ const postSchema = new Schema(
     description: { type: String },
     idUser: { type: Schema.Types.ObjectId, ref: "user" },
     background: { type: String, required: true },
-    status: { type: String, default: "active" },
+    status: { type: String, default: "/assets/images/avatarStore.jpg" },
   },
   {
     timestamps: true,

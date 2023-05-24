@@ -5,6 +5,7 @@ const storeSchema = new Schema(
     idUser: { type: String, required: true },
     name: { type: String, required: true },
     imageBusiness: { type: String, required: true },
+    avatar: { type: String, default: "/assets/images/avatarStore.jpg" },
     type: { type: String, required: true },
     address: {
       district: {
