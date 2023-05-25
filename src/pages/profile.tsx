@@ -1,8 +1,9 @@
-import { getStoreUserId } from "@/lib/helper"
+import { getStoreUserId, getUserId } from "@/lib/helper"
 import { getSession } from "next-auth/react"
 import Link from "next/link"
 import React, { useState } from "react"
 import {
+  AiFillCamera,
   AiFillClockCircle,
   AiFillEdit,
   AiFillHome,
@@ -15,6 +16,8 @@ import { RiDashboardFill } from "react-icons/ri"
 
 import checkAuth from "./middleware/checkAuth"
 import ProfileModal from "@/feature/Home/components/ProfileModal"
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 type Props = {
   dataUser: any
@@ -23,6 +26,60 @@ type Props = {
 
 const ProfilePage = ({ dataUser, dataStore }: Props) => {
   const [showModal, setShowModal] = useState(false)
+  const [userInfo, setUserInfo] = useState(Object)
+
+  const handleOnClose = (mess: String) => {
+    setShowModal(false)
+    if (mess !== "close") {
+      switch (mess) {
+        case "success":
+          toast.success("Chỉnh sửa thông tin thành công!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          })
+          break
+        case "error":
+          toast.error("Chỉnh sửa thộng tin thất bại!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          })
+          break
+        default:
+          toast("Đang thực hiện...", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          })
+          toast.success("Chỉnh sửa thông tin thành công!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          })
+      }
+    }
+  }
 
   function monthCreateStore() {
     let month = []
@@ -40,30 +97,44 @@ const ProfilePage = ({ dataUser, dataStore }: Props) => {
   }
 
   return (
-    <div className="flex-1 bg-white text-gray-950">
-      <div className="h-64 bg-slate-100">
+    <div className="flex-1 bg-[#f1f1f1] text-gray-950">
+      <div className="h-64 bg-white">
         <div className="container mx-auto h-full">
-          <div className="h-[75%]  rounded-b-md bg-white shadow-md">
+          <div className="h-[75%]  rounded-b-md bg-[#f0f2f5] shadow-md relative ">
             {/* <img
               src="https://haycafe.vn/wp-content/uploads/2022/03/background-banner-mau-hong-chuc-mung.jpg"
               alt="image"
               className="w-full h-full object-cover rounded-b-md"
             /> */}
+            <div className="w-full absolute bg-gradient-to-b from-[#f0f2f5] to-[#6b6c6e] h-16 bottom-0 flex items-center justify-end rounded-b-md">
+              <button className="p-2 bg-slate-100 rounded-md mr-20 flex items-center gap-1 hover:bg-slate-200">
+                <AiFillCamera size={18} />
+                <span className="font-medium text-base">
+                  {dataUser.background ? "Thay đổi" : "Thêm ảnh bìa"}
+                </span>
+              </button>
+            </div>
           </div>
           <div className="flex items-center justify-between h-[25%] ml-20">
-            <div className="flex items-center">
+            <div className="flex items-center relative">
               <img
                 src={dataUser.avatar}
                 alt=""
-                className=" rounded-full w-28 h-28 -translate-y-7 border-2 border-slate-100"
+                className=" rounded-full w-28 h-28 -translate-y-7 border-2 border-white"
               />
-              <h1 className="ml-2 font-bold text-xl text-green-900">
+              <div className="absolute h-5 w-5 rounded-full flex items-center justify-center bg-slate-200 cursor-pointer top-14 left-20">
+                <AiFillCamera size={14} />
+              </div>
+              <h1 className="ml-2 font-bold text-2xl text-black">
                 {dataUser.name}
               </h1>
             </div>
             <div className="mr-20">
               <button
-                onClick={() => setShowModal(true)}
+                onClick={() => {
+                  setUserInfo(dataUser)
+                  setShowModal(true)
+                }}
                 className="bg-green-900 rounded-lg p-2 text-white text-base flex gap-3 items-center transition duration-100 ease-in-out hover:scale-105"
               >
                 <AiOutlineEdit size={20} />
@@ -74,8 +145,8 @@ const ProfilePage = ({ dataUser, dataStore }: Props) => {
         </div>
       </div>
       <div className="container mx-auto h-full mt-4 flex gap-4">
-        <div className="w-[30%] bg-slate-100 p-4 rounded-md h-fit shadow-md">
-          <h1 className="font-bold text-xl text-green-900 mb-2">Giới thiệu</h1>
+        <div className="w-[30%] bg-white p-4 rounded-md h-fit shadow-md">
+          <h1 className="font-bold text-xl text-black mb-2">Giới thiệu</h1>
           <hr />
           <ul className="mt-4">
             <li className="mt-3 flex items-center gap-2">
@@ -128,9 +199,9 @@ const ProfilePage = ({ dataUser, dataStore }: Props) => {
           </ul>
         </div>
         <div className="w-[70%] h-fit">
-          <div className=" flex bg-slate-100 p-4 rounded-md items-center justify-between shadow-md ">
-            <h1 className="font-bold text-xl text-green-900">Cửa hàng</h1>
-            {dataStore && (
+          <div className=" flex bg-white p-4 rounded-md items-center justify-between shadow-md ">
+            <h1 className="font-bold text-xl text-black">Cửa hàng</h1>
+            {dataStore.length > 0 && (
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-1 font-semibold text-green-700 border-b-2 border-b-green-700 transition duration-100 ease-in-out hover:scale-105">
                   <BsList size={18} />
@@ -146,7 +217,7 @@ const ProfilePage = ({ dataUser, dataStore }: Props) => {
               </div>
             )}
           </div>
-          {!dataStore && (
+          {dataStore.length <= 0 && (
             <div className="flex flex-col items-center justify-center mt-4">
               <h1 className="font-bold text-2xl">Bạn chưa có cửa hàng nào</h1>
               <Link
@@ -185,33 +256,27 @@ const ProfilePage = ({ dataUser, dataStore }: Props) => {
             ))}
         </div>
       </div>
-      {showModal && <ProfileModal />}
+      {showModal && (
+        <ProfileModal
+          visible={showModal}
+          onClose={handleOnClose}
+          dataUser={userInfo}
+        />
+      )}
+      <ToastContainer />
     </div>
   )
 }
 
 export const getServerSideProps = checkAuth(async (context: any) => {
   const session: any = await getSession(context)
-  let dataUser = session?.user
+  let dataUser
+  dataUser = await getUserId(session?.user?._id)
   let dataStore
-  if (dataUser._id) {
-    dataStore = await getStoreUserId(session?.user?._id)
-  }
+  dataStore = await getStoreUserId(session?.user?._id)
 
   // Pass data to the page via props
   return { props: { dataUser, dataStore } }
 })
-
-// export async function getServerSideProps(context: any) {
-//   const session: any = await getSession(context)
-//   let dataUser = session?.user
-//   let dataStore
-//   if (dataUser._id) {
-//     dataStore = await getStoreUserId(session?.user?._id)
-//   }
-
-//   // Pass data to the page via props
-//   return { props: { dataUser, dataStore } }
-// }
 
 export default ProfilePage
