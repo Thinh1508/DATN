@@ -48,10 +48,17 @@ const Header = (props: Props) => {
           <form className="flex items-center">
             <label className="sr-only">Search</label>
             <div className="relative w-full">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+              <input
+                type="text"
+                id="simple-search"
+                className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full pr-10 p-1.5 sm:p-2.5 sm:pr-10 focus:outline-none"
+                placeholder="Search"
+                required
+              />
+              <div className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer">
                 <svg
                   aria-hidden="true"
-                  className="w-5 h-5 text-gray-500 dark:text-gray-400"
+                  className="w-5 h-5 text-gray-500 dark:text-gray-400 cursor-pointer"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg"
@@ -63,13 +70,6 @@ const Header = (props: Props) => {
                   ></path>
                 </svg>
               </div>
-              <input
-                type="text"
-                id="simple-search"
-                className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full pl-10 p-1.5 sm:p-2.5 sm:pl-10 focus:"
-                placeholder="Search"
-                required
-              />
             </div>
           </form>
         </div>
@@ -334,7 +334,7 @@ const Header = (props: Props) => {
             <form className="flex items-center">
               <label className="sr-only">Search</label>
               <div className="relative w-full">
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <div className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer">
                   <svg
                     aria-hidden="true"
                     className="w-5 h-5 text-gray-500 dark:text-gray-400"
@@ -352,7 +352,7 @@ const Header = (props: Props) => {
                 <input
                   type="text"
                   id="simple-search"
-                  className="bg-white border  text-gray-800 font-medium text-sm rounded-lg  block w-full pl-10 p-1.5 focus:outline-none"
+                  className="bg-white border  text-gray-800 font-medium text-sm rounded-lg  block w-full pr-10 p-1.5 focus:outline-none"
                   placeholder="Search"
                   required
                 />

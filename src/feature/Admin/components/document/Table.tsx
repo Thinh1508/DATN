@@ -1,22 +1,93 @@
 import React, { useState } from "react"
 import Link from "next/link"
-
+import { useQuery, useQueryClient } from "react-query"
 import { BiEdit, BiTrashAlt } from "react-icons/bi"
-import AddModal from "../document/AddModal"
 
-type Props = {}
+import Modal from "../document/Modal"
+import { deleteDocument, getDocument } from "@/lib/helper"
 
-const Table = (props: Props) => {
-  const [addModal, setAddModal] = useState(false)
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+
+const Table = () => {
+  const queryClient = useQueryClient()
+  const { isLoading, isError, data, error } = useQuery("document", getDocument)
+  const [modal, setModal] = useState(false)
+  const [action, setAction] = useState("")
+  const [documentInfo, setDocumentInfo] = useState(Object)
+
   const handleOnClose = (mess: string) => {
-    setAddModal(false)
+    setModal(false)
+    if (mess !== "close") {
+      switch (mess) {
+        case "success":
+          toast.success("Thành công!", {
+            position: "top-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          })
+          break
+        case "error":
+          toast.error("Thất bại!", {
+            position: "top-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          })
+          break
+        default:
+          toast.success("Thành công!", {
+            position: "top-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          })
+      }
+    }
   }
+
+  //delete document
+  const [modalDelete, setModalDelete] = useState(false)
+  const [documentIdDelete, setDocumentIdDelete] = useState(String)
+  const onDelete = async (documentId: string) => {
+    await deleteDocument(documentId)
+    queryClient.prefetchQuery("document", getDocument)
+    toast.success("Xóa thành công", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    })
+  }
+
+  if (isLoading) return <div>Đang tải dữ liệu...</div>
+  if (isError) return <div>Lỗi khi tải dữ liệu {`${error}`}</div>
   return (
     <div className="bg-white w-full border p-4 mt-4  rounded-lg h-[84vh] xl:h-[82vh] overflow-y-auto scrollbar-style">
       <div className="mb-4">
         <button
           className="bg-white py-2 px-6 border-green-600 text-green-600 border-2 rounded-lg hover:bg-green-600 hover:text-white"
-          onClick={() => setAddModal(true)}
+          onClick={() => {
+            setAction("add")
+            setModal(true)
+          }}
         >
           <span className="font-medium">Thêm văn bản mới</span>
         </button>
@@ -48,29 +119,96 @@ const Table = (props: Props) => {
           </tr>
         </thead>
         <tbody>
-          <tr className="bg-gray-200 border-b text-gray-900 hover:bg-gray-300">
-            <th
-              scope="row"
-              className="px-4 py-4 font-medium  whitespace-nowrap text-lg"
-            ></th>
-            <td className="px-4 py-4 text-lg"></td>
-            <td className="px-4 py-4 text-lg"></td>
-            <td className="px-4 py-4 text-lg"></td>
-            <td className="px-4 py-4 text-lg"></td>
-            <td className="px-4 py-4 text-lg">
-              <span
-                className={` text-white px-6 py-2.5 rounded-xl text-lg`}
-              ></span>
-            </td>
-            <td className="flex items-center px-4 py-4 space-x-3 relative">
-              <button className="cursor">
-                <BiEdit size={25} color="rgb(34,197,94)" />
-              </button>
-              <button className="cursor">
-                <BiTrashAlt size={25} color="rgb(244,63,94)" />
-              </button>
-            </td>
-          </tr>
+          {data &&
+            data.map((document: any) => (
+              <tr
+                className="bg-gray-200 border-b text-gray-900 hover:bg-gray-300"
+                key={document._id}
+              >
+                <th
+                  scope="row"
+                  className="px-4 py-4 font-medium  whitespace-nowrap text-lg cursor-pointer"
+                  onClick={() => {
+                    setDocumentInfo(document)
+                    setAction("view")
+                    setModal(true)
+                  }}
+                >
+                  {document.symbol}
+                </th>
+                <td
+                  className="px-4 py-4 text-lg cursor-pointer"
+                  onClick={() => {
+                    setDocumentInfo(document)
+                    setAction("view")
+                    setModal(true)
+                  }}
+                >
+                  {document.issuingAgency}
+                </td>
+                <td
+                  className="px-4 py-4 text-lg cursor-pointer"
+                  onClick={() => {
+                    setDocumentInfo(document)
+                    setAction("view")
+                    setModal(true)
+                  }}
+                >
+                  {document.category}
+                </td>
+                <td
+                  className="px-4 py-4 text-lg cursor-pointer"
+                  onClick={() => {
+                    setDocumentInfo(document)
+                    setAction("view")
+                    setModal(true)
+                  }}
+                >
+                  {document.issued}
+                </td>
+                <td
+                  className="px-4 py-4 text-lg cursor-pointer"
+                  onClick={() => {
+                    setDocumentInfo(document)
+                    setAction("view")
+                    setModal(true)
+                  }}
+                >
+                  {document.effective}
+                </td>
+                <td
+                  className="px-4 py-4 text-lg cursor-pointer"
+                  onClick={() => {
+                    setDocumentInfo(document)
+                    setAction("view")
+                    setModal(true)
+                  }}
+                >
+                  {document.status}
+                </td>
+                <td className="flex items-center px-4 py-4 space-x-3 relative">
+                  <button
+                    className="cursor"
+                    onClick={() => {
+                      setDocumentInfo(document)
+                      setAction("edit")
+                      setModal(true)
+                    }}
+                  >
+                    <BiEdit size={25} color="rgb(34,197,94)" />
+                  </button>
+                  <button
+                    className="cursor"
+                    onClick={() => {
+                      setDocumentIdDelete(document._id)
+                      setModalDelete(true)
+                    }}
+                  >
+                    <BiTrashAlt size={25} color="rgb(244,63,94)" />
+                  </button>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
       <div className="mt-7 w-full h-fit flex flex-row sm:justify-end justify-center">
@@ -81,7 +219,7 @@ const Table = (props: Props) => {
                 href={"/admin/document"}
                 className="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700"
               >
-                Previous
+                Trước
               </Link>
             </li>
             <li>
@@ -113,13 +251,52 @@ const Table = (props: Props) => {
                 href={"/admin/document"}
                 className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700"
               >
-                Next
+                Sau
               </Link>
             </li>
           </ul>
         </nav>
       </div>
-      <AddModal onClose={handleOnClose} visible={addModal} />
+      <div
+        className={`${
+          !modalDelete ? "hidden" : "block "
+        } fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center z-20`}
+      >
+        <div
+          className={`bg-white p-8 bottom-0 border-4 border-green-600  rounded-lg flex flex-col items-center transition ease-in-out delay-150 duration-1000`}
+        >
+          <span className="font-medium text-3xl text-gray-950">
+            Bạn có muôn xóa văn bản không?
+          </span>
+          <div className="mt-6 grid grid-cols-2 gap-10">
+            <button
+              onClick={() => {
+                if (documentIdDelete.length > 0) onDelete(documentIdDelete)
+                setModalDelete(false)
+                setDocumentIdDelete("")
+              }}
+              className="bg-white border-2 border-red-600 text-red-600 px-6 py-0 rounded-lg hover:bg-red-600 hover:text-white"
+            >
+              <span className="text-xl font-medium capitalize ">Có</span>
+            </button>
+            <button
+              onClick={() => setModalDelete(false)}
+              className="bg-white border-2 border-gray-600 text-gray-600 px-6 py-0 rounded-lg hover:bg-gray-600 hover:text-white"
+            >
+              <span className="text-xl font-medium capitalize">Không</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      {modal && (
+        <Modal
+          action={action}
+          onClose={handleOnClose}
+          visible={modal}
+          documentData={documentInfo}
+        />
+      )}
+      <ToastContainer />
     </div>
   )
 }

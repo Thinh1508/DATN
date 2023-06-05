@@ -1,14 +1,18 @@
-import React, { useRef, useState } from "react"
+import React, { useState } from "react"
+import { useMutation, useQuery, useQueryClient } from "react-query"
+import { useSession } from "next-auth/react"
 import { AiOutlineClose } from "react-icons/ai"
 
-import { useQuery } from "react-query"
-import { getCategory } from "@/lib/helper"
+import { storage } from "../../../../../firebaseConfig"
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
+import { addDocument, getCategory, getDocument } from "@/lib/helper"
 
 import { Viewer, Worker } from "@react-pdf-viewer/core"
-
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout"
 import "@react-pdf-viewer/core/lib/styles/index.css"
 import "@react-pdf-viewer/default-layout/lib/styles/index.css"
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 type Props = { visible: boolean; onClose: (mess: string) => void }
 type Category = {
@@ -17,10 +21,22 @@ type Category = {
   slug: string
   description: string
 }
+type Document = {
+  symbol: string
+  category: string
+  issuingAgency: string
+  title: string
+  content: string
+  node: string
+  idUser: string
+  issued: string
+  effective: string
+}
 
 const AddModal = (props: Props) => {
+  const queryClient = useQueryClient()
+  const { data: session }: { data: any } = useSession()
   const { isLoading, isError, data, error } = useQuery("category", getCategory)
-  //   console.log(data)
 
   const agencyCategory = () => {
     const agency = data
@@ -37,11 +53,15 @@ const AddModal = (props: Props) => {
 
   const [pdfFile, setPdfFile] = useState(null)
   const [viewFdf, setViewFdf] = useState(null)
+  const [pdfUpload, setPdfUpload] = useState<File>()
+  const [downloadURL, setDownloadURL] = useState<String>()
+  const [formData, setFormData] = useState<Document | any>({})
 
   const handelFileChange = (e: any) => {
     setViewFdf(null)
     let selectedFile = e.target.files[0]
-    if (selectedFile) {
+    if (selectedFile && selectedFile.size < 10000000) {
+      setPdfUpload(selectedFile)
       let reader = new FileReader()
       reader.readAsDataURL(selectedFile)
       reader.onload = (e: any) => {
@@ -59,27 +79,52 @@ const AddModal = (props: Props) => {
     }
   }
 
-  const handleChange = () => {}
-  const handleSubmit = async (e: any) => {
-    e.preventDefault()
-    if (!pdfFile) {
-      console.log(pdfFile)
-    } else {
-      const formDataI = new FormData()
-      formDataI.append("file", pdfFile)
-      formDataI.append("upload_preset", "imageBusiness")
-
-      const data = await fetch(
-        "https://api.cloudinary.com/v1_1/dv5h57yvq/image/upload",
-        {
-          method: "POST",
-          body: formDataI,
-        }
-      ).then((r) => r.json())
-      console.log("success")
-    }
+  const handleChange = (e: any) => {
+    const { name, value } = e.target
+    setFormData({ ...formData, [name]: value })
   }
 
+  const uploadPDF = async (file: File) => {
+    const name = file?.name
+    const storageRef = ref(storage, `pdfFile/${name}`)
+    const uploadTask = await uploadBytesResumable(storageRef, file as File)
+    let link
+    await getDownloadURL(uploadTask.ref).then((url) => {
+      link = url
+    })
+
+    return link
+  }
+
+  const addMutation = useMutation(addDocument, {
+    onSuccess: () => {
+      queryClient.prefetchQuery("document", getDocument)
+      props.onClose("success")
+    },
+    onError: () => {
+      props.onClose("error")
+    },
+  })
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault()
+    if (pdfUpload) {
+      toast("Đang thực hiện...", {
+        position: "top-right",
+        autoClose: 800,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
+      const model = formData
+      model.idUser = session?.user?._id
+      model.node = await uploadPDF(pdfUpload)
+      addMutation.mutate(model)
+    }
+  }
   const newPlugin = defaultLayoutPlugin()
 
   if (isLoading) return <div>Đang tải dữ liệu...</div>
@@ -122,18 +167,35 @@ const AddModal = (props: Props) => {
                   name="symbol"
                   className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-950 bg-transparent peer  appearance-none  focus:outline-none focus:ring-0 "
                   placeholder=" "
+                  required
+                  onChange={handleChange}
                 />
                 <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
                   Số hiệu
                 </label>
               </div>
               <div className="relative border-2 border-gray-400 rounded-lg">
-                <textarea
-                  className="block p-2.5 w-full text-xl text-gray-950 bg-transparent rounded-lg border border-gray-200 focus:outline-none scrollbar-style"
-                  placeholder=""
+                <input
+                  type="text"
+                  name="title"
+                  className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-950 bg-transparent peer  appearance-none  focus:outline-none focus:ring-0 "
+                  placeholder=" "
+                  required
+                  onChange={handleChange}
                 />
                 <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
-                  Tóm tắc
+                  Tiêu đề
+                </label>
+              </div>
+              <div className="relative border-2 border-gray-400 rounded-lg">
+                <textarea
+                  name="content"
+                  className="block p-2.5 w-full text-xl text-gray-950 bg-transparent rounded-lg border border-gray-200 focus:outline-none scrollbar-style"
+                  placeholder=""
+                  onChange={handleChange}
+                />
+                <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
+                  Nội dung
                 </label>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -179,6 +241,7 @@ const AddModal = (props: Props) => {
                     name="issued"
                     onChange={handleChange}
                     className="bg-gray-50 border-2 border-gray-400 text-gray-900 text-xl rounded-lg outline-none  block w-full p-2.5 "
+                    required
                   />
                   <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
                     Ngày ban hành
@@ -190,6 +253,7 @@ const AddModal = (props: Props) => {
                     name="effective"
                     onChange={handleChange}
                     className="bg-gray-50 border-2 border-gray-400 text-gray-900 text-xl rounded-lg outline-none  block w-full p-2.5 "
+                    required
                   />
                   <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
                     Ngày áp dụng
@@ -198,49 +262,17 @@ const AddModal = (props: Props) => {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="flex flex-row items-center gap-6 relative">
-                  {/* <div className="flex items-center">
-                    <input
-                      type="radio"
-                      value={"active"}
-                      id="radioDefault1"
-                      onChange={handleChange}
-                      name="status"
-                      className="form-check-input appearance-none rounded-full h-5 w-5 border border-gray-300 checked:bg-green-500 checked:border-green-500 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                    />
-                    <label
-                      htmlFor="radioDefault1"
-                      className="inline-block text-gray-900 text-xl"
-                    >
-                      Active
-                    </label>
-                  </div>
-                  <div className="flex items-center">
-                    <input
-                      type="radio"
-                      value={"block"}
-                      id="radioDefault2"
-                      name="status"
-                      onChange={handleChange}
-                      className="form-check-input appearance-none rounded-full h-5 w-5 border border-gray-300 checked:bg-red-500 checked:border-red-500 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                    />
-                    <label
-                      htmlFor="radioDefault2"
-                      className="inline-block text-gray-900 text-xl"
-                    >
-                      Block
-                    </label>
-                  </div> */}
                   <input
                     className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 pr-6"
                     id="file_input"
                     type="file"
                     onChange={handelFileChange}
                     accept=".pdf"
+                    required
                   />
                   <span
                     className="absolute text-gray-700 top-3 right-1 hover:bg-gray-300 hover:text-gray-900 p-1 hover:rounded-md cursor-pointer"
                     onClick={() => {
-                      console.log(pdfFile)
                       setPdfFile(null)
                       setViewFdf(null)
                     }}
@@ -285,6 +317,7 @@ const AddModal = (props: Props) => {
           </form>
         </div>
       </div>
+      <ToastContainer />
     </div>
   )
 }

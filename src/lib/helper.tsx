@@ -472,3 +472,72 @@ export async function updateInspectionResult({ resultId, formData }: any) {
 
   return json
 }
+
+//document
+//all document
+export const getDocument = async () => {
+  const response = await fetch(`${BASE_URL}/api/document`)
+  const json = await response.json()
+
+  return json
+}
+
+//single document
+export const getDocumentId = async (documentId: string) => {
+  const response = await fetch(`${BASE_URL}/api/document/${documentId}`)
+  const json = await response.json()
+
+  if (json) return json
+  return {}
+}
+
+//posting new document
+export async function addDocument(formData: any) {
+  try {
+    const Options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    }
+
+    const response = await fetch(`${BASE_URL}/api/document`, Options)
+    const json = await response.json()
+
+    return json
+  } catch (error) {
+    return error
+  }
+}
+
+//update document
+export async function updateDocument({ documentId, formData }: any) {
+  const Options = {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(formData),
+  }
+
+  const response = await fetch(
+    `${BASE_URL}/api/document/?documentId=${documentId}`,
+    Options
+  )
+  const json = await response.json()
+
+  return json
+}
+
+//delete document
+export async function deleteDocument(documentId: string) {
+  const Options = {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+  }
+
+  const response = await fetch(
+    `${BASE_URL}/api/document/?documentId=${documentId}`,
+    Options
+  )
+  const json = await response.json()
+
+  return json
+}

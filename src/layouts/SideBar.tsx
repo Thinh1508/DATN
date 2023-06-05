@@ -83,7 +83,7 @@ const SideBar = (props: Props) => {
         <ul className="max-w-md divide-y divide-green-200 dark:divide-green-600 p2">
           <li className="p-2 ">
             <Link
-              href={"/"}
+              href={"/inspection"}
               className=" flex items-center space-x-4 text-green-600 hover:text-green-800"
             >
               <div className="flex-shrink-0">
@@ -113,7 +113,7 @@ const SideBar = (props: Props) => {
           </li>
           <li className="p-2 ">
             <Link
-              href={"/"}
+              href={"/atvstp/store"}
               className=" flex items-center space-x-4 text-green-600 hover:text-green-800"
             >
               <div className="flex-shrink-0">
