@@ -120,11 +120,11 @@ export function SliderBanner(props: Props) {
   const listSlider = [
     {
       id: 1,
-      img: "https://scontent.fdad3-6.fna.fbcdn.net/v/t1.6435-9/64504703_512765892595520_7340542718856134656_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=e3f864&_nc_ohc=qwlqRvEzhxkAX-yr-b4&_nc_ht=scontent.fdad3-6.fna&oh=00_AfB-3bJF2McW-2b11zmjVWxeoj4yxtsjxQqhM_OWrWW_FA&oe=647DD0F0",
+      img: "https://danang-shopping.com/wp-content/uploads/2019/07/banner-website-cau-rong.jpg",
     },
     {
       id: 2,
-      img: "https://scontent.fdad3-6.fna.fbcdn.net/v/t1.6435-9/64504703_512765892595520_7340542718856134656_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=e3f864&_nc_ohc=qwlqRvEzhxkAX-yr-b4&_nc_ht=scontent.fdad3-6.fna&oh=00_AfB-3bJF2McW-2b11zmjVWxeoj4yxtsjxQqhM_OWrWW_FA&oe=647DD0F0",
+      img: "https://media.thuonghieucongluan.vn/uploads/2019_01_24/2-1548283845.jpg",
     },
   ]
   const listItems = listSlider.map((slide) => (

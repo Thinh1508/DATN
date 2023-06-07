@@ -14,6 +14,22 @@ const ResultModal = (props: Props) => {
   const insById = useQuery("inspectionResult", () =>
     getInspectionResultId(dataIns._id)
   )
+
+  const showResult = (num: string) => {
+    switch (num) {
+      case "0":
+        return "Vi phạm và đã thu hồi giấy phép ATVSTP"
+      case "1":
+        return "Vi phạm và đã sử phạt"
+      case "2":
+        return "Không vi phạm"
+      case "3":
+        return "Đủ điều kiện cấp giấy phép"
+      case "4":
+        return "Không đủ điều kiện cấp giấy phép"
+    }
+  }
+
   if (insById.isLoading)
     return (
       <div className="flex-1 bg-white text-gray-950">Đang tải dữ liệu...</div>
@@ -118,9 +134,9 @@ const ResultModal = (props: Props) => {
                 </label>
               </div>
               <div className="relative border-2 border-gray-400 rounded-lg">
-                <textarea
+                <input
                   name="content"
-                  defaultValue={insById.data.content}
+                  defaultValue={showResult(insById.data.content)}
                   className="block p-2.5 w-full text-xl text-gray-950 bg-transparent rounded-lg border border-gray-200 focus:outline-none scrollbar-style "
                   placeholder=""
                   disabled
@@ -140,9 +156,26 @@ const ResultModal = (props: Props) => {
                   disabled
                 />
                 <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
-                  Ghi chú
+                  {insById.data.idReport
+                    ? "Nội dung sử phạt (nếu có))"
+                    : "Ghi chú"}
                 </label>
               </div>
+              {insById.data.idDocument && (
+                <div className="relative border-2 border-gray-400 rounded-lg">
+                  <input
+                    type="text"
+                    name="note"
+                    defaultValue={insById.data.idDocument.title}
+                    className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-900 bg-transparent   appearance-none  focus:outline-none focus:ring-0 focus:border-3 peer"
+                    placeholder=" "
+                    disabled
+                  />
+                  <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
+                    Trích yếu
+                  </label>
+                </div>
+              )}
               {insById.data.img && (
                 <div className="relative border-2 border-gray-400 rounded-lg p-4">
                   {insById.data.img.map((url: string) => (

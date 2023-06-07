@@ -131,7 +131,7 @@ const Table = (props: Props) => {
                 </td>
                 <td className="px-4 py-4 text-lg cursor-pointer capitalize">
                   {report.status === "pending"
-                    ? "Đợi sử lý"
+                    ? "Chờ xử lý"
                     : report.status === "checking"
                     ? "Đang kiểm tra"
                     : "Đã kiểm tra"}

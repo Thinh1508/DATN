@@ -48,7 +48,6 @@ const LicensePage = ({ data, dataCer }: Props) => {
         check = false
       }
     }
-    console.log(check)
     return check
   }
   const checkStore = (storeId: string) => {
@@ -113,7 +112,6 @@ const LicensePage = ({ data, dataCer }: Props) => {
   }
 
   const uploadImage = async (image: File) => {
-    console.log(image)
     const formData = new FormData()
     formData.append("file", image)
     formData.append("upload_preset", "imageLicense")
@@ -129,7 +127,6 @@ const LicensePage = ({ data, dataCer }: Props) => {
   }
 
   const uploadFiles = async (files: any) => {
-    console.log(files)
     if (
       typeof files !== "undefined" &&
       files !== null &&
@@ -364,7 +361,7 @@ const LicensePage = ({ data, dataCer }: Props) => {
         ) : (
           <div className="flex flex-col items-center justify-center h-full bg-white">
             <h1 className="text-xl md:text-4xl font-bold text-gray-800 mt-20 ">
-              Bạn chưa có cơ sở kinh doanh nào
+              Bạn chưa có cơ sở kinh doanh nào hoặc đã đăng kí giấy phép
             </h1>
             <Link
               href="/atvstp/store"

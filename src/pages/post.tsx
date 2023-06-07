@@ -37,7 +37,7 @@ const PostsPage = ({ posts, currentPage, totalPages, category }: Props) => {
                 className="flex flex-row gap-2 w-full border-b-2"
                 key={post._id}
               >
-                <div className="w-32 h-32 shrink-0">
+                <div className="w-44 h-44 shrink-0">
                   <img
                     src={post.background}
                     alt=""
@@ -48,7 +48,7 @@ const PostsPage = ({ posts, currentPage, totalPages, category }: Props) => {
                   <h1 className="text-[#049803] break-words font-semibold text-2xl relative line-clamp-2 cursor-pointer">
                     {post.title}
                   </h1>
-                  <span className=" text-gray-500 ">
+                  <span className=" text-gray-500 text-xl">
                     {post.createdAt.substring(0, 10)}
                   </span>
                 </div>

@@ -130,7 +130,7 @@ const LicenseTable = (props: Props) => {
                 </td>
                 <td className="px-4 py-4 text-lg cursor-pointer capitalize">
                   {license.status === "pending"
-                    ? "Đợi sử lý"
+                    ? "Chờ xử lý"
                     : license.status === "checking"
                     ? "Đang kiểm tra"
                     : "Đã kiểm tra"}

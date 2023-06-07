@@ -13,12 +13,27 @@ export async function getDocument(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
+//get:http://localhost:3000/api/document/top5
+export async function getDocumentTop5(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  try {
+    const document = await Document.find().sort({ createdAt: -1 }).limit(5)
+    if (!document) return res.status(404).json({ error: "Data Not Found" })
+
+    res.status(200).json(document)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
+
 //get:http://localhost:3000/api/document/id
 export async function getDocumentId(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { id } = req.query
-    if (id) {
-      const document = await Document.findOne({ idInspectionPlan: id })
+    const { documentId } = req.query
+    if (documentId) {
+      const document = await Document.findById(documentId)
       res.status(200).json(document)
     }
     res.status(400).json({ error: "Document Not Selected...!" })
@@ -39,6 +54,25 @@ export async function postDocument(req: NextApiRequest, res: NextApiResponse) {
     else res.status(400).json({})
   } catch (error) {
     res.status(500).json(error)
+  }
+}
+
+//post:http://localhost:3000/api/post/view
+export async function postDocumentView(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  try {
+    const category = req.body
+    if (!category) return res.status(400).json({ error: category })
+    const post = await Document.find({
+      category: category,
+      status: "active",
+    }).limit(10)
+    if (!post) return res.status(404).json({ error: "Data Not Found" })
+    res.status(200).json(post)
+  } catch (error) {
+    res.status(501).json(error)
   }
 }
 

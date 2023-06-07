@@ -88,7 +88,7 @@ const Table = (props: Props) => {
     if (mess !== "close") {
       switch (mess) {
         case "success":
-          toast.success("Chỉnh sửa thông tin thành công!", {
+          toast.success("Thành công!", {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -100,7 +100,7 @@ const Table = (props: Props) => {
           })
           break
         case "error":
-          toast.error("Chỉnh sửa thộng tin thất bại!", {
+          toast.error("Thất bại!", {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -122,7 +122,7 @@ const Table = (props: Props) => {
             progress: undefined,
             theme: "light",
           })
-          toast.success("Chỉnh sửa thông tin thành công!", {
+          toast.success("Thành công!", {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -168,82 +168,85 @@ const Table = (props: Props) => {
             </tr>
           </thead>
           <tbody>
-            {data.map((plan: any) => (
-              <tr
-                className="bg-gray-200 border-b text-gray-900 hover:bg-gray-300"
-                key={plan._id}
-              >
-                <th
-                  scope="row"
-                  className="px-4 py-4 font-medium  whitespace-nowrap text-lg cursor-pointer capitalize"
-                >
-                  {plan.name}
-                </th>
-                <td className="px-4 py-4 text-lg cursor-pointer capitalize">
-                  {plan.idStore.name}
-                </td>
-                <td className="px-4 py-4 text-lg cursor-pointer capitalize">
-                  {plan.category}
-                </td>
-                <td className="px-4 py-4 text-lg cursor-pointer capitalize">
-                  {plan.startTime}
-                </td>
-                <td className="px-4 py-4 text-lg cursor-pointer capitalize">
-                  {plan.actionTime}
-                </td>
-                <td className="px-4 py-4 text-lg cursor-pointer capitalize">
-                  {plan.status === "pending"
-                    ? "Chờ sử lý"
-                    : plan.status === "checking"
-                    ? "Đang thanh tra"
-                    : "Đã báo cáo"}
-                </td>
-                {plan.status === "pending" && (
-                  <td className="flex items-center px-4 py-4 space-x-3 relative">
-                    <button
-                      className="cursor"
-                      onClick={() => {
-                        setInsInfo(plan)
-                        setAction("edit")
-                        setModal(true)
-                      }}
-                    >
-                      <BiEdit size={25} color="rgb(34,197,94)" />
-                    </button>
-                    <button
-                      className="cursor"
-                      onClick={() => {
-                        setPlanIdDelete(plan._id)
-                        if (plan.idReport) {
-                          setType("report")
-                          setUpdateId(plan.idReport._id)
-                        } else {
-                          setType("inspection")
-                          setUpdateId(plan.idStore._id)
-                        }
-                        setModalDelete(true)
-                      }}
-                    >
-                      <BiTrashAlt size={25} color="rgb(244,63,94)" />
-                    </button>
-                  </td>
-                )}
-                {plan.status === "checked" ? (
-                  <td
-                    className="px-4 py-4 text-lg cursor-pointer capitalize hover:text-red-700 hover:underline"
-                    onClick={() => {
-                      setInsInfo(plan)
-                      setAction("view")
-                      setModal(true)
-                    }}
+            {data.map(
+              (plan: any) =>
+                plan.status !== "end" && (
+                  <tr
+                    className="bg-gray-200 border-b text-gray-900 hover:bg-gray-300"
+                    key={plan._id}
                   >
-                    Xem kết quả
-                  </td>
-                ) : (
-                  <td></td>
-                )}
-              </tr>
-            ))}
+                    <th
+                      scope="row"
+                      className="px-4 py-4 font-medium  whitespace-nowrap text-lg cursor-pointer capitalize"
+                    >
+                      {plan.name}
+                    </th>
+                    <td className="px-4 py-4 text-lg cursor-pointer capitalize">
+                      {plan.idStore.name}
+                    </td>
+                    <td className="px-4 py-4 text-lg cursor-pointer capitalize">
+                      {plan.category}
+                    </td>
+                    <td className="px-4 py-4 text-lg cursor-pointer capitalize">
+                      {plan.startTime}
+                    </td>
+                    <td className="px-4 py-4 text-lg cursor-pointer capitalize">
+                      {plan.actionTime}
+                    </td>
+                    <td className="px-4 py-4 text-lg cursor-pointer capitalize">
+                      {plan.status === "pending"
+                        ? "Chờ xử lý"
+                        : plan.status === "checking"
+                        ? "Đang thanh tra"
+                        : "Đã báo cáo"}
+                    </td>
+                    {plan.status === "pending" && (
+                      <td className="flex items-center px-4 py-4 space-x-3 relative">
+                        <button
+                          className="cursor"
+                          onClick={() => {
+                            setInsInfo(plan)
+                            setAction("edit")
+                            setModal(true)
+                          }}
+                        >
+                          <BiEdit size={25} color="rgb(34,197,94)" />
+                        </button>
+                        <button
+                          className="cursor"
+                          onClick={() => {
+                            setPlanIdDelete(plan._id)
+                            if (plan.idReport) {
+                              setType("report")
+                              setUpdateId(plan.idReport._id)
+                            } else {
+                              setType("inspection")
+                              setUpdateId(plan.idStore._id)
+                            }
+                            setModalDelete(true)
+                          }}
+                        >
+                          <BiTrashAlt size={25} color="rgb(244,63,94)" />
+                        </button>
+                      </td>
+                    )}
+                    {plan.status === "checked" ? (
+                      <td
+                        className="px-4 py-4 text-lg cursor-pointer capitalize hover:text-red-700 hover:underline"
+                        onClick={() => {
+                          setInsInfo(plan)
+                          setAction("view")
+                          setModal(true)
+                        }}
+                      >
+                        Xem kết quả
+                      </td>
+                    ) : (
+                      <td></td>
+                    )}
+                  </tr>
+                )
+            )}
           </tbody>
         </table>
       </div>

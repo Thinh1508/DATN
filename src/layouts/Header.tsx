@@ -8,6 +8,8 @@ import { useRouter } from "next/router"
 type Props = {}
 
 const Header = (props: Props) => {
+  const router = useRouter()
+
   const { data: session }: { data: any } = useSession()
   const [showMenu, setShowMenu] = useState(false)
   const [showSubMenu, setShowSubMenu] = useState(false)
@@ -24,6 +26,22 @@ const Header = (props: Props) => {
   }, [])
 
   const { pathname } = useRouter()
+
+  const [search, setSearch] = useState("")
+  const handleSubmit = (e: any) => {
+    e.preventDefault()
+    if (search.length > 0) {
+      router.push({
+        pathname: "/searchResult",
+        query: { key: search },
+      })
+      setSearch("")
+    }
+  }
+
+  const handleClear = () => {
+    setSearch("")
+  }
 
   return (
     <header className=" bg-[#049803] sticky top-0 z-[30]">
@@ -45,20 +63,23 @@ const Header = (props: Props) => {
 
         {/* search */}
         <div className="hidden sm:block sm:basis-2/4">
-          <form className="flex items-center">
-            <label className="sr-only">Search</label>
+          <form className="flex items-center" onSubmit={handleSubmit}>
             <div className="relative w-full">
               <input
                 type="text"
                 id="simple-search"
                 className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full pr-10 p-1.5 sm:p-2.5 sm:pr-10 focus:outline-none"
-                placeholder="Search"
-                required
+                placeholder="Tìm kiếm"
+                onChange={(e) => setSearch(e.target.value)}
+                value={search}
               />
-              <div className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer">
+              <button
+                className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+                type="submit"
+              >
                 <svg
                   aria-hidden="true"
-                  className="w-5 h-5 text-gray-500 dark:text-gray-400 cursor-pointer"
+                  className="w-5 h-5 text-gray-500 cursor-pointer"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg"
@@ -69,7 +90,7 @@ const Header = (props: Props) => {
                     clipRule="evenodd"
                   ></path>
                 </svg>
-              </div>
+              </button>
             </div>
           </form>
         </div>
@@ -331,10 +352,12 @@ const Header = (props: Props) => {
             </li>
           )}
           <li className="p-2 text-white font-bold uppercase cursor-pointer">
-            <form className="flex items-center">
-              <label className="sr-only">Search</label>
+            <form className="flex items-center" onSubmit={handleSubmit}>
               <div className="relative w-full">
-                <div className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer">
+                <button
+                  type="submit"
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+                >
                   <svg
                     aria-hidden="true"
                     className="w-5 h-5 text-gray-500 dark:text-gray-400"
@@ -348,13 +371,14 @@ const Header = (props: Props) => {
                       clipRule="evenodd"
                     ></path>
                   </svg>
-                </div>
+                </button>
                 <input
                   type="text"
                   id="simple-search"
                   className="bg-white border  text-gray-800 font-medium text-sm rounded-lg  block w-full pr-10 p-1.5 focus:outline-none"
-                  placeholder="Search"
-                  required
+                  placeholder="Tìm kiếm"
+                  onChange={(e) => setSearch(e.target.value)}
+                  value={search}
                 />
               </div>
             </form>

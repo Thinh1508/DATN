@@ -2,10 +2,14 @@ import React, { useState } from "react"
 import { useMutation, useQuery, useQueryClient } from "react-query"
 
 import {
+  addLicense,
   getCategory,
   getInspectionPlan,
   getInspectionResultId,
+  updateCertificateReg,
   updateInspectionPlan,
+  updateInspectionResult,
+  updateReport,
 } from "@/lib/helper"
 import Link from "next/link"
 
@@ -65,6 +69,104 @@ const Modal = (props: Props) => {
     updateMutation.mutate({ planId: dataIns._id, formData: model })
   }
 
+  const updateRes = useMutation(updateInspectionResult, {
+    onError: () => {
+      console.log("error")
+    },
+  })
+
+  const updateCer = useMutation(updateCertificateReg, {
+    onError: () => {
+      console.log("error")
+    },
+  })
+  const updateRep = useMutation(updateReport, {
+    onError: () => {
+      console.log("error")
+    },
+  })
+
+  const addMutation = useMutation(addLicense, {
+    onError: (e: any) => {
+      console.log(e)
+    },
+  })
+
+  const licensing = (status: string, idStore: string, idResult: string) => {
+    if (status === "3") {
+      const currentDate = new Date()
+      const formattedDate = currentDate.toLocaleDateString()
+      const model = {
+        idStore: idStore,
+        dateRange: formattedDate,
+      }
+      addMutation.mutate(model)
+      updateRes.mutate({
+        resultId: idResult,
+        formData: { status: "end" },
+      })
+      updateCer.mutate({
+        storeId: idStore,
+        formData: { status: "checked" },
+      })
+    } else {
+      updateRes.mutate({
+        resultId: idResult,
+        formData: { status: "end" },
+      })
+      updateCer.mutate({
+        storeId: idStore,
+        formData: { status: "checked" },
+      })
+    }
+    updateMutation.mutate({
+      planId: dataIns._id,
+      formData: { status: "end" },
+    })
+  }
+
+  const reportResult = (status: string, idReport: string, idResult: string) => {
+    if (status === "0") {
+      // updateRes.mutate({
+      //   resultId: idResult,
+      //   formData: { status: "end" },
+      // })
+      // updateCer.mutate({
+      //   storeId: idStore,
+      //   formData: { status: "checked" },
+      // })
+      console.log("đang làm")
+    } else {
+      updateRes.mutate({
+        resultId: idResult,
+        formData: { status: "end" },
+      })
+      updateRep.mutate({
+        reportId: idReport,
+        formData: { status: "checked" },
+      })
+    }
+    updateMutation.mutate({
+      planId: dataIns._id,
+      formData: { status: "end" },
+    })
+  }
+
+  const showResult = (num: string) => {
+    switch (num) {
+      case "0":
+        return "Vi phạm và đã thu hồi giấy phép ATVSTP"
+      case "1":
+        return "Vi phạm và đã sử phạt"
+      case "2":
+        return "Không vi phạm"
+      case "3":
+        return "Đủ điều kiện cấp giấy phép"
+      case "4":
+        return "Không đủ điều kiện cấp giấy phép"
+    }
+  }
+
   if (insCategory.isLoading || insById.isLoading)
     return (
       <div className="flex-1 bg-white text-gray-950">Đang tải dữ liệu...</div>
@@ -75,7 +177,6 @@ const Modal = (props: Props) => {
         Lỗi khi tải dữ liệu! Tải lại trang
       </div>
     )
-
   switch (props.action) {
     case "view":
       return (
@@ -172,9 +273,9 @@ const Modal = (props: Props) => {
                     </label>
                   </div>
                   <div className="relative border-2 border-gray-400 rounded-lg">
-                    <textarea
+                    <input
                       name="content"
-                      defaultValue={insById.data.content}
+                      defaultValue={showResult(insById.data.content)}
                       className="block p-2.5 w-full text-xl text-gray-950 bg-transparent rounded-lg border border-gray-200 focus:outline-none scrollbar-style "
                       placeholder=""
                       disabled
@@ -184,19 +285,50 @@ const Modal = (props: Props) => {
                     </label>
                   </div>
 
-                  <div className="relative border-2 border-gray-400 rounded-lg">
-                    <input
-                      type="text"
-                      name="note"
-                      defaultValue={insById.data.note}
-                      className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-900 bg-transparent   appearance-none  focus:outline-none focus:ring-0 focus:border-3 peer"
-                      placeholder=" "
-                      disabled
-                    />
-                    <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
-                      Ghi chú
-                    </label>
-                  </div>
+                  {insById.data.idInspectionPlan.idReport ? (
+                    <div className="relative border-2 border-gray-400 rounded-lg">
+                      <input
+                        type="text"
+                        name="note"
+                        defaultValue={insById.data.note}
+                        className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-900 bg-transparent   appearance-none  focus:outline-none focus:ring-0 focus:border-3 peer"
+                        placeholder=" "
+                        disabled
+                      />
+                      <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
+                        Nội dung sử phạt nếu có
+                      </label>
+                    </div>
+                  ) : (
+                    <div className="relative border-2 border-gray-400 rounded-lg">
+                      <input
+                        type="text"
+                        name="note"
+                        defaultValue={insById.data.note}
+                        className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-900 bg-transparent   appearance-none  focus:outline-none focus:ring-0 focus:border-3 peer"
+                        placeholder=" "
+                        disabled
+                      />
+                      <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
+                        Ghi chú
+                      </label>
+                    </div>
+                  )}
+                  {insById.data.idDocument && (
+                    <div className="relative border-2 border-gray-400 rounded-lg">
+                      <input
+                        type="text"
+                        name="note"
+                        defaultValue={insById.data.idDocument.title}
+                        className="block px-2.5 pb-1.5 pt-3 w-full text-xl text-gray-900 bg-transparent   appearance-none  focus:outline-none focus:ring-0 focus:border-3 peer"
+                        placeholder=" "
+                        disabled
+                      />
+                      <label className="absolute text-xl text-gray-500  duration-300 transform -translate-y-3 scale-75 -top-1 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-green-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:-top-1 peer-focus:scale-75 peer-focus:-translate-y-3 left-1">
+                        Trích yếu
+                      </label>
+                    </div>
+                  )}
                   {insById.data.img && (
                     <div className="relative border-2 border-gray-400 rounded-lg p-4">
                       {insById.data.img.map((url: string) => (
@@ -211,21 +343,38 @@ const Modal = (props: Props) => {
                   )}
                 </div>
                 <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b ">
-                  {dataIns.idReport ? (
-                    <button
-                      type="submit"
-                      className="sm:w-1/2 text-yellow-700 bg-white border border-yellow-700 hover:bg-yellow-700 hover:transition-all hover:duration-500 ease-in-out hover:text-white  font-medium rounded-lg text-lg px-5 py-2.5 text-center "
-                    >
-                      Thu giấy phép ATVSTP
-                    </button>
-                  ) : (
-                    <button
-                      type="submit"
-                      className="sm:w-1/2 text-green-900 bg-white border border-green-900 hover:bg-green-800  hover:transition-all hover:duration-500 ease-in-out hover:text-white  font-medium rounded-lg text-lg px-5 py-2.5 text-center "
-                    >
-                      Cấp giấy phép ATVSTP
-                    </button>
-                  )}
+                  {insById.data.status !== "end" &&
+                    (!insById.data.idInspectionPlan.idReport ? (
+                      <div
+                        className="sm:w-1/2 text-green-900 bg-white border border-green-900 hover:bg-green-800  hover:transition-all hover:duration-500 ease-in-out hover:text-white  font-medium rounded-lg text-lg px-5 py-2.5 text-center cursor-pointer"
+                        onClick={() =>
+                          licensing(
+                            insById.data.content,
+                            insById.data.idInspectionPlan.idStore,
+                            insById.data._id
+                          )
+                        }
+                      >
+                        {insById.data.content === "3"
+                          ? "Cấp giấy phép ATVSTP"
+                          : "Hủy phiếu đăng kí"}
+                      </div>
+                    ) : (
+                      <div
+                        className="sm:w-1/2 text-green-900 bg-white border border-green-900 hover:bg-green-800  hover:transition-all hover:duration-500 ease-in-out hover:text-white  font-medium rounded-lg text-lg px-5 py-2.5 text-center cursor-pointer"
+                        onClick={() =>
+                          reportResult(
+                            insById.data.content,
+                            insById.data.idInspectionPlan.idReport,
+                            insById.data._id
+                          )
+                        }
+                      >
+                        {insById.data.content === "0"
+                          ? "Thu hồi giấy phép ATVSTP"
+                          : "Kết thúc thanh tra"}
+                      </div>
+                    ))}
                   <button
                     onClick={() => props.onClose("close")}
                     className="sm:w-1/2 text-gray-950 bg-white border border-gray-900 hover:bg-gray-900 hover:transition-all hover:duration-500 ease-in-out hover:text-white  font-medium rounded-lg text-lg px-5 py-2.5 text-center "

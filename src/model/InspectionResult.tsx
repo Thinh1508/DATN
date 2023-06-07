@@ -4,10 +4,11 @@ const inspectionResultSchema = new Schema(
   {
     idUser: { type: Schema.Types.ObjectId, ref: "user", required: true },
     idInspectionPlan: { type: Schema.Types.ObjectId, ref: "inspectionPlan" },
-    idDocument: { type: String },
+    idDocument: { type: Schema.Types.ObjectId, ref: "document" },
     content: { type: String, required: true },
     note: { type: String },
     img: [],
+    status: { type: String, default: "start" },
   },
   {
     timestamps: true,

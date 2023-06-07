@@ -1,12 +1,13 @@
+import { getDocumentTop5 } from "@/lib/helper"
 import Link from "next/link"
 import React from "react"
 import {
   FaCalendar,
-  FaFacebookMessenger,
   FaPenSquare,
   FaRegCalendarTimes,
   FaComment,
 } from "react-icons/fa"
+import { useQuery } from "react-query"
 
 type Props = {}
 
@@ -67,6 +68,8 @@ const SideBar = (props: Props) => {
       img: "https://antoanthucpham.danang.gov.vn/documents/10181/10940/a-min.jpg?t=1560500879407",
     },
   ]
+
+  const listDocument = useQuery("document", getDocumentTop5)
 
   return (
     <div className="sticky mt-2 hidden lg:col-span-3 lg:block space-y-2 h-fit pb-20">
@@ -145,7 +148,7 @@ const SideBar = (props: Props) => {
       </div>
       <div>
         <div className="flex mb-2">
-          <Link href="#">
+          <Link href="/document">
             <h1 className="font-bold text-slate-900 hover:text-green-600 border-b-[3px] border-green-600">
               VĂN BẢN MỚI BAN HÀNH
             </h1>
@@ -153,24 +156,30 @@ const SideBar = (props: Props) => {
           <div className="flex-1 border-b-[3px] border-slate-900/40"></div>
         </div>
         <div className="space-y-2 overflow-x-auto max-h-64 scrollbar-style">
-          {documents.map((document, index) => (
-            <Link
-              className="text-green-600 font-bold flex gap-1 mb-2 hover:text-green-800 text-sm"
-              href=""
-              key={index}
-            >
-              <div className="h-3 w-3 mt-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 448 512"
-                  fill="currentColor"
-                >
-                  <path d="M246.6 233.4l-160-160c-12.5-12.5-32.75-12.5-45.25 0s-12.5 32.75 0 45.25L178.8 256l-137.4 137.4c-12.5 12.5-12.5 32.75 0 45.25C47.63 444.9 55.81 448 64 448s16.38-3.125 22.62-9.375l160-160C259.1 266.1 259.1 245.9 246.6 233.4zM438.6 233.4l-160-160c-12.5-12.5-32.75-12.5-45.25 0s-12.5 32.75 0 45.25L370.8 256l-137.4 137.4c-12.5 12.5-12.5 32.75 0 45.25C239.6 444.9 247.8 448 256 448s16.38-3.125 22.62-9.375l160-160C451.1 266.1 451.1 245.9 438.6 233.4z" />
-                </svg>
-              </div>
-              <p className="flex-1 font-normal">{document.title}</p>
-            </Link>
-          ))}
+          {listDocument.data &&
+            listDocument.data.map((document: any) => (
+              <Link
+                className="text-green-600 font-bold flex gap-1 mb-2 hover:text-green-800 text-sm"
+                href={{
+                  pathname: "/documentDetail",
+                  query: {
+                    documentId: document._id,
+                  },
+                }}
+                key={document._id}
+              >
+                <div className="h-3 w-3 mt-1">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 448 512"
+                    fill="currentColor"
+                  >
+                    <path d="M246.6 233.4l-160-160c-12.5-12.5-32.75-12.5-45.25 0s-12.5 32.75 0 45.25L178.8 256l-137.4 137.4c-12.5 12.5-12.5 32.75 0 45.25C47.63 444.9 55.81 448 64 448s16.38-3.125 22.62-9.375l160-160C259.1 266.1 259.1 245.9 246.6 233.4zM438.6 233.4l-160-160c-12.5-12.5-32.75-12.5-45.25 0s-12.5 32.75 0 45.25L370.8 256l-137.4 137.4c-12.5 12.5-12.5 32.75 0 45.25C239.6 444.9 247.8 448 256 448s16.38-3.125 22.62-9.375l160-160C451.1 266.1 451.1 245.9 438.6 233.4z" />
+                  </svg>
+                </div>
+                <p className="flex-1 font-normal">{document.title}</p>
+              </Link>
+            ))}
         </div>
       </div>
 

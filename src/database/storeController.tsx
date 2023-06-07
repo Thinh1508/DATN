@@ -35,6 +35,21 @@ export async function getStoreUserId(
   }
 }
 
+//get:http://localhost:3000/store/storeId
+export async function getStoreId(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    const { storeId } = req.query
+    console.log(storeId)
+    if (storeId) {
+      const store = await Store.findById(storeId)
+      res.status(200).json(store)
+    }
+    res.status(400).json({ error: req.query })
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
+
 //post:http://localhost:3000/api/store
 export async function postStore(req: NextApiRequest, res: NextApiResponse) {
   try {

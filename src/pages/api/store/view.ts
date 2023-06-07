@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 
 import connectMongo from "@/database/conn"
-import { getDocumentId } from "@/database/documentController"
+import { getStoreId } from "@/database/storeController"
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   connectMongo().catch(() =>
@@ -12,7 +12,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
   switch (method) {
     case "GET":
-      getDocumentId(req, res)
+      getStoreId(req, res)
       break
     default:
       res.setHeader("Allowd", ["GET", "POST", "PUT", "DELETE"])

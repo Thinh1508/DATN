@@ -99,7 +99,7 @@ export async function getInspectionResult(
   res: NextApiResponse
 ) {
   try {
-    const plan = await InspectionResult.find()
+    const plan = await InspectionResult.find().populate("idInspectionPlan")
     if (!plan) return res.status(404).json({ error: "Data Not Found" })
 
     res.status(200).json(plan)
@@ -115,7 +115,11 @@ export async function getInspectionResultId(
   try {
     const { id } = req.query
     if (id) {
-      const plan = await InspectionResult.findOne({ idInspectionPlan: id })
+      const plan = await InspectionResult.findOne({
+        idInspectionPlan: id,
+      })
+        .populate("idDocument", "title")
+        .populate("idInspectionPlan")
       res.status(200).json(plan)
     }
     res.status(400).json({ error: "User Not Selected...!" })

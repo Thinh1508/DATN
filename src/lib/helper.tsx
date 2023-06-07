@@ -265,6 +265,15 @@ export const getStoreUserId = async (userId: string) => {
   return {}
 }
 
+//get store by storeId
+export const getStoreId = async (storeId: string) => {
+  const response = await fetch(`${BASE_URL}/api/store/view/?storeId=${storeId}`)
+  const json = await response.json()
+
+  if (json) return json
+  return {}
+}
+
 //certificateReg
 //all certificateReg
 export const getCertificateReg = async () => {
@@ -540,4 +549,74 @@ export async function deleteDocument(documentId: string) {
   const json = await response.json()
 
   return json
+}
+
+//license
+//all license
+export const getLicense = async () => {
+  const response = await fetch(`${BASE_URL}/api/license`)
+  const json = await response.json()
+
+  return json
+}
+
+//single license
+export const getLicenseId = async (licenseId: string) => {
+  const response = await fetch(`${BASE_URL}/api/license/${licenseId}`)
+  const json = await response.json()
+
+  if (json) return json
+  return {}
+}
+
+//posting new license
+export async function addLicense(formData: any) {
+  try {
+    const Options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    }
+
+    const response = await fetch(`${BASE_URL}/api/license`, Options)
+    const json = await response.json()
+
+    return json
+  } catch (error) {
+    return error
+  }
+}
+
+//update document
+export async function updateLicense({ licenseId, formData }: any) {
+  const Options = {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(formData),
+  }
+
+  const response = await fetch(
+    `${BASE_URL}/api/license/?licenseId=${licenseId}`,
+    Options
+  )
+  const json = await response.json()
+
+  return json
+}
+
+// get document top 5
+export async function getDocumentTop5() {
+  const response = await fetch(`${BASE_URL}/api/document/top5`)
+  const json = await response.json()
+
+  return json
+}
+
+//get search
+export const getPostSearch = async (key: string) => {
+  const response = await fetch(`${BASE_URL}/api/post/search/?key=${key}`)
+  const json = await response.json()
+
+  if (json) return json
+  return {}
 }

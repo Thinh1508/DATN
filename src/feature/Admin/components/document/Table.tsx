@@ -184,7 +184,7 @@ const Table = () => {
                     setModal(true)
                   }}
                 >
-                  {document.status}
+                  {document.status === "active" ? "Còn hiệu Lực" : "Hết hiệu lực"}
                 </td>
                 <td className="flex items-center px-4 py-4 space-x-3 relative">
                   <button

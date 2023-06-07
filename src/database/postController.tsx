@@ -27,6 +27,21 @@ export async function getPostId(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
+//get:http://localhost:3000/api/post/search
+export async function getPostSearch(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    const { key } = req.query
+    const criteria = []
+    if (key) criteria.push({ title: new RegExp(`${key as string}`, "i") })
+
+    const query = criteria.length > 0 ? { $or: criteria } : {}
+    const post = await Post.find(query).sort({ createdAt: -1 })
+    res.status(200).json(post)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
+
 //get:http://localhost:3000/api/post/top3
 export async function getPostTop3(req: NextApiRequest, res: NextApiResponse) {
   try {
