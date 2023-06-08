@@ -302,7 +302,6 @@ const Table = (props: Props) => {
             <button
               onClick={() => {
                 if (categoryIdDelete.length > 0) onDelete(categoryIdDelete)
-                console.log(categoryIdDelete)
                 setModalDelete(false)
                 setCategoryIdDelete("")
               }}

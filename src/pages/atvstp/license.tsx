@@ -13,6 +13,7 @@ import {
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import axios from "axios"
+import { useRouter } from "next/router"
 
 type Props = {
   data: any
@@ -155,12 +156,12 @@ const LicensePage = ({ data, dataCer }: Props) => {
       return url
     }
   }
-
+  const router = useRouter()
   const addMutation = useMutation(addCertificateReg, {
     onSuccess: () => {
       toast.success("Thành công", {
         position: "top-right",
-        autoClose: 1000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -168,6 +169,9 @@ const LicensePage = ({ data, dataCer }: Props) => {
         progress: undefined,
         theme: "light",
       })
+      setTimeout(() => {
+        router.push("/atvstp/showLicense")
+      }, 2000)
     },
     onError: () => {
       toast.error("Thất bại", {
@@ -232,7 +236,7 @@ const LicensePage = ({ data, dataCer }: Props) => {
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                <div className="relative border-2 border-gray-400 rounded-lg">
+                <div className="relative border-2 border-gray-400 rounded-lg h-fit">
                   <div>
                     <input
                       type="file"
@@ -258,7 +262,7 @@ const LicensePage = ({ data, dataCer }: Props) => {
                     )}
                   </div>
                 </div>
-                <div className="relative border-2 border-gray-400 rounded-lg mt-4 lg:mt-0">
+                <div className="relative border-2 border-gray-400 rounded-lg mt-4 lg:mt-0 h-fit">
                   <div>
                     <input
                       type="file"
@@ -287,7 +291,7 @@ const LicensePage = ({ data, dataCer }: Props) => {
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                <div className="relative border-2 border-gray-400 rounded-lg">
+                <div className="relative border-2 border-gray-400 rounded-lg h-fit">
                   <div>
                     <input
                       type="file"
@@ -317,7 +321,7 @@ const LicensePage = ({ data, dataCer }: Props) => {
                     </div>
                   )}
                 </div>
-                <div className="relative border-2 border-gray-400 rounded-lg mt-4 lg:mt-0">
+                <div className="relative border-2 border-gray-400 rounded-lg mt-4 lg:mt-0 h-fit">
                   <div>
                     <input
                       type="file"

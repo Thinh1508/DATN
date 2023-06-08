@@ -73,8 +73,8 @@ const LicenseTable = (props: Props) => {
           }}
           className="bg-white outline-none flex items-center  text-gray-900 text-sm rounded-lg focus:ring-blue-500  w-full p-1.5 sm:p-2.5 "
         >
-          <option value="checking">Đang sử lý</option>
-          <option value="checked">Đã sử lý</option>
+          <option value="checking">Đang xử lý</option>
+          <option value="checked">Đã xử lý</option>
         </select>
       </div>
       <div className="max-h-[91%] overflow-y-auto scrollbar-style">

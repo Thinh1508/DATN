@@ -29,7 +29,6 @@ const DocumentPage = (props: Props) => {
           (document: any) => document.issuingAgency === category.target.value
         )
       )
-      console.log(documentData)
     } else setDocumentData(props.data)
   }
 
@@ -41,7 +40,6 @@ const DocumentPage = (props: Props) => {
           (document: any) => document.category === category.target.value
         )
       )
-      console.log(documentData)
     } else setDocumentData(props.data)
   }
 
@@ -77,7 +75,7 @@ const DocumentPage = (props: Props) => {
               <select
                 name="district"
                 defaultValue={"DEFAULT"}
-                className="p-1  text-gray-900  border-1  focus:outline-none    border border-gray-900 rounded-md"
+                className="p-1  text-gray-900 border-1 focus:outline-none border border-gray-900 rounded-md"
                 onChange={handleCategoryChange}
               >
                 <option className="relative" value="DEFAULT">
@@ -95,11 +93,11 @@ const DocumentPage = (props: Props) => {
               </select>
             </div>
           </div>
-          <div className="mb-2 mt-7 px-2 ">
-            <table className="border border-collapse w-full">
+          <div className="mb-2 mt-7 px-2 overflow-x-auto scroll-style">
+            <table className="border border-collapse w-fit">
               <thead className="border">
                 <tr>
-                  <th className="border w-[4%] p-2">Stt</th>
+                  <th className="border w-1/12 p-2">Stt</th>
                   <th className="border w-1/12 p-2">Số kí hiệu</th>
                   <th className="border w-1/12 p-2">Cơ quan ban hành</th>
                   <th className="border w-1/12 p-2">Loại văn bản</th>

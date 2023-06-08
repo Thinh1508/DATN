@@ -135,7 +135,6 @@ export async function putPost(req: NextApiRequest, res: NextApiResponse) {
 export async function deletePost(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { postId } = req.query
-    console.log(postId)
     if (postId) {
       await Post.findByIdAndDelete(postId)
       return res.status(200).json({ delete: postId })

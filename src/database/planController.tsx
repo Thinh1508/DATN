@@ -45,7 +45,6 @@ export async function postInspectionPlan(
 ) {
   try {
     const formData = req.body
-    console.log(formData)
     if (!formData)
       return res.status(400).json({ error: "Form Data Not Provided...!" })
 
@@ -135,7 +134,6 @@ export async function postInspectionResult(
 ) {
   try {
     const formData = req.body
-    console.log(formData)
     if (!formData)
       return res.status(400).json({ error: "Form Data Not Provided...!" })
 

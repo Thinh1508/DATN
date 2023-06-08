@@ -1,10 +1,11 @@
 import License from "@/model/License"
+import { Types } from "mongoose"
 import { NextApiRequest, NextApiResponse } from "next"
 
 //get:http://localhost:3000/api/license
 export async function getLicense(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const license = await License.find()
+    const license = await License.find().populate("idStore")
     if (!license) return res.status(404).json({ error: "Data Not Found" })
 
     res.status(200).json(license)
@@ -18,7 +19,7 @@ export async function getLicenseId(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { id } = req.query
     if (id) {
-      const license = await License.findOne({ idStore: id })
+      const license = await License.findOne({ idStore: id, status: "active" })
       res.status(200).json(license)
     }
     res.status(400).json({ error: "license Not Selected...!" })
@@ -45,13 +46,19 @@ export async function postLicense(req: NextApiRequest, res: NextApiResponse) {
 //put http://localhost:3000/api/license
 export async function putLicense(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { licenseId } = req.query
+    const { storeId } = req.query
     const formData = req.body
 
-    if (licenseId && formData) {
-      await License.findByIdAndUpdate(licenseId, formData)
+    if (storeId && formData) {
+      await License.findOneAndUpdate(
+        {
+          idStore: new Types.ObjectId(storeId as string),
+        },
+        formData
+      )
       return res.status(200).json(formData)
     }
+
     res.status(400).json({ error: "license Not Selected...!" })
   } catch (error) {
     res.status(400).json(error)
@@ -62,7 +69,6 @@ export async function putLicense(req: NextApiRequest, res: NextApiResponse) {
 export async function deleteLicense(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { licenseId } = req.query
-    console.log(licenseId)
     if (licenseId) {
       await License.findByIdAndDelete(licenseId)
       return res.status(200).json({ delete: licenseId })

@@ -51,7 +51,6 @@ export async function putReport(req: NextApiRequest, res: NextApiResponse) {
 export async function deleteReport(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { reportId } = req.query
-    console.log(reportId)
     if (reportId) {
       await Report.findByIdAndDelete(reportId)
       return res.status(200).json({ delete: reportId })

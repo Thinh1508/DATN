@@ -587,8 +587,8 @@ export async function addLicense(formData: any) {
   }
 }
 
-//update document
-export async function updateLicense({ licenseId, formData }: any) {
+//update license
+export async function updateLicense({ storeId, formData }: any) {
   const Options = {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
@@ -596,7 +596,7 @@ export async function updateLicense({ licenseId, formData }: any) {
   }
 
   const response = await fetch(
-    `${BASE_URL}/api/license/?licenseId=${licenseId}`,
+    `${BASE_URL}/api/license/?storeId=${storeId}`,
     Options
   )
   const json = await response.json()
@@ -612,9 +612,18 @@ export async function getDocumentTop5() {
   return json
 }
 
-//get search
+//get search post
 export const getPostSearch = async (key: string) => {
   const response = await fetch(`${BASE_URL}/api/post/search/?key=${key}`)
+  const json = await response.json()
+
+  if (json) return json
+  return {}
+}
+
+//get search
+export const getStoreSearch = async (key: string) => {
+  const response = await fetch(`${BASE_URL}/api/store/search/?key=${key}`)
   const json = await response.json()
 
   if (json) return json

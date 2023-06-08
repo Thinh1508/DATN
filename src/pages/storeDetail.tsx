@@ -102,7 +102,7 @@ const StoreDetail = (props: Props) => {
                     </tr>
                     <tr>
                       <td className="border border-gray-300  px-1 py-2 pl-1">
-                        thời hạn CN ATTP
+                        Thời hạn CN ATTP
                       </td>
                       <td className="border border-gray-300  px-1 py-2 pl-1">
                         {props.dataLicense.period} năm
@@ -136,9 +136,9 @@ const StoreDetail = (props: Props) => {
                 </tr>
               </tbody>
             </table>
-            <h1 className="text-xl font-semibold text-red-500 mt-7">
+            {/* <h1 className="text-xl font-semibold text-red-500 mt-7">
               Lịch sử vi phạm
-            </h1>
+            </h1> */}
             <hr className="h-1  bg-gray-300" />
             {/* {props.dataSame &&
               props.dataSame.map(

@@ -10,7 +10,6 @@ type Props = {
 }
 
 const DocumentDetail = (props: Props) => {
-  console.log(props.dataSame)
   return (
     <div className="bg-white">
       <div className="grid grid-cols-10 space-x-8 pt-4 container mx-auto scrollbar-style">

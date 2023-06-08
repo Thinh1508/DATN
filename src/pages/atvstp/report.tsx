@@ -2,12 +2,13 @@ import React, { useState } from "react"
 
 import checkAuth from "../middleware/checkAuth"
 import { useMutation, useQuery } from "react-query"
-import { addReport, getStore, getWard } from "@/lib/helper"
+import { addReport, getLicense, getStore, getWard } from "@/lib/helper"
 import { useSession } from "next-auth/react"
 
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import Link from "next/link"
+import { useRouter } from "next/router"
 
 type Props = {}
 type Store = {
@@ -21,9 +22,10 @@ type Store = {
 }
 
 const ReportPage = (props: Props) => {
+  const router = useRouter()
   const { data: session }: { data: any } = useSession()
 
-  const listStore = useQuery("store", getStore)
+  const listStore = useQuery("license", getLicense)
   const listWard = useQuery("ward", getWard)
 
   const showDistricts = () => {
@@ -55,7 +57,7 @@ const ReportPage = (props: Props) => {
 
   const showStore = () => {
     const stores = listStore.data
-    return stores.filter((store: any) => store.address.ward === valWard)
+    return stores.filter((store: any) => store.idStore.address.ward === valWard)
   }
 
   const [fileImage, setFileImage] = useState<File | any>(null)
@@ -79,7 +81,7 @@ const ReportPage = (props: Props) => {
     onSuccess: () => {
       toast.success("Thành công", {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -87,7 +89,9 @@ const ReportPage = (props: Props) => {
         progress: undefined,
         theme: "light",
       })
-      console.log("sucess")
+      setTimeout(() => {
+        router.push("/atvstp/showReport")
+      }, 2000)
     },
     onError: (e) => {
       console.log("error")
@@ -193,9 +197,9 @@ const ReportPage = (props: Props) => {
                     <option className="relative" value="DEFAULT">
                       Tên cơ sở kinh doanh
                     </option>
-                    {showStore().map((store: Store) => (
-                      <option key={store._id} value={store._id}>
-                        {store.name}
+                    {showStore().map((store: any) => (
+                      <option key={store.idStore._id} value={store.idStore._id}>
+                        {store.idStore.name}
                       </option>
                     ))}
                   </select>

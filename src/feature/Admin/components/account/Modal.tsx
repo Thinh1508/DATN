@@ -117,8 +117,6 @@ const Modal = (props: Props) => {
         permissions: formData.permissions,
       }
       if (!model.permissions) model.permissions == "user"
-      console.log(model)
-      console.log(valDistrict + valWar)
       if (props.action === "add") addMutation.mutate(model)
       if (props.action === "edit")
         updateMutation.mutate({ userId: dataUser._id, formData: model })

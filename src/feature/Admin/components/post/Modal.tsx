@@ -209,7 +209,6 @@ const Modal = (props: Props) => {
                       formats={Modal.formats}
                       onChange={(e: any) => {
                         setValue(e)
-                        console.log(value)
                       }}
                     />
                   </div>

@@ -44,7 +44,6 @@ export async function postCategory(req: NextApiRequest, res: NextApiResponse) {
 
 //put:http://localhost:3000/api/category/1
 export async function putCategory(req: NextApiRequest, res: NextApiResponse) {
-  console.log(req.query, req.body)
   try {
     const { categoryId } = req.query
     const formData = req.body
@@ -65,7 +64,6 @@ export async function deleteCategory(
 ) {
   try {
     const { categoryId } = req.query
-    console.log(categoryId)
     if (categoryId) {
       await Category.findByIdAndDelete(categoryId)
       return res.status(200).json({ delete: categoryId })

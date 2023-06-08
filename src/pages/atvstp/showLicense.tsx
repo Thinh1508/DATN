@@ -1,53 +1,48 @@
-import React, { useState } from "react"
 import SideBar from "@/layouts/SideBar"
-import { getInspectionResult, getStore, getStoreId } from "@/lib/helper"
+import { getCertificateReg, getLicense } from "@/lib/helper"
+import { useSession } from "next-auth/react"
 import Link from "next/link"
+import React, { useState } from "react"
 
 type Props = {
   data: any
+  dataRecall: any
 }
 
-const InspectionPage = ({ data }: Props) => {
+const ShowLicense = ({ data, dataRecall }: Props) => {
+  const { data: session }: { data: any } = useSession()
+  const dataLicense = data.filter(
+    (license: any) => license.idStore.idUser === session?.user?._id
+  )
+
+  const dataRecallStore = dataRecall.filter(
+    (recall: any) =>
+      recall.idStore.idUser === session?.user?._id && recall.status === "block"
+  )
+
   const [show, setShow] = useState(false)
-
-  const dataReport = () => {
-    const reports = data
-    return reports.filter(
-      (report: any) => report.idInspectionPlan.idReport && report.content < 2
-    )
-  }
-
-  const dataStore = () => {
-    const stores = data
-    return stores.filter((store: any) => store.content === "3")
-  }
-
   return (
     <div className="bg-white flex-1">
       <div className="grid grid-cols-10 space-x-8 pt-4 container mx-auto scrollbar-style ">
         <div className="col-span-10 lg:col-span-7 mb-4 bg-white  shadow-xl h-fit">
           <div className="border-t-4 border-t-[#049803] mt-2 pt-2 text-gray-950 px-2">
             <div className="flex flex-row items-center my-2 ">
-              <div onClick={() => setShow(false)}>
+              <div onClick={() => setShow(!show)}>
                 <span
                   className={`${
-                    !show
-                      ? "text-gray-700 bg-green-100 p-2"
-                      : "text-gray-500 opacity-80"
-                  } hover:text-green-700 font-semibold text-xs sm:text-xl mr-4 cursor-pointer relative `}
+                    !show ? "text-gray-700  p-2" : "text-gray-500 opacity-80"
+                  } hover:text-green-700 font-semibold text-xl mr-4 cursor-pointer relative `}
                 >
-                  Danh sách vi phạm
+                  Danh sách đăng kí
                 </span>
               </div>
-              <div onClick={() => setShow(true)}>
+              <div onClick={() => setShow(!show)}>
                 <span
                   className={`${
-                    show
-                      ? "text-gray-700 bg-green-100 p-2"
-                      : "text-gray-500 opacity-80"
-                  } hover:text-green-700 font-semibold text-xs sm:text-xl mr-4 cursor-pointer relative `}
+                    show ? "text-gray-700 p-2" : "text-gray-500 opacity-80"
+                  } hover:text-green-700 font-semibold text-xl mr-4 cursor-pointer relative `}
                 >
-                  Danh sách cấp giấy chứng nhận ATVSTP
+                  Danh sách thu hồi
                 </span>
               </div>
             </div>
@@ -60,33 +55,35 @@ const InspectionPage = ({ data }: Props) => {
                       <th className="border w-[4%] p-2">Stt</th>
                       <th className="border w-1/6 p-2">Tên cơ sở</th>
                       <th className="border w-2/6 p-2">Địa chỉ</th>
-                      <th className="border w-1/6 p-2">Ngày quyết định</th>
-                      <th className="border w-2/6 p-2">Nội dung sử phạt</th>
+                      <th className="border w-1/6 p-2">Ngày đăng kí</th>
+                      <th className="border w-1/6 p-2">Tình trạng</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {dataReport() &&
-                      dataReport().map((report: any, index: number) => (
+                    {dataLicense &&
+                      dataLicense.map((report: any, index: number) => (
                         <tr key={report._id}>
                           <td className="border pl-1 py-2">{index + 1}</td>
                           <td className="border pl-1 py-2">
-                            {report.store.name}
+                            {report.idStore.name}
                           </td>
                           <td className="border pl-1 py-2">
-                            {report.store.address.street +
+                            {report.idStore.address.street +
                               ", " +
-                              report.store.address.ward +
+                              report.idStore.address.ward +
                               ", " +
-                              report.store.address.district +
+                              report.idStore.address.district +
                               ", Đà Nẵng"}
                           </td>
                           <td className="border pl-1 py-2">
-                            {report.updatedAt.substring(0, 10)}
+                            {report.createdAt.substring(0, 10)}
                           </td>
-                          <td className="border pl-1 py-2">
-                            {report.content === "0"
-                              ? "Thu hồi giấy phép ATVSTP"
-                              : report.note}
+                          <td className="border pl-1">
+                            {report.status === "pending"
+                              ? "Đợi xử lý"
+                              : report.status === "checking"
+                              ? "Đang xử lý"
+                              : "Đã xử lý"}
                           </td>
                         </tr>
                       ))}
@@ -98,36 +95,19 @@ const InspectionPage = ({ data }: Props) => {
                     <tr>
                       <th className="border w-[4%] p-2">Stt</th>
                       <th className="border w-2/6 p-2">Tên cơ sở</th>
-                      <th className="border w-3/6 p-2">Địa chỉ</th>
-                      <th className="border w-1/6 p-2">Ngày cấp</th>
+                      <th className="border w-2/6 p-2">Lý do</th>
+                      <th className="border w-2/6 p-2">Ngày thu hồi</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {dataStore() &&
-                      dataStore().map((report: any, index: number) => (
+                    {dataRecallStore &&
+                      dataRecallStore.map((report: any, index: number) => (
                         <tr key={report._id}>
                           <td className="border pl-1 py-2">{index + 1}</td>
                           <td className="border pl-1 py-2">
-                            <Link
-                              href={{
-                                pathname: "/storeDetail",
-                                query: {
-                                  storeId: report.store._id,
-                                },
-                              }}
-                              className="text-blue-600 hover:text-red-500"
-                            >
-                              {report.store.name}
-                            </Link>
+                            {report.idStore.name}
                           </td>
-                          <td className="border pl-1 py-2">
-                            {report.store.address.street +
-                              ", " +
-                              report.store.address.ward +
-                              ", " +
-                              report.store.address.district +
-                              ", Đà Nẵng"}
-                          </td>
+                          <td className="border pl-1 py-2">fsdfsjdf</td>
                           <td className="border pl-1">
                             {report.updatedAt.substring(0, 10)}
                           </td>
@@ -176,19 +156,11 @@ const InspectionPage = ({ data }: Props) => {
   )
 }
 
-export async function getServerSideProps() {
-  const data = await getInspectionResult()
-  const dataStore = await getStore()
+export async function getServerSideProps(context: any) {
+  const data = await getCertificateReg()
+  const dataRecall = await getLicense()
 
-  dataStore.map((store: any) => {
-    data.map((report: any) => {
-      if (report.idInspectionPlan.idStore === store._id) {
-        report.store = store
-      }
-    })
-  })
-
-  return { props: { data } }
+  return { props: { data, dataRecall } }
 }
 
-export default InspectionPage
+export default ShowLicense

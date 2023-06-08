@@ -22,7 +22,6 @@ export async function getStoreUserId(
 ) {
   try {
     const { userId } = req.query
-    console.log(userId)
     if (userId) {
       const store = await Store.find({
         idUser: userId,
@@ -39,7 +38,6 @@ export async function getStoreUserId(
 export async function getStoreId(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { storeId } = req.query
-    console.log(storeId)
     if (storeId) {
       const store = await Store.findById(storeId)
       res.status(200).json(store)
@@ -85,7 +83,6 @@ export async function putStore(req: NextApiRequest, res: NextApiResponse) {
 export async function deleteStore(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { storeId } = req.query
-    console.log(storeId)
     if (storeId) {
       await Store.findByIdAndDelete(storeId)
       return res.status(200).json({ delete: storeId })
@@ -169,5 +166,23 @@ export async function deleteCertificateReg(
     res.status(400).json({ error: "User Not Selected...!" })
   } catch (error) {
     res.status(400).json(error)
+  }
+}
+
+//get:http://localhost:3000/api/store/search
+export async function getStoreSearch(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  try {
+    const { key } = req.query
+    const criteria = []
+    if (key) criteria.push({ name: new RegExp(`${key as string}`, "i") })
+
+    const query = criteria.length > 0 ? { $or: criteria } : {}
+    const store = await Store.find(query).sort({ createdAt: -1 })
+    res.status(200).json(store)
+  } catch (error) {
+    res.status(500).json(error)
   }
 }

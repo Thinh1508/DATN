@@ -9,6 +9,7 @@ import {
   updateCertificateReg,
   updateInspectionPlan,
   updateInspectionResult,
+  updateLicense,
   updateReport,
 } from "@/lib/helper"
 import Link from "next/link"
@@ -30,6 +31,7 @@ type Category = {
 
 const Modal = (props: Props) => {
   const { InsData: dataIns } = props
+
   const queryClient = useQueryClient()
 
   const insCategory = useQuery("category", getCategory)
@@ -65,7 +67,6 @@ const Modal = (props: Props) => {
   const handleSubmit = (e: any) => {
     e.preventDefault()
     const model = formData
-    console.log(model)
     updateMutation.mutate({ planId: dataIns._id, formData: model })
   }
 
@@ -81,6 +82,12 @@ const Modal = (props: Props) => {
     },
   })
   const updateRep = useMutation(updateReport, {
+    onError: () => {
+      console.log("error")
+    },
+  })
+
+  const updateLicenseByReport = useMutation(updateLicense, {
     onError: () => {
       console.log("error")
     },
@@ -127,25 +134,19 @@ const Modal = (props: Props) => {
 
   const reportResult = (status: string, idReport: string, idResult: string) => {
     if (status === "0") {
-      // updateRes.mutate({
-      //   resultId: idResult,
-      //   formData: { status: "end" },
-      // })
-      // updateCer.mutate({
-      //   storeId: idStore,
-      //   formData: { status: "checked" },
-      // })
-      console.log("đang làm")
-    } else {
-      updateRes.mutate({
-        resultId: idResult,
-        formData: { status: "end" },
-      })
-      updateRep.mutate({
-        reportId: idReport,
-        formData: { status: "checked" },
+      updateLicenseByReport.mutate({
+        storeId: dataIns.idStore._id,
+        formData: { status: "block" },
       })
     }
+    updateRes.mutate({
+      resultId: idResult,
+      formData: { status: "end" },
+    })
+    updateRep.mutate({
+      reportId: idReport,
+      formData: { status: "checked" },
+    })
     updateMutation.mutate({
       planId: dataIns._id,
       formData: { status: "end" },
@@ -285,7 +286,7 @@ const Modal = (props: Props) => {
                     </label>
                   </div>
 
-                  {insById.data.idInspectionPlan.idReport ? (
+                  {insById.data.idInspectionPlan?.idReport ? (
                     <div className="relative border-2 border-gray-400 rounded-lg">
                       <input
                         type="text"
@@ -344,7 +345,7 @@ const Modal = (props: Props) => {
                 </div>
                 <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b ">
                   {insById.data.status !== "end" &&
-                    (!insById.data.idInspectionPlan.idReport ? (
+                    (!insById.data.idInspectionPlan?.idReport ? (
                       <div
                         className="sm:w-1/2 text-green-900 bg-white border border-green-900 hover:bg-green-800  hover:transition-all hover:duration-500 ease-in-out hover:text-white  font-medium rounded-lg text-lg px-5 py-2.5 text-center cursor-pointer"
                         onClick={() =>
@@ -365,7 +366,7 @@ const Modal = (props: Props) => {
                         onClick={() =>
                           reportResult(
                             insById.data.content,
-                            insById.data.idInspectionPlan.idReport,
+                            insById.data.idInspectionPlan?.idReport,
                             insById.data._id
                           )
                         }

@@ -13,6 +13,7 @@ const Header = (props: Props) => {
   const { data: session }: { data: any } = useSession()
   const [showMenu, setShowMenu] = useState(false)
   const [showSubMenu, setShowSubMenu] = useState(false)
+  const [showSubMenu1, setShowSubMenu1] = useState(false)
   const [showSubMenuLogin, setShowSubMenuLogin] = useState(false)
 
   useEffect(() => {
@@ -105,9 +106,17 @@ const Header = (props: Props) => {
               <Link href="" className="text-white font-medium  pl-2">
                 {session?.user?.name}
               </Link>
-              <ul className="absolute bg-white right-0 rounded-md p-2 z-20 text-gray-900 w-32 hidden group-hover:block ">
+              <ul className="absolute bg-white right-0 rounded-md p-2 z-20 text-gray-900 w-40 hidden group-hover:block ">
                 <li className="hover:text-yellow-700 hover:font-medium">
                   <Link href={"/profile"}>Trang cá nhân</Link>
+                </li>
+                {session?.user?.permissions !== "inspection" && (
+                  <li className="hover:text-yellow-700 hover:font-medium">
+                    <Link href={"/atvstp/showLicense"}>Giấy phép ATVSTP</Link>
+                  </li>
+                )}
+                <li className="hover:text-yellow-700 hover:font-medium">
+                  <Link href={"/atvstp/showReport"}>Báo cáo vi phạm</Link>
                 </li>
                 {session?.user?.permissions === "admin" && (
                   <li className="hover:text-yellow-700 hover:font-medium">
@@ -135,6 +144,7 @@ const Header = (props: Props) => {
           onClick={() => {
             setShowMenu(!showMenu)
             setShowSubMenu(false)
+            setShowSubMenu1(false)
             setShowSubMenuLogin(false)
           }}
         >
@@ -179,10 +189,22 @@ const Header = (props: Props) => {
                 pathname === "/inspection" || pathname === "/atvstp/inspection"
                   ? "bg-[#0cb306]"
                   : ""
-              } text-center`}
+              } text-center relative group`}
             >
               {session?.user?.permissions === "inspection" ? (
-                <Link href={"/atvstp/inspection"}>thanh tra - kiểm tra</Link>
+                <>
+                  <Link href={"/atvstp/inspection"}>thanh tra - kiểm tra</Link>
+                  <ul className="absolute bg-[#0cb306] right-0 capitalize rounded-md p-2 z-10 text-white w-full hidden group-hover:block  ">
+                    <li className="hover:text-yellow-300 hover:font-extrabold my-2">
+                      <Link href={"/atvstp/inspection"}>
+                        Danh sách thanh tra
+                      </Link>
+                    </li>
+                    <li className="hover:text-yellow-300 hover:font-extrabold my-2">
+                      <Link href={"/inspection"}>Kết quả thanh tra</Link>
+                    </li>
+                  </ul>
+                </>
               ) : (
                 <Link href={"/inspection"}>thanh tra - kiểm tra</Link>
               )}
@@ -254,31 +276,49 @@ const Header = (props: Props) => {
             </Link>
           </li>
           <li
-            className={`p-2 text-white font-bold uppercase cursor-pointer hover:bg-[#0cb306] ${
+            className={`flex items-center justify-between p-2 text-white font-bold uppercase cursor-pointer hover:bg-[#0cb306] ${
               pathname === "/inspection" || pathname === "/atvstp/inspection"
                 ? "bg-[#0cb306]"
                 : ""
             }`}
           >
             {session?.user?.permissions === "inspection" ? (
-              <Link
-                href={"/atvstp/inspection"}
-                onClick={() => setShowMenu(false)}
-              >
-                thanh tra - kiểm tra
-              </Link>
+              <>
+                <h1 onClick={() => setShowSubMenu1(!showSubMenu1)}>
+                  thanh tra - kiểm tra
+                </h1>
+                <IoMdAdd size={20} />
+              </>
             ) : (
               <Link href={"/inspection"} onClick={() => setShowMenu(false)}>
                 thanh tra - kiểm tra
               </Link>
             )}
           </li>
+          {showSubMenu1 && (
+            <li className="px-2 text-white font-bold uppercase">
+              <ul className=" capitalize rounded-md px-2 z-10 text-white w-full">
+                <li
+                  className="hover:text-yellow-200 hover:font-extrabold my-2"
+                  onClick={() => setShowMenu(false)}
+                >
+                  <Link href={"/atvstp/inspection"}>Danh sách thanh tra</Link>
+                </li>
+                <li
+                  className="hover:text-yellow-200 hover:font-extrabold my-2"
+                  onClick={() => setShowMenu(false)}
+                >
+                  <Link href={"/inspection"}>Kết quả thanh tra</Link>
+                </li>
+              </ul>
+            </li>
+          )}
 
           <li
             className="flex items-center justify-between p-2 text-white font-bold uppercase cursor-pointer hover:bg-[#0cb306]"
             onClick={() => setShowSubMenu(!showSubMenu)}
           >
-            <h1>an toàn vệ sinh thực phẩm</h1>
+            <h1>An toàn vệ sinh thực phẩm</h1>
             <IoMdAdd size={20} />
           </li>
           {showSubMenu && (
@@ -342,6 +382,18 @@ const Header = (props: Props) => {
                     <Link href={"/admin"}>Trang quản lý</Link>
                   </li>
                 )}
+                <li
+                  className="hover:text-yellow-300 hover:font-extrabold my-2"
+                  onClick={() => setShowMenu(false)}
+                >
+                  <Link href={"/atvstp/showLicense"}>Giấy phép ATVSTP</Link>
+                </li>
+                <li
+                  className="hover:text-yellow-300 hover:font-extrabold my-2"
+                  onClick={() => setShowMenu(false)}
+                >
+                  <Link href={"/atvstp/showReport"}>Báo cáo vi phạm</Link>
+                </li>
                 <li
                   className="hover:text-yellow-200 hover:font-extrabold my-2"
                   onClick={() => signOut()}

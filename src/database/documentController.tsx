@@ -99,7 +99,6 @@ export async function deleteDocument(
 ) {
   try {
     const { documentId } = req.query
-    console.log(documentId)
     if (documentId) {
       await Document.findByIdAndDelete(documentId)
       return res.status(200).json({ delete: documentId })
