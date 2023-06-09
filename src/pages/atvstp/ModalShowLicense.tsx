@@ -12,7 +12,6 @@ const ModalShowLicense = (props: Props) => {
   const dataResult = useQuery("inspectionResult", () =>
     getInspectionResultId(props.idPlan as string)
   )
-  console.log(dataResult)
   if (dataResult.isLoading) return <div>Đang tải dữ liệu...</div>
   if (dataResult.isError) return <div>Lỗi khi tải dữ liệu </div>
   return (

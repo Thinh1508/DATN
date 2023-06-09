@@ -629,3 +629,37 @@ export const getStoreSearch = async (key: string) => {
   if (json) return json
   return {}
 }
+
+export const getCerSearch = async (key: string) => {
+  const response = await fetch(
+    `${BASE_URL}/api/certificateReg/search/?key=${key}`
+  )
+  const json = await response.json()
+
+  if (json) return json
+  return {}
+}
+
+export const getLicenseSearch = async (key: string) => {
+  const response = await fetch(`${BASE_URL}/api/license/search/?key=${key}`)
+  const json = await response.json()
+
+  if (json) return json
+  return {}
+}
+
+export const getReportSearch = async (key: string) => {
+  const response = await fetch(`${BASE_URL}/api/report/search/?key=${key}`)
+  const json = await response.json()
+
+  if (json) return json
+  return {}
+}
+
+export const getUserSearch = async (key: string) => {
+  const response = await fetch(`${BASE_URL}/api/user/search/?key=${key}`)
+  const json = await response.json()
+
+  if (json) return json
+  return {}
+}

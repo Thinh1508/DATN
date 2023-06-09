@@ -27,7 +27,7 @@ const BarChart = (props) => {
       datasets: [
         {
           label: "Lược truy cập",
-          data: [18127, 22201, 19490, 17938, 24182, 17842, 22475],
+          data: [18, 22, 19, 17, 24, 17, 22],
           borderColor: "rgb(53,162,235)",
           backgroundColor: "rgb(53,162,235,0.4)",
         },

@@ -186,3 +186,20 @@ export async function getStoreSearch(
     res.status(500).json(error)
   }
 }
+
+//get:http://localhost:3000/api/certificateReg/search
+export async function getCerSearch(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    const { key } = req.query
+    console.log(key)
+    const cer = await CertificateRegistration.find({
+      createdAt: {
+        $gte: new Date(key + "-01"),
+        $lte: new Date(key + "-30"),
+      },
+    })
+    res.status(200).json(cer)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}

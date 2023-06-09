@@ -130,3 +130,20 @@ export async function postWard(req: NextApiRequest, res: NextApiResponse) {
     res.status(500).json(error)
   }
 }
+
+//get:http://localhost:3000/api/user/search
+export async function getUserSearch(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    const { key } = req.query
+    console.log(key)
+    const user = await Users.find({
+      createdAt: {
+        $gte: new Date(key + "-01"),
+        $lte: new Date(key + "-30"),
+      },
+    })
+    res.status(200).json(user)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}

@@ -61,3 +61,23 @@ export async function deleteReport(req: NextApiRequest, res: NextApiResponse) {
     res.status(400).json(error)
   }
 }
+
+//get:http://localhost:3000/api/report/search
+export async function getReportSearch(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  try {
+    const { key } = req.query
+    console.log(key)
+    const report = await Report.find({
+      createdAt: {
+        $gte: new Date(key + "-01"),
+        $lte: new Date(key + "-30"),
+      },
+    })
+    res.status(200).json(report)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}

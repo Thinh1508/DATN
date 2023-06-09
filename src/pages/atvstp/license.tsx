@@ -6,7 +6,9 @@ import Link from "next/link"
 import {
   addCertificateReg,
   getCertificateReg,
+  getInspectionResult,
   getInspectionResultId,
+  getLicense,
   getStoreUserId,
 } from "@/lib/helper"
 
@@ -16,9 +18,7 @@ import axios from "axios"
 import { useRouter } from "next/router"
 
 type Props = {
-  data: any
-  data1: any
-  dataCer: any
+  dataStore: any
 }
 type Store = {
   _id: string
@@ -38,26 +38,7 @@ type CertificateRegistration = {
   status: string
 }
 
-const LicensePage = ({ data, data1, dataCer }: Props) => {
-  const checkStore1 = () => {
-    let data1: any = []
-    data.map((store: any) => {
-      data1.push(store._id)
-    })
-    let check = true
-    for (const i of data1) {
-      if (!dataCer.find((c: any) => c.idStore._id === i)) {
-        check = false
-      }
-    }
-    return check
-  }
-  const checkStore = (storeId: string) => {
-    for (const cer of dataCer) {
-      if (cer.idStore._id === storeId) return false
-    }
-    return true
-  }
+const LicensePage = ({ dataStore }: Props) => {
   const [fileImage1, setFileImage1] = useState<File | any>(null)
   const [fileImage2, setFileImage2] = useState<File | any>(null)
   const [fileImage3, setFileImage3] = useState<File | any>(null)
@@ -211,7 +192,7 @@ const LicensePage = ({ data, data1, dataCer }: Props) => {
   return (
     <div className="bg-white flex-1">
       <div className="container mx-auto text-gray-900">
-        {data?.length > 0 && !checkStore1() ? (
+        {dataStore ? (
           <form method="POST" onSubmit={handleSubmit}>
             <div className="p-6 space-y-10">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -224,14 +205,11 @@ const LicensePage = ({ data, data1, dataCer }: Props) => {
                     <option className="relative" value="DEFAULT">
                       Tên cơ sở kinh doanh
                     </option>
-                    {data.map(
-                      (store: Store) =>
-                        checkStore(store._id) && (
-                          <option key={store._id} value={store._id}>
-                            {store.name}
-                          </option>
-                        )
-                    )}
+                    {dataStore.map((store: Store) => (
+                      <option key={store._id} value={store._id}>
+                        {store.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
@@ -389,7 +367,46 @@ export async function getServerSideProps(context: any) {
     data = await getStoreUserId(session?.user?._id)
   }
   const dataCer = await getCertificateReg()
-  return { props: { data, dataCer } }
+  const dataLicense = await getLicense()
+  const dataResult = await getInspectionResult()
+  const dataStore = data
+
+  if (data) {
+    dataCer.map((cre: any) => {
+      for (let i = data.length - 1; i >= 0; i--) {
+        if (data[i]._id === cre.idStore._id) {
+          data.splice(i, 1)
+        }
+      }
+    })
+
+    const data1 = await getStoreUserId(session?.user?._id)
+    const storesToAdd: any = []
+
+    dataResult.map((res: any) => {
+      data1.map((store: any) => {
+        if (
+          res.idInspectionPlan.idStore === store._id &&
+          res.status === "end" &&
+          !res.idReport
+        ) {
+          storesToAdd.push(store)
+        }
+      })
+    })
+
+    dataStore.push(...storesToAdd)
+
+    dataLicense.map((license: any) => {
+      dataStore.forEach((store: any, index: number) => {
+        if (store._id === license.idStore._id && license.status === "active") {
+          dataStore.splice(index, 1)
+        }
+      })
+    })
+  }
+
+  return { props: { dataStore } }
 }
 
 export default LicensePage

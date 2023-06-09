@@ -79,3 +79,23 @@ export async function deleteLicense(req: NextApiRequest, res: NextApiResponse) {
     res.status(400).json(error)
   }
 }
+
+//get:http://localhost:3000/api/license/search
+export async function getLicenseSearch(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  try {
+    const { key } = req.query
+    console.log(key)
+    const license = await License.find({
+      createdAt: {
+        $gte: new Date(key + "-01"),
+        $lte: new Date(key + "-30"),
+      },
+    })
+    res.status(200).json(license)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
