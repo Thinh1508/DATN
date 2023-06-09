@@ -44,17 +44,6 @@ const Table = () => {
             theme: "light",
           })
           break
-        default:
-          toast.success("Thành công!", {
-            position: "top-right",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          })
       }
     }
   }
@@ -184,7 +173,9 @@ const Table = () => {
                     setModal(true)
                   }}
                 >
-                  {document.status === "active" ? "Còn hiệu Lực" : "Hết hiệu lực"}
+                  {document.status === "active"
+                    ? "Còn hiệu Lực"
+                    : "Hết hiệu lực"}
                 </td>
                 <td className="flex items-center px-4 py-4 space-x-3 relative">
                   <button

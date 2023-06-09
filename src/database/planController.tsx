@@ -82,7 +82,7 @@ export async function deleteInspectionPlan(
   try {
     const { planId } = req.query
     if (planId) {
-      await InspectionPlan.findByIdAndDelete(planId)
+      await InspectionPlan.findByIdAndDelete(planId).sort({ createdAt: -1 })
       return res.status(200).json({ delete: planId })
     }
 
@@ -98,7 +98,9 @@ export async function getInspectionResult(
   res: NextApiResponse
 ) {
   try {
-    const plan = await InspectionResult.find().populate("idInspectionPlan")
+    const plan = await InspectionResult.find()
+      .populate("idInspectionPlan")
+      .sort({ createdAt: -1 })
     if (!plan) return res.status(404).json({ error: "Data Not Found" })
 
     res.status(200).json(plan)

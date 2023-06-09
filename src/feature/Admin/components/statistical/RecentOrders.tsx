@@ -21,6 +21,7 @@ const RecentOrders = (props: Props) => {
 
     fetchCer()
   }, [props.date])
+
   if (!user) return <div>Đang tải dữ liệu...</div>
 
   return (

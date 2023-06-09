@@ -4,7 +4,9 @@ import { NextApiRequest, NextApiResponse } from "next"
 //get:http://localhost:3000/api/document
 export async function getDocument(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const document = await Document.find().populate("idUser", "name")
+    const document = await Document.find()
+      .populate("idUser", "name")
+      .sort({ issued: -1 })
     if (!document) return res.status(404).json({ error: "Data Not Found" })
 
     res.status(200).json(document)

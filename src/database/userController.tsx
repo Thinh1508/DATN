@@ -8,7 +8,7 @@ import Ward from "@/model/ward"
 //get:http://localhost:3000/api/users
 export async function getUser(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const users = await Users.find()
+    const users = await Users.find().sort({ createdAt: -1 })
     if (!users) return res.status(404).json({ error: "Data Not Found" })
 
     res.status(200).json(users)

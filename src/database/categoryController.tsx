@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next"
 //get:http://localhost:3000/api/category
 export async function getCategory(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const category = await Category.find()
+    const category = await Category.find().sort({ createdAt: -1 })
     if (!category) return res.status(404).json({ error: "Data Not Found" })
 
     res.status(200).json(category)

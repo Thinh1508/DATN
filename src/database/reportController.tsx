@@ -6,6 +6,7 @@ import { NextApiRequest, NextApiResponse } from "next"
 export async function getReport(req: NextApiRequest, res: NextApiResponse) {
   try {
     const report = await Report.find()
+      .sort({ createdAt: -1 })
       .populate("idStore")
       .populate("idUser", "name")
     if (!report) return res.status(404).json({ error: "Data Not Found" })
