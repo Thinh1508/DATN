@@ -110,6 +110,11 @@ const Header = (props: Props) => {
                 <li className="hover:text-yellow-700 hover:font-medium">
                   <Link href={"/profile"}>Trang cá nhân</Link>
                 </li>
+                {session?.user?.permissions === "admin" && (
+                  <li className="hover:text-yellow-700 hover:font-medium">
+                    <Link href={"/admin"}>Trang quản lý</Link>
+                  </li>
+                )}
                 {session?.user?.permissions !== "inspection" && (
                   <li className="hover:text-yellow-700 hover:font-medium">
                     <Link href={"/atvstp/showLicense"}>Giấy phép ATVSTP</Link>
@@ -118,11 +123,7 @@ const Header = (props: Props) => {
                 <li className="hover:text-yellow-700 hover:font-medium">
                   <Link href={"/atvstp/showReport"}>Báo cáo vi phạm</Link>
                 </li>
-                {session?.user?.permissions === "admin" && (
-                  <li className="hover:text-yellow-700 hover:font-medium">
-                    <Link href={"/admin"}>Trang quản lý</Link>
-                  </li>
-                )}
+
                 <li className="hover:text-yellow-700 hover:font-medium">
                   <button onClick={() => signOut()} className="cursor-pointer">
                     Đăng xuất

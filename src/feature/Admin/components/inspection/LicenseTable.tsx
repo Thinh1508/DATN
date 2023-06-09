@@ -5,12 +5,11 @@ import { BiEdit, BiTrashAlt } from "react-icons/bi"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 
-import { useQuery, useQueryClient } from "react-query"
+import { useQuery } from "react-query"
 import { getCertificateReg } from "@/lib/helper"
 import ModalShowLicense from "./ModalShowLicense"
 // import Modal from "./Modal"
 
-type Props = {}
 type License = {
   _id: string
   idStore: {
@@ -34,8 +33,7 @@ type License = {
   createdAt: string
 }
 
-const LicenseTable = (props: Props) => {
-  const queryClient = useQueryClient()
+const LicenseTable = () => {
   const { isLoading, isError, data, error } = useQuery(
     "certificateReg",
     getCertificateReg

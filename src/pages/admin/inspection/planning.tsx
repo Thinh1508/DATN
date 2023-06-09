@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { NextPageWithLayout } from "@/pages/_app"
 import { useRouter } from "next/router"
 import { useSession } from "next-auth/react"
-import { useMutation, useQuery, useQueryClient } from "react-query"
+import { useMutation, useQuery } from "react-query"
 
 import AdminLayout from "@/layouts/AdminLayout"
 import {
@@ -73,7 +73,7 @@ const PlanningAdmin: NextPageWithLayout = (props: Props) => {
     onSuccess: () => {
       toast.success("Thêm thành công", {
         position: "top-right",
-        autoClose: 1000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -117,6 +117,7 @@ const PlanningAdmin: NextPageWithLayout = (props: Props) => {
       const model = {
         idUser: session?.user?._id,
         idStore: parsedStore._id,
+        idCertificate: idCertificateReg,
         name: formData.name,
         category: formData.category,
         startTime: formData.startTime,

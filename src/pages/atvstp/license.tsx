@@ -3,10 +3,10 @@ import { useMutation, useQuery, useQueryClient } from "react-query"
 import { getSession, useSession } from "next-auth/react"
 import Link from "next/link"
 
-import checkAuth from "../middleware/checkAuth"
 import {
   addCertificateReg,
   getCertificateReg,
+  getInspectionResultId,
   getStoreUserId,
 } from "@/lib/helper"
 
@@ -17,6 +17,7 @@ import { useRouter } from "next/router"
 
 type Props = {
   data: any
+  data1: any
   dataCer: any
 }
 type Store = {
@@ -37,7 +38,7 @@ type CertificateRegistration = {
   status: string
 }
 
-const LicensePage = ({ data, dataCer }: Props) => {
+const LicensePage = ({ data, data1, dataCer }: Props) => {
   const checkStore1 = () => {
     let data1: any = []
     data.map((store: any) => {
@@ -383,13 +384,11 @@ const LicensePage = ({ data, dataCer }: Props) => {
 
 export async function getServerSideProps(context: any) {
   const session: any = await getSession(context)
-  let data = null
+  let data: any = null
   if (session?.user?._id) {
     data = await getStoreUserId(session?.user?._id)
   }
   const dataCer = await getCertificateReg()
-
-  // Pass data to the page via props
   return { props: { data, dataCer } }
 }
 

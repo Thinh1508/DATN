@@ -175,7 +175,7 @@ const Table = (props: Props) => {
                     setModal(true)
                   }}
                 >
-                  {user.gender === 1 ? "Male" : "Female"}
+                  {user.gender === 1 ? "Nam" : "Nữ"}
                 </td>
                 <td
                   className="px-4 py-4 text-lg cursor-pointer"

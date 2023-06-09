@@ -114,7 +114,10 @@ const Modal = (props: Props) => {
       })
       updateCer.mutate({
         storeId: idStore,
-        formData: { status: "checked" },
+        formData: {
+          idPlan: dataIns._id,
+          status: "checked",
+        },
       })
     } else {
       updateRes.mutate({
@@ -123,7 +126,10 @@ const Modal = (props: Props) => {
       })
       updateCer.mutate({
         storeId: idStore,
-        formData: { status: "checked" },
+        formData: {
+          idPlan: dataIns._id,
+          status: "checked",
+        },
       })
     }
     updateMutation.mutate({

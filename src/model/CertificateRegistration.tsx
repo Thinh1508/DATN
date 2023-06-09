@@ -8,6 +8,7 @@ const certificateRegistrationSchema = new Schema(
     description: [],
     trainCertificate: { type: String, required: true },
     status: { type: String, default: "pending" },
+    idPlan: { type: String },
   },
   {
     timestamps: true,

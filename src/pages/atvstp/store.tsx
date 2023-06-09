@@ -78,7 +78,7 @@ const StorePage = (props: Props) => {
     onSuccess: () => {
       toast.success("Thành công", {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 1000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -90,7 +90,7 @@ const StorePage = (props: Props) => {
     onError: (e) => {
       toast.error("Thất bại", {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 1000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,

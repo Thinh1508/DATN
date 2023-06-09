@@ -5,6 +5,7 @@ import { useQuery } from "react-query"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import Modal from "./Modal"
+import Link from "next/link"
 
 type Props = {}
 type Report = {
@@ -134,7 +135,7 @@ const Table = (props: Props) => {
                     ? "Chờ xử lý"
                     : report.status === "checking"
                     ? "Đang kiểm tra"
-                    : "Đã kiểm tra"}
+                    : "Đã kiếm tra"}
                 </td>
               </tr>
             ))}
