@@ -14,6 +14,14 @@ import Link from "next/link"
 type Props = {}
 
 const InspectionAtvstp = (props: Props) => {
+  const today: Date = new Date()
+  const day: number = today.getDate()
+  const month: number = today.getMonth() + 1
+  const year: number = today.getFullYear()
+  const todayString: string = `${year}-${month < 10 ? "0" + month : month}-${
+    day < 10 ? "0" + day : day
+  }`
+
   const { isLoading, isError, data, error } = useQuery(
     "inspectionPlan",
     getInspectionPlan
@@ -90,6 +98,14 @@ const InspectionAtvstp = (props: Props) => {
     }
   }
 
+  const createDate = (date: string, action: string) => {
+    const createdDate = new Date(date)
+    const today = new Date(todayString)
+    createdDate.setDate(createdDate.getDate() + parseInt(action))
+
+    return createdDate >= today
+  }
+
   if (isLoading)
     return (
       <div className="flex-1 bg-white text-gray-950">Đang tải dữ liệu...</div>
@@ -134,7 +150,8 @@ const InspectionAtvstp = (props: Props) => {
             {Array.isArray(showInspection()) &&
               showInspection().map(
                 (plan: any, index: any) =>
-                  plan.status !== "end" && (
+                  plan.status !== "end" &&
+                  createDate(plan.startTime, plan.actionTime) && (
                     <tr key={plan._id}>
                       <td
                         onClick={() => {

@@ -388,7 +388,7 @@ export async function getServerSideProps(context: any) {
     dataCer.map((cre: any) => {
       for (let i = data.length - 1; i >= 0; i--) {
         if (data[i]._id === cre.idStore._id) {
-          data.splice(i, 1)
+          dataStore.splice(i, 1)
         }
       }
     })
@@ -396,18 +396,17 @@ export async function getServerSideProps(context: any) {
     const data1 = await getStoreUserId(session?.user?._id)
     const storesToAdd: any = []
 
-    dataResult.map((res: any) => {
-      data1.map((store: any) => {
+    data1.map((store: any) => {
+      dataResult.map((res: any) => {
         if (
           res.idInspectionPlan.idStore === store._id &&
           res.status === "end" &&
-          !res.idReport
+          !res.idInspectionPlan.idReport
         ) {
           storesToAdd.push(store)
         }
       })
     })
-
     dataStore.push(...storesToAdd)
 
     dataLicense.map((license: any) => {

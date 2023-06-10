@@ -111,37 +111,66 @@ const PlanningAdmin: NextPageWithLayout = (props: Props) => {
     },
   })
 
+  const today: Date = new Date()
+  const day: number = today.getDate()
+  const month: number = today.getMonth() + 1
+  const year: number = today.getFullYear()
+  const todayString: string = `${year}-${month < 10 ? "0" + month : month}-${
+    day < 10 ? "0" + day : day
+  }`
+
+  const createDate = (date: string, action: string) => {
+    const createdDate = new Date(date)
+    const today = new Date(todayString)
+    createdDate.setDate(createdDate.getDate() + parseInt(action))
+
+    return createdDate >= today
+  }
+
   const handleSubmit = (e: any) => {
     e.preventDefault()
-    if (type === "inspection") {
-      const model = {
-        idUser: session?.user?._id,
-        idStore: parsedStore._id,
-        idCertificate: idCertificateReg,
-        name: formData.name,
-        category: formData.category,
-        startTime: formData.startTime,
-        actionTime: formData.actionTime,
+    if (createDate(formData.startTime, formData.actionTime)) {
+      if (type === "inspection") {
+        const model = {
+          idUser: session?.user?._id,
+          idStore: parsedStore._id,
+          idCertificate: idCertificateReg,
+          name: formData.name,
+          category: formData.category,
+          startTime: formData.startTime,
+          actionTime: formData.actionTime,
+        }
+        addMutation.mutate(model)
+      } else {
+        const model = {
+          idUser: session?.user?._id,
+          idStore: parsedStore._id,
+          idReport: idCertificateReg,
+          name: formData.name,
+          category: formData.category,
+          startTime: formData.startTime,
+          actionTime: formData.actionTime,
+        }
+        addMutation.mutate(model)
       }
-      addMutation.mutate(model)
+      setFormData({
+        name: "",
+        category: "",
+        startTime: "",
+        actionTime: "",
+      })
     } else {
-      const model = {
-        idUser: session?.user?._id,
-        idStore: parsedStore._id,
-        idReport: idCertificateReg,
-        name: formData.name,
-        category: formData.category,
-        startTime: formData.startTime,
-        actionTime: formData.actionTime,
-      }
-      addMutation.mutate(model)
+      toast.error("Thời hạn thanh tra không đúng", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
     }
-    setFormData({
-      name: "",
-      category: "",
-      startTime: "",
-      actionTime: "",
-    })
   }
 
   if (isLoading) return <div>Đang tải dữ liệu...</div>
