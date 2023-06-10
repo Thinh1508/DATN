@@ -11,6 +11,7 @@ export async function getInspectionPlan(
     const plan = await InspectionPlan.find()
       .populate("idStore")
       .populate("idReport")
+      .sort({ startTime: 1 })
     if (!plan) return res.status(404).json({ error: "Data Not Found" })
 
     res.status(200).json(plan)
@@ -28,6 +29,7 @@ export async function getInspectionPlanId(
     const { id } = req.query
     if (id) {
       const plan = await InspectionPlan.findById(id)
+
         .populate("idStore")
         .populate("idReport")
       res.status(200).json(plan)

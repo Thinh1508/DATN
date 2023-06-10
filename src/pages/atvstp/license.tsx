@@ -158,7 +158,7 @@ const LicensePage = ({ dataStore }: Props) => {
     onError: () => {
       toast.error("Thất bại", {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -189,10 +189,22 @@ const LicensePage = ({ dataStore }: Props) => {
     addMutation.mutate(model)
   }
 
+  const [imagePath, setImagePath] = useState("")
+  const ShowImage = (file: File) => {
+    const reader = new FileReader()
+
+    reader.onload = () => {
+      const imageURL = reader.result
+      setImagePath(imageURL as string)
+    }
+
+    return imagePath
+  }
+
   return (
     <div className="bg-white flex-1">
       <div className="container mx-auto text-gray-900">
-        {dataStore ? (
+        {dataStore?.length ? (
           <form method="POST" onSubmit={handleSubmit}>
             <div className="p-6 space-y-10">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -289,12 +301,13 @@ const LicensePage = ({ dataStore }: Props) => {
                     <div className=" text-gray-900">
                       <div className="flex shrink-0 flex-wrap m-2">
                         {selectImage2?.map((image: any) => (
-                          <img
-                            src={image}
-                            alt=""
-                            className="w-32 h-32"
+                          <Link
+                            href={ShowImage(image)}
+                            target="_blank"
                             key={image}
-                          />
+                          >
+                            <img src={image} alt="" className="w-32 h-32" />
+                          </Link>
                         ))}
                       </div>
                     </div>

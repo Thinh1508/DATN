@@ -100,9 +100,9 @@ export async function getCertificateReg(
   res: NextApiResponse
 ) {
   try {
-    const certificateReg = await CertificateRegistration.find().populate(
-      "idStore"
-    )
+    const certificateReg = await CertificateRegistration.find()
+      .populate("idStore")
+      .sort({ createdAt: -1 })
     if (!certificateReg)
       return res.status(404).json({ error: "Data Not Found" })
 
